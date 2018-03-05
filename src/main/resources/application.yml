@@ -35,9 +35,16 @@ spring:
     filters: mergeStat,wall
     # 合并多个DruidDataSource的监控数据
     # useGlobalDataSourceStat=true
+
+  freemarker:
+    expose-request-attributes: true
+    expose-session-attributes: true
+    request-context-attribute: request
+
   http:
     encoding:
       force: true
+
 mybatis:
   configuration:
     #开启全局驼峰映射
