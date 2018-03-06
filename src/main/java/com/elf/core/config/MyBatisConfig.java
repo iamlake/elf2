@@ -1,6 +1,6 @@
 package com.elf.core.config;
 
-import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInterceptor;
 import org.apache.ibatis.plugin.Interceptor;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
@@ -32,7 +32,7 @@ public class MyBatisConfig implements TransactionManagementConfigurer {
         bean.setTypeAliasesPackage("com.elf.*.*.entity");
 
         //分页插件
-        PageHelper pageHelper = new PageHelper();
+        PageInterceptor pageHelper = new PageInterceptor();
         Properties properties = new Properties();
         properties.setProperty("reasonable", "true");
         properties.setProperty("supportMethodsArguments", "true");
