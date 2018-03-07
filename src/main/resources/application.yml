@@ -1,5 +1,6 @@
 server:
   port: 8088
+  context-path: /elf
 security:
   basic:
     enabled: false
@@ -37,8 +38,10 @@ spring:
     # useGlobalDataSourceStat=true
 
   freemarker:
+    cache: false
     expose-request-attributes: true
     expose-session-attributes: true
+    expose-spring-macro-helpers: true
     request-context-attribute: request
 
   http:
