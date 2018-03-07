@@ -36,19 +36,16 @@ public class BaseServiceImpl<M extends BaseMapper<T>, T extends DataEntity<T>>im
     }
 
     @Override
-    @Transactional(readOnly = false)
     public int save(T entity) {
         return mapper.insertSelective(entity);
     }
 
     @Override
-    @Transactional(readOnly = false)
     public int delete(T entity) {
         return mapper.deleteByPrimaryKey(entity);
     }
 
     @Override
-    @Transactional(readOnly = false)
     public int saveOrUpdate(T entity) {
         //TODO 自动判断插入或修改
         if (entity.getIsNew()) {
