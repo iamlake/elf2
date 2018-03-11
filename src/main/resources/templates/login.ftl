@@ -25,7 +25,7 @@
     <div class="layui-form-item input-item" id="imgCode">
         <label for="code">验证码</label>
         <input type="text" placeholder="请输入验证码" autocomplete="off" id="code" class="layui-input">
-        <img src="${basePath}/static/assets/images/code.jpg">
+        <img alt="验证码" onclick="this.src='${basePath}/kaptcha.jpg?d='+new Date()*1" src="${basePath}/kaptcha.jpg"/>
     </div>
     <div class="layui-form-item">
         <button class="layui-btn layui-block" lay-filter="login" lay-submit>登录</button>

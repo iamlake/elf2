@@ -13,10 +13,10 @@ import javax.servlet.http.HttpSession;
 
 
 /**
- * <br>Title: BaseController
- * <br>Description: 控制器支持类
- * <br>Author:李一鸣(liyiming.neu@neusoft.com)
- * <br>Date:2017年11月12日
+ * @Title: BaseController
+ * @Description: 控制器支持类
+ * @Author:李一鸣(liyiming.neu@neusoft.com)
+ * @Date:2017年11月12日
  */
 public abstract class BaseController {
     /**

@@ -1,7 +1,14 @@
 package com.elf.core.persistence.result;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
 import java.util.List;
 
+@Setter
+@Getter
+@ToString
 public class QueryResult<T> extends Result {
 
     /**
@@ -17,22 +24,6 @@ public class QueryResult<T> extends Result {
      * <br>Date:2017年11月24日
      */
     private List<T> data;
-
-    public int getCount() {
-        return count;
-    }
-
-    public void setCount(int count) {
-        this.count = count;
-    }
-
-    public List<T> getData() {
-        return data;
-    }
-
-    public void setData(List<T> data) {
-        this.data = data;
-    }
 
     public QueryResult() {
         super();
