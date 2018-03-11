@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
@@ -50,10 +49,10 @@ public class PageController extends BaseController{
         // print the kaptcha text
         logger.info(Constants.KAPTCHA_SESSION_KEY + " : " + capText);
         // create the image with the text
-        BufferedImage bi = captchaProducer.createImage(capText);
+        BufferedImage bufferedImage = captchaProducer.createImage(capText);
         ServletOutputStream out = response.getOutputStream();
         // write the data out
-        ImageIO.write(bi, "jpg", out);
+        ImageIO.write(bufferedImage, "jpg", out);
         try {
             out.flush();
         } finally {
@@ -68,7 +67,7 @@ public class PageController extends BaseController{
      * @param path
      * @return
      */
-    @RequestMapping(value = "/page/{path}")
+    @GetMapping(value = "/page/{path}")
     public String forward(@PathVariable String path) {
         return path.replace("_", "/");
     }
