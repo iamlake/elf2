@@ -29,7 +29,7 @@ public class PageController extends BaseController{
      * <br>Date:2018年3月11日
      * @return
      */
-    @GetMapping("/kaptcha.jpg")
+    @GetMapping("/api/kaptcha.jpg")
     public void getKaptchaImage() throws Exception {
 
         response.setDateHeader("Expires", 0);
