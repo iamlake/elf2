@@ -12,6 +12,11 @@
 <!-- TODO 页面公共资源 -->
 <script type="text/javascript">
     var basePath = document.getElementById("basePath").href;
+    var loginUser = {
+        account : '${(user_session.account)!'N/A'}',
+        fullname : '${(user_session.fullname)!'N/A'}',
+        userHead : '${(user_session.userHead)!'N/A'}'
+    }
 </script>
 
 <script type="text/javascript" src="${basePath}/static/assets/layui/layui.js"></script>

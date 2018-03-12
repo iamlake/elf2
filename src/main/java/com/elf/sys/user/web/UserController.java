@@ -68,7 +68,7 @@ public class UserController extends BaseController {
             token.setRememberMe(rememberMe);
             try {
                 subject.login(token);
-                final User loginUser = userService.getUserByAccount(user.getAccount());
+                final User loginUser = userService.get(user);
                 session.setAttribute(Global.USER_SESSION, loginUser);
                 result.setCode(Global.RESULT_STAUTS_SUCCESS);
                 result.setMsg("登录成功！");

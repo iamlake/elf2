@@ -39,6 +39,6 @@
             </div>
         </form>
         <script type="text/javascript" src="${basePath}/static/page/login/login.js"></script>
-        <script type="text/javascript" src="${basePath}/static/js/cache.js"></script>
+        <#--<script type="text/javascript" src="${basePath}/static/js/cache.js"></script>-->
     </body>
 </html>
