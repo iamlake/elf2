@@ -7,10 +7,10 @@ import lombok.ToString;
 import java.util.Date;
 
 /**
- * <br>Title: DataEntity
- * <br>Description: 数据Entity支持类
- * <br>Author:李一鸣(liyiming.neu@neusoft.com)
- * <br>Date:2017年11月12日
+ * @Title: DataEntity
+ * @Description: 数据Entity支持类
+ * @Author:李一鸣(liyiming.neu@neusoft.com)
+ * @Date:2017年11月12日
  */
 @Setter
 @Getter

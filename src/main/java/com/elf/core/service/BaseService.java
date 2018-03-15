@@ -1,24 +1,12 @@
 package com.elf.core.service;
 
-import java.util.List;
+import com.baomidou.mybatisplus.service.IService;
 
 /**
- * <br>Title: BaseService
- * <br>Description: Service支持类
- * <br>Author:李一鸣(liyiming.neu@neusoft.com)
- * <br>Date:2017年11月12日
+ * @Title: BaseService
+ * @Description: Service支持类
+ * @Author:李一鸣(liyiming.neu@neusoft.com)
+ * @Date:2017年11月12日
  */
-public interface BaseService<T> {
-
-    List<T> list(T entity);
-
-    T get(T entity);
-
-    int update(T entity);
-
-    int save(T entity);
-
-    int delete(T entity);
-
-    int saveOrUpdate(T entity);
+public interface BaseService<T> extends IService<T>{
 }

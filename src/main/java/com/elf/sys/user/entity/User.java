@@ -1,31 +1,28 @@
 package com.elf.sys.user.entity;
 
+import com.baomidou.mybatisplus.annotations.TableId;
+import com.baomidou.mybatisplus.annotations.TableName;
 import com.elf.core.common.utils.StringUtils;
 import com.elf.core.persistence.DataEntity;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
 import java.util.Date;
 
 /**
- * <br>Title: User
- * <br>Description: 用户
- * <br>Author:李一鸣(liyiming.neu@neusoft.com)
- * <br>Date:2017年12月6日
+ * @Title: User
+ * @Description: 用户
+ * @Author:李一鸣(liyiming.neu@neusoft.com)
+ * @Date:2017年12月6日
  */
 @Setter
 @Getter
 @ToString
-@Table(name = "SYS_ORG_USER")
+@TableName("SYS_ORG_USER")
 public class User extends DataEntity<User> {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @TableId
     private String userId;
 
     private String account;
@@ -78,9 +75,9 @@ public class User extends DataEntity<User> {
     }
 
     /**
-     * <br>Description: serialVersionUID
-     * <br>Author:李一鸣(liyiming.neu@neusoft.com)
-     * <br>Date:2017年11月15日
+     * @Description: serialVersionUID
+     * @Author:李一鸣(liyiming.neu@neusoft.com)
+     * @Date:2017年11月15日
      */
     private static final long serialVersionUID = 1L;
 }

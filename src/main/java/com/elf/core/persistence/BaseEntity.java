@@ -1,7 +1,8 @@
 package com.elf.core.persistence;
 
 
-import javax.persistence.Transient;
+import com.baomidou.mybatisplus.annotations.TableField;
+
 import java.io.Serializable;
 
 /**
@@ -17,7 +18,7 @@ public abstract class BaseEntity<T> implements Serializable {
      * <br>Author:李一鸣(liyiming.neu@neusoft.com)
      * <br>Date:2017年11月12日
      */
-    @Transient
+    @TableField(exist=false)
     protected boolean isNew = false;
 
     public boolean getIsNew() {

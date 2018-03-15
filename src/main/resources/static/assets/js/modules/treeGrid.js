@@ -1,33 +1,30 @@
 /**
 
- @Name：layui.treeGrid 树表格操作
- @Author：luonianqing
- @License：public,
- 首先感谢Layui的原码分项,本源码是在table.js的基面上改进的,如有BUG,请直接在FLY上留言,代码存在冗余,因为看得不够细,没时间,项目需要,Layui没有,我就写了
- 去除了排序,因为树型不支持表头排序
- 去除了全选,因为没有意义,不支持分页,因为也没有意义,也支除了记录条数限制,下级分支有多少条就展示多少条,只支持动态数据,不支持静态
- 增加了行选功能.即只要单击,其它的全不选,只有结点会被选中,
- 增加了treeDataCache,因为树是多级目录关系
- 不支持,树枝选择,下面全部被选中,也许将来会支持,现在满足项目需求即可,新增了注代码
+ @Name：layui.table 表格操作
+ @Author：贤心
+ @License：MIT
 
  */
-layui.define(['laytpl', 'layer', 'form'], function(exports){
+
+layui.define(['laytpl', 'laypage', 'layer', 'form'], function(exports){
     "use strict";
-    var treeDataCache;
+
     var $ = layui.$
         ,laytpl = layui.laytpl
+        ,laypage = layui.laypage
         ,layer = layui.layer
         ,form = layui.form
         ,hint = layui.hint()
         ,device = layui.device()
+
         //外部接口
-        ,treeGrid = {
+        ,table = {
             config: {
                 checkName: 'LAY_CHECKED' //是否选中状态的字段名
                 ,indexName: 'LAY_TABLE_INDEX' //下标索引名
             } //全局配置项
             ,cache: {} //数据缓存
-            ,index: layui.treeGrid ? (layui.treeGrid.index + 10000) : 0
+            ,index: layui.table ? (layui.table.index + 10000) : 0
 
             //设置全局项
             ,set: function(options){
@@ -97,9 +94,12 @@ layui.define(['laytpl', 'layer', 'form'], function(exports){
                 ,'{{# } }}'
                 ,'" {{#if(item2.align){}}align="{{item2.align}}"{{#}}}>'
                 ,'{{# if(item2.type === "checkbox"){ }}' //复选框
-                ,''
+                ,'<input type="checkbox" name="layTableCheckbox" lay-skin="primary" lay-filter="layTableAllChoose" {{# if(item2[d.data.checkName]){ }}checked{{# }; }}>'
                 ,'{{# } else { }}'
                 ,'<span>{{item2.title||""}}</span>'
+                ,'{{# if(!(item2.colspan > 1) && item2.sort){ }}'
+                ,'<span class="layui-table-sort layui-inline"><i class="layui-edge layui-table-sort-asc"></i><i class="layui-edge layui-table-sort-desc"></i></span>'
+                ,'{{# } }}'
                 ,'{{# } }}'
                 ,'</div>'
                 ,'</th>'
@@ -157,6 +157,12 @@ layui.define(['laytpl', 'layer', 'form'], function(exports){
             ,'{{# }; }}'
             ,'</div>'
 
+            ,'{{# if(d.data.page){ }}'
+            ,'<div class="layui-table-page">'
+            ,'<div id="layui-table-page{{d.index}}"></div>'
+            ,'</div>'
+            ,'{{# } }}'
+
             ,'<style>'
             ,'{{# layui.each(d.data.cols, function(i1, item1){'
             ,'layui.each(item1, function(i2, item2){ }}'
@@ -176,8 +182,8 @@ layui.define(['laytpl', 'layer', 'form'], function(exports){
         //构造器
         ,Class = function(options){
             var that = this;
-            that.index = ++treeGrid.index;
-            that.config = $.extend({}, that.config, treeGrid.config, options);
+            that.index = ++table.index;
+            that.config = $.extend({}, that.config, table.config, options);
             that.render();
         };
 
@@ -186,6 +192,9 @@ layui.define(['laytpl', 'layer', 'form'], function(exports){
         limit: 10 //每页显示的数量
         ,loading: true //请求数据时，是否显示loading
         ,cellMinWidth: 60 //所有单元格默认最小宽度
+        ,text: {
+            none: '无数据'
+        }
     };
 
     //表格渲染
@@ -198,7 +207,10 @@ layui.define(['laytpl', 'layer', 'form'], function(exports){
         options.id = options.id || options.elem.attr('id');
 
         //请求参数的自定义格式
-        options.request = $.extend({}, options.request)
+        options.request = $.extend({
+            pageName: 'page'
+            ,limitName: 'limit'
+        }, options.request)
 
         //响应数据的自定义格式
         options.response = $.extend({
@@ -208,7 +220,18 @@ layui.define(['laytpl', 'layer', 'form'], function(exports){
             ,dataName: 'data'
             ,countName: 'count'
         }, options.response);
+
+        //如果 page 传入 laypage 对象
+        if(typeof options.page === 'object'){
+            options.limit = options.page.limit || options.limit;
+            options.limits = options.page.limits || options.limits;
+            that.page = options.page.curr = options.page.curr || 1;
+            delete options.page.elem;
+            delete options.page.jump;
+        }
+
         if(!options.elem[0]) return that;
+
         that.setArea(); //动态分配列宽高
 
         //开始插入替代元素
@@ -226,16 +249,7 @@ layui.define(['laytpl', 'layer', 'form'], function(exports){
 
         //生成替代元素
         hasRender[0] && hasRender.remove(); //如果已经渲染，则Rerender
-        if(options.refresh)
-        {
-
-        }
-        else
-        {
-            othis.after(reElem);
-        }
-        console.log(othis);
-
+        othis.after(reElem);
 
         //各级容器
         that.layHeader = reElem.find(ELEM_HEADER);
@@ -260,7 +274,7 @@ layui.define(['laytpl', 'layer', 'form'], function(exports){
         }
 
         //请求数据
-        that.pullData();
+        that.pullData(that.page);
         that.events();
     };
 
@@ -271,6 +285,7 @@ layui.define(['laytpl', 'layer', 'form'], function(exports){
             ,initWidth = {
                 checkbox: 48
                 ,space: 15
+                ,numbers: 40
             };
 
         //让 type 参数兼容旧版本
@@ -375,37 +390,44 @@ layui.define(['laytpl', 'layer', 'form'], function(exports){
         that.render();
     };
 
+    //页码
+    Class.prototype.page = 1;
+
     //获得数据
     Class.prototype.pullData = function(curr, loadIndex){
         var that = this
             ,options = that.config
             ,request = options.request
-            ,response = options.response;
-        that.startTime = new Date().getTime(); //渲染开始时间
-        var parentId=0;
-        if(options.url){ //Ajax请求
-            if(options.refresh)
-            {
-
-                var refreshId=options.refresh.parentNodeId;
-                var  jsonArray =$.parseJSON("{\""+options.paramName+"\":"+refreshId+"}");
-                options.refresh=jsonArray;
-                parentId=refreshId;
+            ,response = options.response
+            ,sort = function(){
+            if(typeof options.initSort === 'object'){
+                that.sort(options.initSort.field, options.initSort.type);
             }
+        };
+
+        that.startTime = new Date().getTime(); //渲染开始时间
+
+        if(options.url){ //Ajax请求
             var params = {};
+            params[request.pageName] = curr;
+            params[request.limitName] = options.limit;
+
             $.ajax({
                 type: options.method || 'get'
                 ,url: options.url
-                ,data: $.extend(params,options.refresh, options.where)
+                ,data: $.extend(params, options.where)
                 ,dataType: 'json'
                 ,success: function(res){
+                    var data = that.filterArray(res.data,options.treeId,options.treeUpId);
+                    res.data=data[0];
+
                     if(res[response.statusName] != response.statusCode){
                         that.renderForm();
-                        return that.layMain.html('<div class="'+ NONE +'">'+ (res[response.msgName] || '返回的数据状态异常') +'</div>');
+                        that.layMain.html('<div class="'+ NONE +'">'+ (res[response.msgName] || '返回的数据状态异常') +'</div>');
+                    } else {
+                        that.renderData(res, curr, res[response.countName]), sort();
+                        options.time = (new Date().getTime() - that.startTime) + ' ms'; //耗时（接口请求+视图渲染）
                     }
-                    //console.log(options);
-                    that.renderData(parentId,res);
-                    options.time = (new Date().getTime() - that.startTime) + ' ms'; //耗时（接口请求+视图渲染）
                     loadIndex && layer.close(loadIndex);
                     typeof options.done === 'function' && options.done(res, curr, res[response.countName]);
                 }
@@ -421,7 +443,8 @@ layui.define(['laytpl', 'layer', 'form'], function(exports){
 
             res[response.dataName] = options.data.concat().splice(startLimit, options.limit);
             res[response.countName] = options.data.length;
-            that.renderData(parentId,res);
+
+            that.renderData(res, curr, options.data.length), sort();
             typeof options.done === 'function' && options.done(res, curr, res[response.countName]);
         }
     };
@@ -461,107 +484,111 @@ layui.define(['laytpl', 'layer', 'form'], function(exports){
 
         eachArrs();
     };
-    //展开或者收起树
-    Class.prototype.exportTree=function(parentId,isExport)
-    {
-        var that = this;
-        var dbClickI=that.layMain.find('tr[data-id="'+ parentId +'"]').find('.layui-tree-head');
-        if(isExport)
-        {
-            dbClickI.attr('isExport',"true");
-            dbClickI.html('&#xe625;');
 
-        }
-        else
-        {
-            dbClickI.attr('isExport',"false");
-            dbClickI.html('&#xe623;');
-            that.layMain.find('tr[data-parent-id="'+ parentId +'"]').each(
-                function()
-                {
-                    var tempParentId=$(this).attr("data-id");
-                    $(this).hide();
-                    that.exportTree(tempParentId,false);
-                });
-            that.layFixLeft.find('tr[data-parent-id="'+ parentId +'"]').each(
-                function()
-                {
-                    var tempParentId=$(this).attr("data-id");
-                    $(this).hide();
-                    that.exportTree(tempParentId,false);
-                });
-            that.layFixRight.find('tr[data-parent-id="'+ parentId +'"]').each(
-                function()
-                {
-                    var tempParentId=$(this).attr("data-id");
-                    $(this).hide();
-                    that.exportTree(tempParentId,false);
-                });
+    /**
+     * 将列表数据转成树形结构和符合table展示的列表
+     * @param data          列表数据
+     * @param field_Id      树形结构主键字段
+     * @param field_upId    树形结构上级字段
+     * @returns {Array}     [0]表格列表  [1]树形结构
+     */
+    Class.prototype.filterArray=function(data,field_Id,field_upId) {
+        var list=[];
+        var treeList=[];
+        var tableList=[];
+
+        //设置默认参数
+        for (var i = 0; i < data.length; i++) {
+            var n = data[i];
+            n.isOpen=true;
         }
 
-    };
+        //处理树结构
+        var fa = function(upId) {
+            var _array = [];
+            for (var i = 0; i < data.length; i++) {
+                var n = data[i];
+                if (n[field_upId] === upId) {
+                    n.children = fa(n[field_Id]);
+                    _array.push(n);
+                }
+            }
+            return _array;
+        }
+        treeList=fa(data[0][field_upId],"");//递归
+
+
+        //处理表格结构
+        var fa2=function (l,level,upids) {
+            for (var i = 0; i < l.length; i++) {
+                var n = l[i];
+                n.level=level;//设置当前层级
+                n.upIds=upids;
+                tableList.push(n);
+                if (n.children&&n.children.length>0) {
+                    fa2(n.children,1+level,upids+"_"+n[field_Id]+"_");
+                }
+            }
+            return;
+        }
+        fa2(treeList,1,"");
+
+        list.push(tableList);//table结构
+        list.push(treeList)//tree树结构
+        return list;
+    }
+
     //数据渲染
-    Class.prototype.renderData = function(parentId,res){
-        if(treeDataCache==null)
-        {
-            treeDataCache=new Object();
-            treeDataCache[parentId]=res[this.config.response.dataName];
-        }
-        else
-        {
-            treeDataCache[parentId]=res[this.config.response.dataName];
-        }
+    Class.prototype.renderData = function(res, curr, count, sort){
         var that = this
             ,options = that.config
-            ,data = treeDataCache|| [] //
+            ,data = res[options.response.dataName] || []
             ,trs = []
             ,trs_fixed = []
             ,trs_fixed_r = []
+
             //渲染视图
             ,render = function(){ //后续性能提升的重点
-                //treeHead内容
-                var levelField=options.levelField
-                    ,paramName=options.paramName
-                    ,paramValue=options.paramValue
-                    ,scopeField=options.scopeField;
-                //处理展开还是隐藏
-                var childIsExport=false;
-                var dbClickI=that.layMain.find('tr[data-id="'+ parentId +'"]').find('.layui-tree-head');
-                if(dbClickI.length>0)
-                {
-                    if(dbClickI.attr('isExport')=='true')//原来是展开,现在要收起
-                    {
-                        childIsExport=false;
-                    }
-                    else
-                    {
-                        childIsExport=true;
-                    }
+                if(!sort && that.sortKey){
+                    return that.sort(that.sortKey.field, that.sortKey.sort, true);
                 }
-                else
-                {
-                    childIsExport=true;
-                }
-                layui.each(data[parentId], function(i1, item1){
-                    var tds = [], tds_fixed = [], tds_fixed_r = [];
+                layui.each(data, function(i1, item1){
+                    var tds = [], tds_fixed = [], tds_fixed_r = []
+                        ,numbers = i1 + options.limit*(curr - 1) + 1; //序号
+
                     if(item1.length === 0) return;
+                    if(!sort){
+                        item1[table.config.indexName] = i1;
+                    }
+
                     that.eachCols(function(i3, item3){
                         var field = item3.field || i3, content = item1[field]
                             ,cell = that.getColElem(that.layHeader, field);
-
                         if(content === undefined || content === null) content = '';
                         if(item3.colspan > 1) return;
-                        var treeHeadImg="";
-                        if(field===scopeField)
-                        {
-                            var level=item1[options.levelField];
-                            var temp="<i>"
-                            for(var i=1;i<level;i++) {
-                                temp = temp + "&nbsp;&nbsp;";
+                        var o=data[i1];
+
+                        var treeImgHtml='';//树形图标
+                        var treeShowName=options.treeShowName;//显示值
+                        if(treeShowName==item3.field){//当前是否用于显示的值
+                            treeImgHtml+='<div style="float: left;height: 28px;line-height: 28px;padding-left: 5px;">';
+                            var temTreeHtml='<i class="layui-icon layui-tree-head">&#xe625;</i> ';
+
+                            var nbspHtml="<i>"//一次位移
+                            for(var i=1;i<o.level;i++) {
+                                nbspHtml = nbspHtml + "&nbsp;&nbsp;&nbsp;&nbsp;";
                             }
-                            temp=temp+"</i>";
-                            treeHeadImg=temp+"<i class='layui-icon layui-tree-head' id=treeHead"+item1[paramValue]+" isExport='false'>&#xe623;</i>";
+                            nbspHtml=nbspHtml+"</i>";
+
+                            if(o.children&&o.children.length>0){//非叶子节点
+                                treeImgHtml+=nbspHtml+temTreeHtml;
+                            }else{
+                                treeImgHtml+=nbspHtml+'<i class="layui-icon layui-tree-head">&nbsp;&nbsp;</i> ';
+                            }
+
+                            treeImgHtml+="</div>";
                         }
+
                         //td内容
                         var td = ['<td data-field="'+ field +'" '+ function(){
                             var attr = [];
@@ -578,68 +605,111 @@ layui.define(['laytpl', 'layer', 'form'], function(exports){
                                 var str = (options.index + '-' + field);
                                 return item3.type === 'normal' ? str
                                     : (str + ' laytable-cell-' + item3.type);
-                            }() +'">' + function(){
-                                var tplData = $.extend(true,item1);
+                            }() +'">'+treeImgHtml+'<p>'+function(){
+                                var tplData = $.extend(true, {
+                                    LAY_INDEX: numbers
+                                }, item1);
+
                                 //渲染复选框列视图
                                 if(item3.type === 'checkbox'){
-                                    return '<input type="checkbox" name="layTableCheckbox" id="tableCheckBox'+ parentId +'_'+i1+'" lay-skin="primary" '+ function(){
-                                        var checkName = treeGrid.config.checkName;
+                                    return '<input type="checkbox" name="layTableCheckbox" lay-skin="primary" '+ function(){
+                                        var checkName = table.config.checkName;
+                                        //如果是全选
+                                        if(item3[checkName]){
+                                            item1[checkName] = item3[checkName];
+                                            return item3[checkName] ? 'checked' : '';
+                                        }
                                         return tplData[checkName] ? 'checked' : '';
                                     }() +'>';
+                                } else if(item3.type === 'numbers'){ //渲染序号
+                                    return numbers;
                                 }
+
                                 //解析工具列模板
                                 if(item3.toolbar){
                                     return laytpl($(item3.toolbar).html()||'').render(tplData);
                                 }
-                                return item3.templet ? treeHeadImg+(laytpl($(item3.templet).html() || String(content)).render(tplData)) : treeHeadImg+content+"";
+                                return item3.templet ? function(){
+                                    return typeof item3.templet === 'function'
+                                        ? item3.templet(tplData)
+                                        : laytpl($(item3.templet).html() || String(content)).render(tplData)
+                                }() : content;
                             }()
-                            ,'</div></td>'].join('');
+                            ,' </p></div></td>'].join('');
 
                         tds.push(td);
                         if(item3.fixed && item3.fixed !== 'right') tds_fixed.push(td);
                         if(item3.fixed === 'right') tds_fixed_r.push(td);
                     });
-                    trs.push('<tr data-index="'+ parentId +'_'+i1+'" data-id="'+item1[paramValue]+'" data-parent-id="'+parentId+'">'+ tds.join('') + '</tr>');
-                    trs_fixed.push('<tr data-index="'+ parentId +'_'+i1+'" data-id="'+item1[paramValue]+'" data-parent-id="'+parentId+'">'+ tds_fixed.join('') + '</tr>');
-                    trs_fixed_r.push('<tr data-index="'+ parentId +'_'+i1+'" data-id="'+item1[paramValue]+'" data-parent-id="'+parentId+'">'+ tds_fixed_r.join('') + '</tr>');
+
+                    trs.push('<tr data-index="'+ i1 +'" upids="'+item1["upIds"]+'">'+ tds.join('') + '</tr>');
+                    trs_fixed.push('<tr data-index="'+ i1 +'">'+ tds_fixed.join('') + '</tr>');
+                    trs_fixed_r.push('<tr data-index="'+ i1 +'">'+ tds_fixed_r.join('') + '</tr>');
                 });
-                if(parentId==0)
-                {
-                    that.layBody.scrollTop(0);
-                    that.layMain.find('.'+ NONE).remove();
-                    that.layMain.find('tbody').html(trs.join(''));
-                    that.layFixLeft.find('tbody').html(trs_fixed.join(''));
-                    that.layFixRight.find('tbody').html(trs_fixed_r.join(''));
-                }
-                else
-                {
-                    that.layMain.find('tr[data-parent-id="'+ parentId +'"]').remove();
-                    that.layFixLeft.find('tr[data-parent-id="'+ parentId +'"]').remove();
-                    that.layFixRight.find('tr[data-parent-id="'+ parentId +'"]').remove();
-                    that.layMain.find('tr[data-id="'+ parentId +'"]').after(trs.join(''));
-                    that.layFixLeft.find('tr[data-id="'+ parentId +'"]').after(trs_fixed.join(''));
-                    that.layFixRight.find('tr[data-id="'+ parentId +'"]').after(trs_fixed_r.join(''));
-                }
+
+                //if(data.length === 0) return;
+
+                that.layBody.scrollTop(0);
+                that.layMain.find('.'+ NONE).remove();
+                that.layMain.find('tbody').html(trs.join(''));
+                that.layFixLeft.find('tbody').html(trs_fixed.join(''));
+                that.layFixRight.find('tbody').html(trs_fixed_r.join(''));
+
                 that.renderForm();
+                that.syncCheckAll();
                 that.haveInit ? that.scrollPatch() : setTimeout(function(){
                     that.scrollPatch();
                 }, 50);
                 that.haveInit = true;
                 layer.close(that.tipsIndex);
-                that.exportTree(parentId,childIsExport);
             };
 
         that.key = options.id || options.index;
-        treeGrid.cache[that.key] = treeDataCache; //记录数据
+        table.cache[that.key] = data; //记录数据
+
+        //显示隐藏分页栏
+        that.layPage[data.length === 0 && curr == 1 ? 'addClass' : 'removeClass'](HIDE);
+
+        //排序
+        if(sort){
+            return render();
+        }
+
         if(data.length === 0){
             that.renderForm();
             that.layFixed.remove();
             that.layMain.find('tbody').html('');
             that.layMain.find('.'+ NONE).remove();
-            return that.layMain.append('<div class="'+ NONE +'">无数据</div>');
+            return that.layMain.append('<div class="'+ NONE +'">'+ options.text.none +'</div>');
         }
 
         render();
+
+        //同步分页状态
+        if(options.page){
+            options.page = $.extend({
+                elem: 'layui-table-page' + options.index
+                ,count: count
+                ,limit: options.limit
+                ,limits: options.limits || [10,20,30,40,50,60,70,80,90]
+                ,groups: 3
+                ,layout: ['prev', 'page', 'next', 'skip', 'count', 'limit']
+                ,prev: '<i class="layui-icon">&#xe603;</i>'
+                ,next: '<i class="layui-icon">&#xe602;</i>'
+                ,jump: function(obj, first){
+                    if(!first){
+                        //分页本身并非需要做以下更新，下面参数的同步，主要是因为其它处理统一用到了它们
+                        //而并非用的是 options.page 中的参数（以确保分页未开启的情况仍能正常使用）
+                        that.page = obj.curr; //更新页码
+                        options.limit = obj.limit; //更新每页条数
+
+                        that.pullData(obj.curr, that.loading());
+                    }
+                }
+            }, options.page);
+            options.page.count = count; //更新总条数
+            laypage.render(options.page);
+        }
     };
 
     //找到对应的列元素
@@ -653,6 +723,73 @@ layui.define(['laytpl', 'layer', 'form'], function(exports){
     Class.prototype.renderForm = function(type){
         form.render(type, 'LAY-table-'+ this.index);
     }
+
+    //数据排序
+    Class.prototype.sort = function(th, type, pull, formEvent){
+        var that = this
+            ,field
+            ,res = {}
+            ,options = that.config
+            ,filter = options.elem.attr('lay-filter')
+            ,data = table.cache[that.key], thisData;
+
+        //字段匹配
+        if(typeof th === 'string'){
+            that.layHeader.find('th').each(function(i, item){
+                var othis = $(this)
+                    ,_field = othis.data('field');
+                if(_field === th){
+                    th = othis;
+                    field = _field;
+                    return false;
+                }
+            });
+        }
+
+        try {
+            var field = field || th.data('field');
+
+            //如果欲执行的排序已在状态中，则不执行渲染
+            if(that.sortKey && !pull){
+                if(field === that.sortKey.field && type === that.sortKey.sort){
+                    return;
+                }
+            }
+
+            var elemSort = that.layHeader.find('th .laytable-cell-'+ options.index +'-'+ field).find(ELEM_SORT);
+            that.layHeader.find('th').find(ELEM_SORT).removeAttr('lay-sort'); //清除其它标题排序状态
+            elemSort.attr('lay-sort', type || null);
+            that.layFixed.find('th')
+        } catch(e){
+            return hint.error('Table modules: Did not match to field');
+        }
+
+        //记录排序索引和类型
+        that.sortKey = {
+            field: field
+            ,sort: type
+        };
+
+        if(type === 'asc'){ //升序
+            thisData = layui.sort(data, field);
+        } else if(type === 'desc'){ //降序
+            thisData = layui.sort(data, field, true);
+        } else { //清除排序
+            thisData = layui.sort(data, table.config.indexName);
+            delete that.sortKey;
+        }
+
+        res[options.response.dataName] = thisData;
+        that.renderData(res, that.page, that.count, true);
+
+        if(formEvent){
+            layui.event.call(th, MOD_NAME, 'sort('+ filter +')', {
+                field: field
+                ,type: type
+            });
+        }
+    };
+
     //请求loading
     Class.prototype.loading = function(){
         var that = this
@@ -675,15 +812,43 @@ layui.define(['laytpl', 'layer', 'form'], function(exports){
     Class.prototype.setCheckData = function(index, checked){
         var that = this
             ,options = that.config
-            ,thisData = treeGrid.cache[that.key];
-        if(!thisData[index.split("_")[0]][index.split("_")[1]]) return;
-        if(thisData[index.split("_")[0]][index.split("_")[1]].constructor === Array)
-            return;
-        else {
-            thisData[index.split("_")[0]][index.split("_")[1]][options.checkName]=checked;
-        }
-
+            ,thisData = table.cache[that.key];
+        if(!thisData[index]) return;
+        if(thisData[index].constructor === Array) return;
+        thisData[index][options.checkName] = checked;
     };
+
+    //同步全选按钮状态
+    Class.prototype.syncCheckAll = function(){
+        var that = this
+            ,options = that.config
+            ,checkAllElem = that.layHeader.find('input[name="layTableCheckbox"]')
+            ,syncColsCheck = function(checked){
+            that.eachCols(function(i, item){
+                if(item.type === 'checkbox'){
+                    item[options.checkName] = checked;
+                }
+            });
+            return checked;
+        };
+
+        if(!checkAllElem[0]) return;
+
+        if(table.checkStatus(that.key).isAll){
+            if(!checkAllElem[0].checked){
+                checkAllElem.prop('checked', true);
+                that.renderForm('checkbox');
+            }
+            syncColsCheck(true);
+        } else {
+            if(checkAllElem[0].checked){
+                checkAllElem.prop('checked', false);
+                that.renderForm('checkbox');
+            }
+            syncColsCheck(false);
+        }
+    };
+
     //获取cssRule
     Class.prototype.getCssRule = function(field, callback){
         var that = this
@@ -713,6 +878,9 @@ layui.define(['laytpl', 'layer', 'form'], function(exports){
         bodyHeight = parseFloat(height) - parseFloat(that.layHeader.height()) - 1;
         if(options.toolbar){
             bodyHeight = bodyHeight - that.layTool.outerHeight();
+        }
+        if(options.page){
+            bodyHeight = bodyHeight - that.layPage.outerHeight() - 1;
         }
         that.layMain.css('height', bodyHeight);
     };
@@ -793,7 +961,7 @@ layui.define(['laytpl', 'layer', 'form'], function(exports){
             ,dict = {}
             ,th = that.layHeader.find('th')
             ,resizing
-            ,ELEM_CELL = '.layui-table-cell'
+            ,ELEM_CELL = '.layui-table-cell p'
             ,filter = options.elem.attr('lay-filter');
 
         //拖拽调整宽度
@@ -848,119 +1016,95 @@ layui.define(['laytpl', 'layer', 'form'], function(exports){
                 resizing = null;
             }
         });
+
+        //排序
+        th.on('click', function(){
+            var othis = $(this)
+                ,elemSort = othis.find(ELEM_SORT)
+                ,nowType = elemSort.attr('lay-sort')
+                ,type;
+
+            if(!elemSort[0] || resizing === 1) return resizing = 2;
+
+            if(nowType === 'asc'){
+                type = 'desc';
+            } else if(nowType === 'desc'){
+                type = null;
+            } else {
+                type = 'asc';
+            }
+            that.sort(othis, type, null, true);
+        }).find(ELEM_SORT+' .layui-edge ').on('click', function(e){
+            var othis = $(this)
+                ,index = othis.index()
+                ,field = othis.parents('th').eq(0).data('field')
+            layui.stope(e);
+            if(index === 0){
+                that.sort(field, 'asc', null, true);
+            } else {
+                that.sort(field, 'desc', null, true);
+            }
+        });
+
+        /**
+         * 树形节点点击事件（隐藏展开下级节点）
+         */
+        that.elem.on('click', 'i.layui-tree-head', function(){
+            var othis = $(this)
+                ,index = othis.parents('tr').eq(0).data('index')
+                ,tr = that.layBody.find('tr[data-index="'+ index +'"]')
+                ,datas=table.cache[that.key];//数据
+            var o=datas[index];
+
+            var stime=new Date();
+            var sonO=$("[upids*=_"+o[options.treeId]+"_]");
+            if(o.isOpen){//打开状态的，关闭
+                sonO.hide();
+            }else{
+                sonO.show();
+            }
+
+            var etime=new Date();
+            console.log((etime-stime)/1000+"秒");
+
+            o.isOpen=!o.isOpen;//设置打开状态
+
+            //处理图标
+            var dbClickI=tr.find('.layui-tree-head');
+            if(o.isOpen){//打开状态
+                dbClickI.html('&#xe625;');
+            }else{
+                dbClickI.html('&#xe623;');
+            }
+        });
+
         //复选框选择
         that.elem.on('click', 'input[name="layTableCheckbox"]+', function(){
             var checkbox = $(this).prev()
+                ,childs = that.layBody.find('input[name="layTableCheckbox"]')
                 ,index = checkbox.parents('tr').eq(0).data('index')
-                ,checked = checkbox[0].checked;
-            //单选
-            that.setCheckData(index, checked);
+                ,checked = checkbox[0].checked
+                ,isAll = checkbox.attr('lay-filter') === 'layTableAllChoose';
+
+            //全选
+            if(isAll){
+                childs.each(function(i, item){
+                    item.checked = checked;
+                    that.setCheckData(i, checked);
+                });
+                that.syncCheckAll();
+                that.renderForm('checkbox');
+            } else {
+                that.setCheckData(index, checked);
+                that.syncCheckAll();
+            }
             layui.event.call(this, MOD_NAME, 'checkbox('+ filter +')', {
                 checked: checked
-                ,data: treeGrid.cache[that.key] ? (treeGrid.cache[that.key][index.split("_")[0]][index.split("_")[1]] || {}) : {}
-                ,type: 'one'
+                ,data: table.cache[that.key] ? (table.cache[that.key][index] || {}) : {}
+                ,type: isAll ? 'all' : 'one'
             });
         });
-        that.elem.on('click', 'i.layui-tree-head', function()
-        {
-            var othis = $(this)
-                ,index = othis.parents('tr').eq(0).data('index')
-                ,tr = that.layBody.find('tr[data-index="'+ index +'"]')
-                ,request = options.request
-                ,response = options.response
-                ,data = treeGrid.cache[that.key][index.split("_")[0]][index.split("_")[1]];
-            var levelField=options.levelField
-                ,paramName=options.paramName
-                ,paramValue=options.paramValue
-                ,scopeField=options.scopeField;
-            var tempValue=data[paramValue];
-            $.ajax({
-                type: options.method || 'get'
-                ,url: options.url
-                ,data: paramName+"="+tempValue
-                ,dataType: 'json'
-                ,success: function(res){
-                    if(res[response.statusName] != response.statusCode){
-                        that.renderForm();
-                        return that.layMain.html('<div class="'+ NONE +'">'+ (res[response.msgName] || '返回的数据状态异常') +'</div>');
-                    }
-                    that.renderData(data[paramValue],res);
-                    options.time = (new Date().getTime() - that.startTime) + ' ms'; //耗时（接口请求+视图渲染）
-                }
-                ,error: function(e, m){
-                    that.layMain.html('<div class="'+ NONE +'">数据接口请求异常</div>');
-                    that.renderForm();
-                }
-            });
-        });
-        //单行点击事件 luo
-        that.elem.on('click', 'td', function()
-        {
-            var othis = $(this);
-            var fieldIndex= othis.attr("data-field");
-            if(!(/^\+?[1-9][0-9]*$/.test(fieldIndex))) //排除checkBox点击事件, 因为td 点击只能如果只要不是checkBox点击,checkBox 点击一定是数字
-            {
-                var childs = that.layBody.find('input[name="layTableCheckbox"]');
-                var index = othis.parents('tr').eq(0).data('index');
-                childs.each(function(i, item)
-                {
-                    if(item.id==="tableCheckBox"+index)
-                    {
-                        item.checked = true;
-                        treeGrid.cache[that.key][index.split("_")[0]][index.split("_")[1]][options.checkName]=true;
 
-                    }
-                    else
-                    {
-                        var otherItemId=item.id.substring("tableCheckBox".length,item.id.length);
-                        item.checked = false;
-                        treeGrid.cache[that.key][otherItemId.split("_")[0]][otherItemId.split("_")[1]][options.checkName]=false;
-                    }
-                });
-                that.renderForm();
-                layui.event.call(this, MOD_NAME, 'checkbox('+ filter +')', {
-                    checked: true
-                    ,data: treeGrid.cache[that.key] ? (treeGrid.cache[that.key][index.split("_")[0]][index.split("_")[1]] || {}) : {}
-                    ,type: 'one'
-                });
-
-            }
-
-        });
-        that.elem.on('dblclick', 'td', function()
-        {
-            var othis = $(this)
-                ,index = othis.parents('tr').eq(0).data('index')
-                ,tr = that.layBody.find('tr[data-index="'+ index +'"]')
-                ,request = options.request
-                ,response = options.response
-                ,data = treeGrid.cache[that.key][index.split("_")[0]][index.split("_")[1]];
-            var levelField=options.levelField
-                ,paramName=options.paramName
-                ,paramValue=options.paramValue
-                ,scopeField=options.scopeField;
-            var tempValue=data[paramValue];
-            $.ajax({
-                type: options.method || 'get'
-                ,url: options.url
-                ,data: paramName+"="+tempValue
-                ,dataType: 'json'
-                ,success: function(res){
-                    if(res[response.statusName] != response.statusCode){
-                        that.renderForm();
-                        return that.layMain.html('<div class="'+ NONE +'">'+ (res[response.msgName] || '返回的数据状态异常') +'</div>');
-                    }
-                    that.renderData(data[paramValue],res);
-                    options.time = (new Date().getTime() - that.startTime) + ' ms'; //耗时（接口请求+视图渲染）
-                }
-                ,error: function(e, m){
-                    that.layMain.html('<div class="'+ NONE +'">数据接口请求异常</div>');
-                    that.renderForm();
-                }
-            });
-
-
-        });
         //行事件
         that.layBody.on('mouseenter', 'tr', function(){
             var othis = $(this)
@@ -978,10 +1122,8 @@ layui.define(['laytpl', 'layer', 'form'], function(exports){
                 ,value = this.value
                 ,field = othis.parent().data('field')
                 ,index = othis.parents('tr').eq(0).data('index')
-                ,data = treeGrid.cache[that.key][index.split("_")[0]][index.split("_")[1]];
-
+                ,data = table.cache[that.key][index];
             data[field] = value; //更新缓存中的值
-
             layui.event.call(this, MOD_NAME, 'edit('+ filter +')', {
                 value: value
                 ,data: data
@@ -992,26 +1134,28 @@ layui.define(['laytpl', 'layer', 'form'], function(exports){
                 ,othis = $(this)
                 ,field = othis.parent().data('field')
                 ,index = othis.parents('tr').eq(0).data('index')
-                ,data = treeGrid.cache[that.key][index];
+                ,data = table.cache[that.key][index];
+
             that.eachCols(function(i, item){
                 if(item.field == field && item.templet){
                     templet = item.templet;
                 }
             });
-            othis.siblings(ELEM_CELL).html(
+
+            othis.parent().find(ELEM_CELL).html(
                 templet ? laytpl($(templet).html() || this.value).render(data) : this.value
             );
+
             othis.parent().data('content', this.value);
             othis.remove();
         });
 
-        //单元格事件
-        that.layBody.on('click', 'td', function(){
-            var othis = $(this)
+        //单元格事件[td改成单元格内容点击事件]
+        that.layBody.on('click', 'td div.layui-table-cell p', function(){
+            var othis = $(this).parent().parent()
                 ,field = othis.data('field')
                 ,editType = othis.data('edit')
                 ,elemCell = othis.children(ELEM_CELL);
-
             layer.close(that.tipsIndex);
             if(othis.data('off')) return;
 
@@ -1022,7 +1166,7 @@ layui.define(['laytpl', 'layer', 'form'], function(exports){
                     //othis.find('.'+ELEM_EDIT)[0] || othis.append(select);
                 } else { //输入框
                     var input = $('<input class="layui-input '+ ELEM_EDIT +'">');
-                    input[0].value = othis.data('content') || elemCell.text();
+                    input[0].value = $(this).text();//  othis.data('content') || elemCell.text();
                     othis.find('.'+ELEM_EDIT)[0] || othis.append(input);
                     input.focus();
                 }
@@ -1068,14 +1212,14 @@ layui.define(['laytpl', 'layer', 'form'], function(exports){
                 ,index = othis.parents('tr').eq(0).data('index')
                 ,tr = that.layBody.find('tr[data-index="'+ index +'"]')
                 ,ELEM_CLICK = 'layui-table-click'
-                ,data = treeGrid.cache[that.key][index.split("_")[0]][index.split("_")[1]];
+                ,data = table.cache[that.key][index];
 
             layui.event.call(this, MOD_NAME, 'tool('+ filter +')', {
-                data: treeGrid.clearCacheKey(data)
+                data: table.clearCacheKey(data)
                 ,event: othis.attr('lay-event')
                 ,tr: tr
                 ,del: function(){
-                    treeGrid.cache[that.key][index] = [];
+                    table.cache[that.key][index] = [];
                     tr.remove();
                     that.scrollPatch();
                 }
@@ -1120,7 +1264,7 @@ layui.define(['laytpl', 'layer', 'form'], function(exports){
     };
 
     //初始化
-    treeGrid.init = function(filter, settings){
+    table.init = function(filter, settings){
         settings = settings || {};
         var that = this
             ,elemTable = filter ? $('table[lay-filter="'+ filter +'"]') : $(ELEM + '[lay-data]')
@@ -1128,12 +1272,14 @@ layui.define(['laytpl', 'layer', 'form'], function(exports){
 
         //遍历数据表格
         elemTable.each(function(){
-            var othis = $(this), treeGridData = othis.attr('lay-data');
+            var othis = $(this), tableData = othis.attr('lay-data');
+
             try{
-                treeGridData = new Function('return '+ treeGridData)();
+                tableData = new Function('return '+ tableData)();
             } catch(e){
-                hint.error(errorTips + treeGridData)
+                hint.error(errorTips + tableData)
             }
+
             var cols = [], options = $.extend({
                 elem: this
                 ,cols: []
@@ -1141,7 +1287,7 @@ layui.define(['laytpl', 'layer', 'form'], function(exports){
                 ,skin: othis.attr('lay-skin') //风格
                 ,size: othis.attr('lay-size') //尺寸
                 ,even: typeof othis.attr('lay-even') === 'string' //偶数行背景
-            }, treeGrid.config, settings, treeGridData);
+            }, table.config, settings, tableData);
 
             filter && othis.hide();
 
@@ -1186,35 +1332,28 @@ layui.define(['laytpl', 'layer', 'form'], function(exports){
                 });
                 options.data[i1] = row;
             });
-            treeGrid.render(options);
+            table.render(options);
         });
 
         return that;
     };
-    treeGrid.refreshNode = function(id, parentId,options){
-        $("#treeHead"+parentId).attr("isexport","false");
-        $("#treeHead"+parentId).click();
-    };
+
     //表格选中状态
-    treeGrid.checkStatus = function(id){
+    table.checkStatus = function(id){
         var nums = 0
             ,invalidNum = 0
             ,arr = []
-            ,data = treeGrid.cache[id] || [];
+            ,data = table.cache[id] || [];
         //计算全选个数
-        layui.each(data, function(i, item)
-        {
-            layui.each(item, function(j, itemTemp)
-            {
-                if (itemTemp.constructor === Array) {
-                    invalidNum++; //无效数据，或已删除的
-                    return;
-                }
-                if (itemTemp[treeGrid.config.checkName]) {
-                    nums++;
-                    arr.push(treeGrid.clearCacheKey(itemTemp));
-                }
-            });
+        layui.each(data, function(i, item){
+            if(item.constructor === Array){
+                invalidNum++; //无效数据，或已删除的
+                return;
+            }
+            if(item[table.config.checkName]){
+                nums++;
+                arr.push(table.clearCacheKey(item));
+            }
         });
         return {
             data: arr //选中的数据
@@ -1224,30 +1363,30 @@ layui.define(['laytpl', 'layer', 'form'], function(exports){
 
     //表格重载
     thisTable.config = {};
-    treeGrid.reload = function(id, options){
+    table.reload = function(id, options){
         var config = thisTable.config[id];
         options = options || {};
-        if(!config) return hint.error('The ID option was not found in the treeGrid instance');
+        if(!config) return hint.error('The ID option was not found in the table instance');
         if(options.data && options.data.constructor === Array) delete config.data;
-        return treeGrid.render($.extend(true, {}, config, options));
+        return table.render($.extend(true, {}, config, options));
     };
 
     //核心入口
-    treeGrid.render = function(options){
+    table.render = function(options){
         var inst = new Class(options);
         return thisTable.call(inst);
     };
 
     //清除临时Key
-    treeGrid.clearCacheKey = function(data){
+    table.clearCacheKey = function(data){
         data = $.extend({}, data);
-        delete data[treeGrid.config.checkName];
-        delete data[treeGrid.config.indexName];
+        delete data[table.config.checkName];
+        delete data[table.config.indexName];
         return data;
     };
 
     //自动完成渲染
-    treeGrid.init();
+    table.init();
 
-    exports(MOD_NAME, treeGrid);
+    exports(MOD_NAME, table);
 });

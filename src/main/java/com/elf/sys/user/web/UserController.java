@@ -1,5 +1,6 @@
 package com.elf.sys.user.web;
 
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.elf.core.persistence.constants.Global;
 import com.elf.core.persistence.result.JSONResult;
 import com.elf.core.persistence.result.QueryResult;
@@ -38,7 +39,7 @@ public class UserController extends BaseController {
     @GetMapping("/user")
     @ResponseBody
     public Result findUsers(User user) {
-        List<User> list = userService.list(user);
+        List<User> list = userService.selectList(new EntityWrapper<>(user));
         return new QueryResult<User>(Global.RESULT_STAUTS_SUCCESS, "", list, list.size());
     }
 
@@ -68,7 +69,7 @@ public class UserController extends BaseController {
             token.setRememberMe(rememberMe);
             try {
                 subject.login(token);
-                final User loginUser = userService.get(user);
+                final User loginUser = userService.selectOne(new EntityWrapper<>(user));
                 session.setAttribute(Global.USER_SESSION, loginUser);
                 result.setCode(Global.RESULT_STAUTS_SUCCESS);
                 result.setMsg("登录成功！");
