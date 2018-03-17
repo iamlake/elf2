@@ -1,4 +1,4 @@
-package com.elf.sys.menu.entity;
+package com.elf.sys.app.entity;
 
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
@@ -9,33 +9,26 @@ import lombok.Data;
 import java.util.Date;
 
 @Data
-@TableName("SYS_MENU")
-public class Menu extends DataEntity{
-
+@TableName("SYS_APP")
+public class App extends DataEntity {
     @TableId
-    private String menuId;
+    private String appId;
 
     private String title;
 
-    private String target;
+    private String style;
+
+    private String appType;
+
+    private String appOrder;
 
     private String href;
 
-    private String icon;
-
-    private String spread;
-
-    private String menuOrder;
-
     private String showDefault;
-
-    private String parentMenuId;
-
-    private String appId;
 
     @Override
     public void preInsert() {
-        this.setMenuId(StringUtils.getUUID());
+        this.setAppId(StringUtils.getUUID());
         this.setCreationTime(new Date());
     }
 

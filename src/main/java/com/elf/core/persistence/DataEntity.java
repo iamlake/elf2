@@ -1,8 +1,6 @@
 package com.elf.core.persistence;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 
 import java.util.Date;
 
@@ -12,10 +10,8 @@ import java.util.Date;
  * @Author:李一鸣(liyiming.neu@neusoft.com)
  * @Date:2017年11月12日
  */
-@Setter
-@Getter
-@ToString
-public abstract class DataEntity<T> extends BaseEntity<T> {
+@Data
+public abstract class DataEntity extends BaseEntity {
 
     protected String remark;
 
@@ -36,9 +32,9 @@ public abstract class DataEntity<T> extends BaseEntity<T> {
     protected String ext3;
 
     /**
-     * <br>Description: serialVersionUID
-     * <br>Author:李一鸣(liyiming.neu@neusoft.com)
-     * <br>Date:2017年11月12日
+     * @Description: serialVersionUID
+     * @Author:李一鸣(liyiming.neu@neusoft.com)
+     * @Date:2017年11月12日
      */
     private static final long serialVersionUID = 1L;
 

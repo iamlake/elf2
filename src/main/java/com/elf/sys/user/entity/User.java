@@ -4,9 +4,7 @@ import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.elf.core.common.utils.StringUtils;
 import com.elf.core.persistence.DataEntity;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 
 import java.util.Date;
 
@@ -16,11 +14,9 @@ import java.util.Date;
  * @Author:李一鸣(liyiming.neu@neusoft.com)
  * @Date:2017年12月6日
  */
-@Setter
-@Getter
-@ToString
+@Data
 @TableName("SYS_ORG_USER")
-public class User extends DataEntity<User> {
+public class User extends DataEntity {
 
     @TableId
     private String userId;
