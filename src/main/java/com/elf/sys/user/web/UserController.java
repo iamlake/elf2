@@ -7,6 +7,7 @@ import com.elf.core.persistence.result.QueryResult;
 import com.elf.core.persistence.result.Result;
 import com.elf.core.web.BaseController;
 import com.elf.sys.user.entity.User;
+import com.elf.sys.user.service.UserService;
 import com.google.code.kaptcha.Constants;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -14,6 +15,7 @@ import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,7 +29,10 @@ import java.util.List;
  * @Date:2017年10月24日
  */
 @Controller
-public class UserController extends BaseController<User> {
+public class UserController extends BaseController {
+
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/hello")
     @ResponseBody
@@ -38,18 +43,18 @@ public class UserController extends BaseController<User> {
     @GetMapping("/user")
     @ResponseBody
     public Result findUsers(User user) {
-        List<User> list = baseService.selectList(new EntityWrapper<>(user));
+        List<User> list = userService.selectList(new EntityWrapper<>(user));
         return new QueryResult<>(Global.RESULT_STAUTS_SUCCESS, "", list, list.size());
     }
 
     /**
-     * @Description: 用户登录
-     * @Author:李一鸣(liyiming.neu@neusoft.com)
-     * @Date:2017年10月24日
      * @param user
      * @param kaptcha
      * @param rememberMe
      * @return
+     * @Description: 用户登录
+     * @Author:李一鸣(liyiming.neu@neusoft.com)
+     * @Date:2017年10月24日
      */
     @RequestMapping(value = "/login", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
@@ -68,7 +73,7 @@ public class UserController extends BaseController<User> {
             token.setRememberMe(rememberMe);
             try {
                 subject.login(token);
-                final User loginUser = baseService.selectOne(new EntityWrapper<>(user));
+                final User loginUser = userService.selectOne(new EntityWrapper<>(user));
                 session.setAttribute(Global.USER_SESSION, loginUser);
                 result.setCode(Global.RESULT_STAUTS_SUCCESS);
                 result.setMsg("登录成功！");
@@ -87,12 +92,12 @@ public class UserController extends BaseController<User> {
     }
 
     /**
+     * @return
      * @Description: 用户注销
      * @Author:李一鸣(liyiming.neu@neusoft.com)
      * @Date:2017年10月24日
-     * @return
      */
-    @RequestMapping(value = "/logout", method = { RequestMethod.POST, RequestMethod.GET })
+    @RequestMapping(value = "/logout", method = {RequestMethod.POST, RequestMethod.GET})
     public String userLogout() {
         Subject subject = SecurityUtils.getSubject();
         subject.logout();
@@ -100,17 +105,17 @@ public class UserController extends BaseController<User> {
     }
 
     /**
+     * @param account
+     * @return
      * @Description: 通过账号查询用户信息
      * @Author:李一鸣(liyiming.neu@neusoft.com)
      * @Date:2017年12月17日
-     * @param account
-     * @return
      */
     @RequestMapping(value = "/user/{account}", method = RequestMethod.GET)
     @ResponseBody
     public Result findUserByAccount(@PathVariable("account") String account) {
         List<User> list = new ArrayList<>();
-        User user = baseService.selectOne(new EntityWrapper<>(new User(account,null)));
+        User user = userService.selectOne(new EntityWrapper<>(new User(account, null)));
         list.add(user);
         return new QueryResult<>(Global.RESULT_STAUTS_SUCCESS, "", list, list.size());
     }

@@ -18,7 +18,7 @@ import java.awt.image.BufferedImage;
  * @Date:2017年10月24日
  */
 @Controller
-public class PageController extends BaseController{
+public class PageController extends BaseController {
 
     @Autowired
     private Producer captchaProducer;
@@ -71,6 +71,5 @@ public class PageController extends BaseController{
     public String forward(@PathVariable String path) {
         return path.replace("_", "/");
     }
-
 
 }

@@ -1,12 +1,10 @@
 package com.elf.core.web;
 
 import com.elf.core.persistence.constants.Global;
-import com.elf.core.service.BaseService;
 import com.elf.sys.user.entity.User;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,10 +17,8 @@ import javax.servlet.http.HttpSession;
  * @Author:李一鸣(liyiming.neu@neusoft.com)
  * @Date:2017年11月12日
  */
-public abstract class BaseController<T> {
+public abstract class BaseController {
 
-    @Autowired
-    protected  BaseService<T> baseService;
     /**
      * 日志对象
      */

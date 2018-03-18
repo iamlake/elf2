@@ -36,4 +36,11 @@ public class App extends DataEntity {
     public void preUpdate() {
         this.setModificationTime(new Date());
     }
+
+    /**
+     * @Description: serialVersionUID
+     * @Author:李一鸣(liyiming.neu@neusoft.com)
+     * @Date:2017年11月15日
+     */
+    private static final long serialVersionUID = 1L;
 }
