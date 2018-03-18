@@ -1,32 +1,21 @@
 var $, tab, dataStr, layer, curapp;
-layui.use(['bodyTab', 'form', 'element', 'layer', 'jquery', 'linq'], function () {
+layui.use(['bodyTab', 'form', 'element', 'layer', 'jquery', 'linq', 'elf'], function () {
     var form = layui.form,
         element = layui.element,
-        linq = layui.linq;
+        linq = layui.linq, elf = layui.elf;
     $ = layui.$;
     layer = parent.layer === undefined ? layui.layer : top.layer;
     tab = layui.bodyTab({
-        openTabNum: "50",  //最大可打开窗口数量
-        url: basePath + "/static/assets/json/navs.json" //获取菜单json地址
+        openTabNum: "20",  //最大可打开窗口数量
+        url: basePath + "/menu" //获取菜单json地址
     });
 
     //通过顶部菜单获取左侧二三级菜单   注：此处只做演示之用，实际开发中通过接口传参的方式获取导航数据
-    function getData(json) {
-        $.getJSON(tab.tabConfig.url, function (data) {
-            if (json == "contentManagement") {
-                dataStr = data.contentManagement;
-                //重新渲染左侧菜单
-                tab.render();
-            } else if (json == "memberCenter") {
-                dataStr = data.memberCenter;
-                //重新渲染左侧菜单
-                tab.render();
-            } else if (json == "systemeSttings") {
-                dataStr = data.systemeSttings;
-                //重新渲染左侧菜单
-                tab.render();
-            } else if (json == "seraphApi") {
-                dataStr = data.seraphApi;
+    function getData(application) {
+        $.getJSON(tab.tabConfig.url, function (result) {
+            if(result.data.length > 0){
+                var menuList = linq.from(result.data).where(function (x) { return x.appId == application }).toArray();
+                dataStr = elf.transTreeData(menuList, 'menuId', 'parentMenuId', 'children');
                 //重新渲染左侧菜单
                 tab.render();
             }
@@ -198,7 +187,7 @@ function donation() {
 
 //图片管理弹窗
 function showImg() {
-    $.getJSON(basePath+'/static/assets/json/images.json', function (json) {
+    $.getJSON(basePath + '/static/assets/json/images.json', function (json) {
         var res = json;
         layer.photos({
             photos: res,

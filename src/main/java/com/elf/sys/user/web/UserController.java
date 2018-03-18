@@ -48,14 +48,12 @@ public class UserController extends BaseController {
     }
 
     /**
-     * @param user
-     * @param kaptcha
-     * @param rememberMe
-     * @return
-     * @Description: 用户登录
-     * @Author:李一鸣(liyiming.neu@neusoft.com)
-     * @Date:2017年10月24日
-     */
+    * @Description: 用户登录
+    * @Param: [user, kaptcha, rememberMe]
+    * @return: com.elf.core.persistence.result.Result
+    * @Author: Liyiming
+    * @Date: 2017/10/24
+    */
     @RequestMapping(value = "/login", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public Result userLogin(User user, String kaptcha, boolean rememberMe) {
@@ -92,11 +90,12 @@ public class UserController extends BaseController {
     }
 
     /**
-     * @return
-     * @Description: 用户注销
-     * @Author:李一鸣(liyiming.neu@neusoft.com)
-     * @Date:2017年10月24日
-     */
+    * @Description: 用户注销
+    * @Param: []
+    * @return: java.lang.String
+    * @Author: Liyiming
+    * @Date: 2017/10/24
+    */
     @RequestMapping(value = "/logout", method = {RequestMethod.POST, RequestMethod.GET})
     public String userLogout() {
         Subject subject = SecurityUtils.getSubject();
@@ -105,12 +104,12 @@ public class UserController extends BaseController {
     }
 
     /**
-     * @param account
-     * @return
-     * @Description: 通过账号查询用户信息
-     * @Author:李一鸣(liyiming.neu@neusoft.com)
-     * @Date:2017年12月17日
-     */
+    * @Description: 通过账号查询用户信息
+    * @Param: [account]
+    * @return: com.elf.core.persistence.result.Result
+    * @Author: Liyiming
+    * @Date: 2017/12/17
+    */
     @RequestMapping(value = "/user/{account}", method = RequestMethod.GET)
     @ResponseBody
     public Result findUserByAccount(@PathVariable("account") String account) {

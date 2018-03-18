@@ -25,6 +25,19 @@ public class MenuController extends BaseController {
     private MenuService menuService;
 
     /**
+     * @Description: 查询所有菜单
+     * @Param: [menu]
+     * @return: com.elf.core.persistence.result.Result
+     * @Author: Liyiming
+     * @Date: 2018/3/18
+     */
+    @GetMapping("/menu")
+    public Result findMenuList(Menu menu) {
+        List<Menu> list = menuService.selectList(new EntityWrapper<>(menu));
+        return new QueryResult<>(Global.RESULT_STAUTS_SUCCESS, "", list, list.size());
+    }
+
+    /**
      * @Description: 通过应用ID查询所属菜单
      * @Param: [appId]
      * @return: com.elf.core.persistence.result.Result
