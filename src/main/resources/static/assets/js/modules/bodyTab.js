@@ -52,6 +52,7 @@ layui.define(["element", "jquery"], function (exports) {
                     } else {
                         ulHtml += '<dd><a data-url="' + basePath + data[i].children[j].href + '">';
                     }
+                    console.log('<dd><a data-url="' + basePath + data[i].children[j].href + '">');
                     if (data[i].children[j].icon != undefined && data[i].children[j].icon != '') {
                         if (data[i].children[j].icon.indexOf("icon-") != -1) {
                             ulHtml += '<i class="seraph ' + data[i].children[j].icon + '" data-icon="' + data[i].children[j].icon + '"></i>';
@@ -64,9 +65,9 @@ layui.define(["element", "jquery"], function (exports) {
                 ulHtml += "</dl>";
             } else {
                 if (data[i].target == "_blank") {
-                    ulHtml += '<a data-url="' + data[i].href + '" target="' + data[i].target + '">';
+                    ulHtml += '<a data-url="' + basePath + data[i].href + '" target="' + data[i].target + '">';
                 } else {
-                    ulHtml += '<a data-url="' + data[i].href + '">';
+                    ulHtml += '<a data-url="' + basePath + data[i].href + '">';
                 }
                 if (data[i].icon != undefined && data[i].icon != '') {
                     if (data[i].icon.indexOf("icon-") != -1) {
