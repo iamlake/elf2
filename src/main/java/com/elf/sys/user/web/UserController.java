@@ -1,6 +1,8 @@
 package com.elf.sys.user.web;
 
+import com.baomidou.mybatisplus.enums.SqlLike;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.elf.core.common.utils.StringUtils;
 import com.elf.core.persistence.constants.Global;
 import com.elf.core.persistence.result.JSONResult;
 import com.elf.core.persistence.result.QueryResult;
@@ -40,20 +42,13 @@ public class UserController extends BaseController {
         return "hello user!";
     }
 
-    @GetMapping("/user")
-    @ResponseBody
-    public Result findUsers(User user) {
-        List<User> list = userService.selectList(new EntityWrapper<>(user));
-        return new QueryResult<>(Global.RESULT_STAUTS_SUCCESS, "", list, list.size());
-    }
-
     /**
-    * @Description: 用户登录
-    * @Param: [user, kaptcha, rememberMe]
-    * @return: com.elf.core.persistence.result.Result
-    * @Author: Liyiming
-    * @Date: 2017/10/24
-    */
+     * @Description: 用户登录
+     * @Param: [user, kaptcha, rememberMe]
+     * @return: com.elf.core.persistence.result.Result
+     * @Author: Liyiming
+     * @Date: 2017/10/24
+     */
     @RequestMapping(value = "/login", method = {RequestMethod.POST, RequestMethod.GET})
     @ResponseBody
     public Result userLogin(User user, String kaptcha, boolean rememberMe) {
@@ -90,12 +85,12 @@ public class UserController extends BaseController {
     }
 
     /**
-    * @Description: 用户注销
-    * @Param: []
-    * @return: java.lang.String
-    * @Author: Liyiming
-    * @Date: 2017/10/24
-    */
+     * @Description: 用户注销
+     * @Param: []
+     * @return: java.lang.String
+     * @Author: Liyiming
+     * @Date: 2017/10/24
+     */
     @RequestMapping(value = "/logout", method = {RequestMethod.POST, RequestMethod.GET})
     public String userLogout() {
         Subject subject = SecurityUtils.getSubject();
@@ -104,18 +99,85 @@ public class UserController extends BaseController {
     }
 
     /**
-    * @Description: 通过账号查询用户信息
-    * @Param: [account]
-    * @return: com.elf.core.persistence.result.Result
-    * @Author: Liyiming
-    * @Date: 2017/12/17
-    */
-    @RequestMapping(value = "/user/{account}", method = RequestMethod.GET)
+     * @Description: 通过账号查询用户信息
+     * @Param: [account]
+     * @return: com.elf.core.persistence.result.Result
+     * @Author: Liyiming
+     * @Date: 2017/12/17
+     */
+    @GetMapping("/user/{account}")
     @ResponseBody
     public Result findUserByAccount(@PathVariable("account") String account) {
         List<User> list = new ArrayList<>();
         User user = userService.selectOne(new EntityWrapper<>(new User(account, null)));
         list.add(user);
         return new QueryResult<>(Global.RESULT_STAUTS_SUCCESS, "", list, list.size());
+    }
+
+    /**
+     * @Description: 查询用户列表
+     * @Param: [user]
+     * @return: com.elf.core.persistence.result.Result
+     * @Author: Liyiming
+     * @Date: 2018/3/24
+     */
+    @GetMapping("/user")
+    @ResponseBody
+    public Result findUsers(User user) {
+        EntityWrapper entityWrapper = new EntityWrapper();
+        if (StringUtils.isNotEmpty(user.getAccount())) {
+            entityWrapper.eq("account", user.getAccount());
+        }
+        if (StringUtils.isNotEmpty(user.getFullname())) {
+            entityWrapper.like("fullname", user.getFullname(), SqlLike.DEFAULT);
+        }
+        List<User> list = userService.selectList(entityWrapper);
+        return new QueryResult<>(Global.RESULT_STAUTS_SUCCESS, "", list, list.size());
+    }
+
+    /**
+     * @Description: 添加用户信息
+     * @Param: [user]
+     * @return: com.elf.core.persistence.result.Result
+     * @Author: Liyiming
+     * @Date: 2018/3/25
+     */
+    @PostMapping("/user")
+    @ResponseBody
+    public Result addNewUser(User user) {
+        JSONResult result = new JSONResult();
+        boolean bRet = userService.insert(user);
+        if (bRet) {
+            result.setCode(Global.RESULT_STAUTS_SUCCESS);
+            result.setMsg("添加成功！");
+            result.getParameters().put("", "");
+        } else {
+            result.setCode(Global.RESULT_STAUTS_FAILED);
+            result.setMsg("添加失败！");
+        }
+        return result;
+    }
+
+    /**
+     * @Description: 修改用户信息
+     * @Param: [user]
+     * @return: com.elf.core.persistence.result.Result
+     * @Author: Liyiming
+     * @Date: 2018/3/25
+     */
+    @PutMapping("/user")
+    @ResponseBody
+    public Result modifyUser(User user) {
+        JSONResult result = new JSONResult();
+        boolean bRet = userService.updateById(user);
+        if (bRet) {
+            result.setCode(Global.RESULT_STAUTS_SUCCESS);
+            result.setMsg("修改成功！");
+            result.getParameters().put("", "");
+        } else {
+            result.setCode(Global.RESULT_STAUTS_FAILED);
+            result.setMsg("修改失败！");
+        }
+        return result;
     }
 }

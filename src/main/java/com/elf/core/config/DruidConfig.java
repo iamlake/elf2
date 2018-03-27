@@ -131,7 +131,7 @@ public class DruidConfig {
     }
 
     @Bean
-    public FilterRegistrationBean filterRegistrationBean() {
+    public FilterRegistrationBean druidFilterRegistrationBean() {
         FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
         filterRegistrationBean.setFilter(new WebStatFilter());
         filterRegistrationBean.addUrlPatterns("/*");

@@ -45,14 +45,12 @@ layui.define(["element", "jquery"], function (exports) {
                 ulHtml += '<span class="layui-nav-more"></span>';
                 ulHtml += '</a>';
                 ulHtml += '<dl class="layui-nav-child">';
-                console.log(basePath);
                 for (var j = 0; j < data[i].children.length; j++) {
                     if (data[i].children[j].target == "_blank") {
                         ulHtml += '<dd><a data-url="' + basePath + data[i].children[j].href + '" target="' + data[i].children[j].target + '">';
                     } else {
                         ulHtml += '<dd><a data-url="' + basePath + data[i].children[j].href + '">';
                     }
-                    console.log('<dd><a data-url="' + basePath + data[i].children[j].href + '">');
                     if (data[i].children[j].icon != undefined && data[i].children[j].icon != '') {
                         if (data[i].children[j].icon.indexOf("icon-") != -1) {
                             ulHtml += '<i class="seraph ' + data[i].children[j].icon + '" data-icon="' + data[i].children[j].icon + '"></i>';

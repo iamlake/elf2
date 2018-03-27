@@ -18,7 +18,7 @@ public abstract class BaseEntity implements Serializable {
      * @Author:李一鸣(liyiming.neu@neusoft.com)
      * @Date:2017年11月12日
      */
-    @TableField(exist=false)
+    @TableField(exist = false)
     protected boolean isNew = false;
 
     public boolean getIsNew() {
