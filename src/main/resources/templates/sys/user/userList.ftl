@@ -20,10 +20,14 @@
                 <div class="layui-input-inline">
                     <input type="text" name="account" class="layui-input search_accont" placeholder="请输入账号"/>
                 </div>
-                &nbsp;&nbsp;姓名：
+            </div>
+            <div class="layui-inline">
+                姓名：
                 <div class="layui-input-inline">
                     <input type="text" name="fullname" class="layui-input search_fullname" placeholder="请输入姓名"/>
                 </div>
+            </div>
+            <div class="layui-inline">
                 <a class="layui-btn btn_query" data-type="reload">搜索</a>
             </div>
             <div class="layui-inline">

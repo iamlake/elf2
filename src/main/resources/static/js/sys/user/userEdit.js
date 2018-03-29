@@ -11,6 +11,21 @@ layui.use(['form', 'layer', 'laydate', 'util', 'elf'], function () {
         elem: '#txt_birthDate', max: util.toDateString(new Date(), "yyyy-MM-dd")
     });
 
+    //监听指定开关
+    form.on('switch(isLocked)', function (data) {
+        this.checked ? $("#hid_isLocked").val("T") : $("#hid_isLocked").val("F");
+        layer.msg('[hid_isLocked]：' + $("#hid_isLocked").val(), {
+            offset: '6px'
+        });
+    });
+
+    $(function () {
+        if ($("#hid_isLocked").val() == 'T') {
+            $("#switch_isLocked").attr("checked", true);
+            form.render();
+        }
+    });
+
     form.on("submit(save)", function (data) {
         var ext = 'isNew:' + isNew;
         var url = basePath + '/user';
@@ -18,6 +33,7 @@ layui.use(['form', 'layer', 'laydate', 'util', 'elf'], function () {
             url += '?_method=PUT';
         }
         var formData = elf.getBinding($('.layui-form'), ext);
+        console.log(formData);
         // 弹出loading
         var index = top.layer.msg('数据提交中，请稍候…', {
             icon: 16,

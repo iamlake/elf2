@@ -22,6 +22,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -146,6 +147,9 @@ public class UserController extends BaseController {
     @ResponseBody
     public Result addNewUser(User user) {
         JSONResult result = new JSONResult();
+        user.setCreatedBy(getSessionUser().getAccount());
+        user.setModifiedBy(getSessionUser().getAccount());
+        user.setCreationTime(new Date());
         boolean bRet = userService.insert(user);
         if (bRet) {
             result.setCode(Global.RESULT_STAUTS_SUCCESS);
@@ -169,6 +173,7 @@ public class UserController extends BaseController {
     @ResponseBody
     public Result modifyUser(User user) {
         JSONResult result = new JSONResult();
+        user.setModifiedBy(getSessionUser().getAccount());
         boolean bRet = userService.updateById(user);
         if (bRet) {
             result.setCode(Global.RESULT_STAUTS_SUCCESS);

@@ -52,14 +52,11 @@ layui.define(['jquery'], function (exports) {
                         }
                     }
                 } else if ($oinput.attr("type") == "radio") {
-                    $oinput.each(function () {
-                        var radioObj = $("[name=" + name + "]");
-                        for (var i = 0; i < radioObj.length; i++) {
-                            if (radioObj[i].value == ival) {
-                                radioObj[i].click();
-                            }
+                    for (var i = 0; i < $oinput.length; i++) {
+                        if ($oinput[i].value == ival) {
+                            $oinput[i].click();
                         }
-                    });
+                    }
                 } else if ($oinput.attr("type") == "textarea") {
                     formObj.find("[name=" + name + "]").html(ival);
                 } else {

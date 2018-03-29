@@ -42,7 +42,7 @@
         <div class="magb15 layui-col-md4 layui-col-xs12">
             <label class="layui-form-label">性别</label>
             <div class="layui-input-block sex">
-                <input type="radio" name="sex" value="男" title="男" checked>
+                <input type="radio" name="sex" value="男" title="男">
                 <input type="radio" name="sex" value="女" title="女">
                 <input type="radio" name="sex" value="保密" title="保密">
             </div>
@@ -75,7 +75,7 @@
     <div class="layui-form-item layui-row layui-col-xs12">
         <label class="layui-form-label">移动电话</label>
         <div class="layui-input-block">
-            <input type="text" class="layui-input" lay-verify="required|phone" placeholder="请输入手机号码"
+            <input type="text" class="layui-input" lay-verify="phone" placeholder="请输入手机号码"
                    name="mobileTelephone">
         </div>
     </div>
@@ -110,7 +110,7 @@
         <div class="magb15 layui-col-md4 layui-col-xs12">
             <label class="layui-form-label">证件号码</label>
             <div class="layui-input-block">
-                <input type="text" class="layui-input credentialsNumber" lay-verify="identity" autocomplete="off"
+                <input type="text" class="layui-input credentialsNumber" autocomplete="off"
                        placeholder="请输入证件号码" name="credentialsNumber">
             </div>
         </div>
@@ -127,7 +127,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">是否锁定</label>
         <div class="layui-input-block">
-            <input type="checkbox" lay-skin="switch" lay-filter="isLocked" value="T" lay-text="是|否" name="isLocked">
+            <input type="checkbox" lay-skin="switch" lay-filter="isLocked" value="1" lay-text="是|否" id="switch_isLocked">
         </div>
     </div>
     <div class="layui-form-item layui-row layui-col-xs12">
@@ -149,6 +149,7 @@
         </div>
     </div>
     <input type="hidden" name="userId">
+    <input type="hidden" name="isLocked" id="hid_isLocked" value="F">
 </form>
 <script type="text/javascript" src="${basePath}/static/js/sys/user/userEdit.js"></script>
 </body>
