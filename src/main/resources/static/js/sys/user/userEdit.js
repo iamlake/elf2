@@ -22,15 +22,15 @@ layui.use(['form', 'layer', 'laydate', 'util', 'elf'], function () {
     $(function () {
         if ($("#hid_isLocked").val() == 'T') {
             $("#switch_isLocked").attr("checked", true);
-            form.render();
+            form.render('checkbox');
         }
+        isNew = $("#hid_userId").val() ? false : true;
     });
 
     form.on("submit(save)", function (data) {
         var ext = 'isNew:' + isNew;
-        var url = basePath + '/user';
         if (!isNew) {
-            url += '?_method=PUT';
+            ext += ';_method:put';
         }
         var formData = elf.getBinding($('.layui-form'), ext);
         console.log(formData);
@@ -41,7 +41,7 @@ layui.use(['form', 'layer', 'laydate', 'util', 'elf'], function () {
             shade: 0.8
         }, function () {
             $.post({
-                url: url,
+                url: basePath + '/user',
                 data: formData,
                 success: function (result) {
                     top.layer.close(index);

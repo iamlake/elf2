@@ -95,6 +95,36 @@ layui.use(['bodyTab', 'form', 'element', 'layer', 'jquery', 'linq', 'elf'], func
         });
     }
 
+    $(".changePwd").click(function () {
+        var index = layui.layer.open({
+            title: "修改密码",
+            type: 2,
+            area : ['770px', '395px'],
+            // offset : 'lt',
+            maxmin: true,
+            content: basePath + "/page/sys_user_changePwd",
+            success: function (layero, index) {
+                $.get(basePath + "/user/" + loginUser.account,
+                    function (result) {
+                        if (result.code == '0') {
+                            var iframeWin = window[layero.find('iframe')[0]['name']];
+                            var body = layui.layer.getChildFrame('body', index);
+                            elf.setData(body.find(".layui-form"), result.data[0]);
+                            form.render();
+                        } else {
+                            layer.msg("请刷新页面后重试！");
+                        }
+                    }
+                );
+                setTimeout(function () {
+                    layui.layer.tips('点击此处返回后台首页', '.layui-layer-setwin .layui-layer-close', {
+                        tips: 3
+                    });
+                }, 500)
+            }
+        })
+    });
+
     //手机设备的简单适配
     $('.site-tree-mobile').on('click', function () {
         $('body').addClass('site-mobile');

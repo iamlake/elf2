@@ -19,19 +19,19 @@
             <input type="text" class="layui-input account" lay-verify="required" placeholder="请输入账号" name="account">
         </div>
     </div>
-    <div class="layui-form-item layui-row layui-col-xs12">
-        <label class="layui-form-label">密码</label>
-        <div class="layui-input-block">
-            <input type="password" class="layui-input password" lay-verify="pass" autocomplete="off" placeholder="请输入密码"
-                   name="password">
-        </div>
-    </div>
-    <div class="layui-form-item layui-row layui-col-xs12">
-        <label class="layui-form-label">重复密码</label>
-        <div class="layui-input-block">
-            <input type="password" class="layui-input passwordRepeat" lay-verify="pass" placeholder="请再次输入密码">
-        </div>
-    </div>
+    <#--<div class="layui-form-item layui-row layui-col-xs12">-->
+        <#--<label class="layui-form-label">密码</label>-->
+        <#--<div class="layui-input-block">-->
+            <#--<input type="password" class="layui-input password" lay-verify="pass" autocomplete="off" placeholder="请输入密码"-->
+                   <#--name="password">-->
+        <#--</div>-->
+    <#--</div>-->
+    <#--<div class="layui-form-item layui-row layui-col-xs12">-->
+        <#--<label class="layui-form-label">重复密码</label>-->
+        <#--<div class="layui-input-block">-->
+            <#--<input type="password" class="layui-input passwordRepeat" lay-verify="pass" placeholder="请再次输入密码">-->
+        <#--</div>-->
+    <#--</div>-->
     <div class="layui-form-item layui-row layui-col-xs12">
         <label class="layui-form-label">姓名</label>
         <div class="layui-input-block">
@@ -130,12 +130,12 @@
             <input type="checkbox" lay-skin="switch" lay-filter="isLocked" value="1" lay-text="是|否" id="switch_isLocked">
         </div>
     </div>
-    <div class="layui-form-item layui-row layui-col-xs12">
-        <label class="layui-form-label">头像</label>
-        <div class="layui-input-block">
-            <input type="text" class="layui-input userHead" lay-verify="required" placeholder="请选择头像" name="userHead">
-        </div>
-    </div>
+    <#--<div class="layui-form-item layui-row layui-col-xs12">-->
+        <#--<label class="layui-form-label">头像</label>-->
+        <#--<div class="layui-input-block">-->
+            <#--<input type="text" class="layui-input userHead" lay-verify="required" placeholder="请选择头像" name="userHead">-->
+        <#--</div>-->
+    <#--</div>-->
     <div class="layui-form-item layui-row layui-col-xs12">
         <label class="layui-form-label">备注</label>
         <div class="layui-input-block">
@@ -148,7 +148,7 @@
             <button type="reset" class="layui-btn layui-btn-sm layui-btn-primary">取消</button>
         </div>
     </div>
-    <input type="hidden" name="userId">
+    <input type="hidden" name="userId" id="hid_userId">
     <input type="hidden" name="isLocked" id="hid_isLocked" value="F">
 </form>
 <script type="text/javascript" src="${basePath}/static/js/sys/user/userEdit.js"></script>

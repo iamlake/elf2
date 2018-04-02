@@ -13,8 +13,11 @@ import org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver;
 import java.io.IOException;
 
 /**
- * @author icelake
- */
+ * @program: elf
+ * @description: WebMvcConfig
+ * @author: Liyiming
+ * @create: 2018-2-14 23:03
+ **/
 @Configuration
 @EnableWebMvc
 public class WebMvcConfig extends WebMvcConfigurerAdapter {
@@ -29,6 +32,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         resolver.setContentType("text/html; charset=UTF-8");
         return resolver;
     }
+
     @Bean
     public FreeMarkerConfigurer freemarkerConfig() throws IOException, TemplateException {
         FreeMarkerConfigurer configurer = new FreeMarkerConfigurer();
@@ -36,6 +40,7 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
         configurer.setDefaultEncoding("UTF-8");
         return configurer;
     }
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");

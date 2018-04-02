@@ -147,6 +147,16 @@ public class UserController extends BaseController {
     @ResponseBody
     public Result addNewUser(User user) {
         JSONResult result = new JSONResult();
+        user.setPassword("1");
+        if (StringUtils.isEmpty(user.getUserHead())) {
+            if ("男".equals(user.getSex())) {
+                user.setUserHead("/static/assets/images/userhead/default_male.jpg");
+            } else if ("女".equals(user.getSex())) {
+                user.setUserHead("/static/assets/images/userhead/default_female.jpg");
+            } else {
+                user.setUserHead("/static/assets/images/userhead/default_none.jpg");
+            }
+        }
         user.setCreatedBy(getSessionUser().getAccount());
         user.setModifiedBy(getSessionUser().getAccount());
         user.setCreationTime(new Date());
@@ -173,6 +183,31 @@ public class UserController extends BaseController {
     @ResponseBody
     public Result modifyUser(User user) {
         JSONResult result = new JSONResult();
+        user.setModifiedBy(getSessionUser().getAccount());
+        boolean bRet = userService.updateById(user);
+        if (bRet) {
+            result.setCode(Global.RESULT_STAUTS_SUCCESS);
+            result.setMsg("修改成功！");
+            result.getParameters().put("", "");
+        } else {
+            result.setCode(Global.RESULT_STAUTS_FAILED);
+            result.setMsg("修改失败！");
+        }
+        return result;
+    }
+
+    /** 
+    * @Description: 修改用户密码
+    * @Param: [user] 
+    * @return: com.elf.core.persistence.result.Result 
+    * @Author: Liyiming
+    * @Date: 2018/4/2 
+    */ 
+    @PutMapping("/user/password")
+    @ResponseBody
+    public Result modifyUserPassword(User user) {
+        JSONResult result = new JSONResult();
+        user.setPwdChangedTime(new Date());
         user.setModifiedBy(getSessionUser().getAccount());
         boolean bRet = userService.updateById(user);
         if (bRet) {

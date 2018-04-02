@@ -90,7 +90,7 @@ layui.define(['jquery'], function (exports) {
                 }
             }
             return r;
-        }
+        },
         /**
          var jsonData = eval('[
          {"id":"4","pid":"1","name":"大家电"},
@@ -141,6 +141,20 @@ layui.define(['jquery'], function (exports) {
              ]}
          ]
          */
+
+        /**
+         * 获取GET参数
+         * @param {name} 参数名
+         * @method getRequestParam
+         * @author Liyiming
+         * */
+        getRequestParam: function (name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null)
+                return unescape(r[2]);
+            return "";
+        }
     }
 
     exports('elf', obj);

@@ -101,7 +101,7 @@ layui.use(['form','jquery',"layer"],function() {
                 function(result) {
                     if(result.code == '0'){
                         if(lockinput.val() == result.data[0].password){
-                            window.sessionStorage.setItem("lockcms",false);
+                            window.sessionStorage.setItem("lockcms", false);
                             lockinput.val('');
                             layer.closeAll("page");
                         }else{
