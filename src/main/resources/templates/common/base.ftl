@@ -12,6 +12,8 @@
 <!-- TODO 页面公共资源 -->
 <script type="text/javascript">
     var basePath = document.getElementById("basePath").href;
+    //外部图标链接
+    var iconUrl = "https://at.alicdn.com/t/font_400842_q6tk84n9ywvu0udi.css";
     var loginUser = {
         account : '${(user_session.account)!'N/A'}',
         fullname : '${(user_session.fullname)!'N/A'}',

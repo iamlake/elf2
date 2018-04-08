@@ -101,7 +101,7 @@ layui.use(['bodyTab', 'form', 'element', 'layer', 'jquery', 'linq', 'elf'], func
             type: 2,
             area : ['770px', '395px'],
             // offset : 'lt',
-            maxmin: true,
+            //maxmin: true,
             content: basePath + "/page/sys_user_changePwd",
             success: function (layero, index) {
                 $.get(basePath + "/user/" + loginUser.account,
@@ -116,11 +116,11 @@ layui.use(['bodyTab', 'form', 'element', 'layer', 'jquery', 'linq', 'elf'], func
                         }
                     }
                 );
-                setTimeout(function () {
-                    layui.layer.tips('点击此处返回后台首页', '.layui-layer-setwin .layui-layer-close', {
-                        tips: 3
-                    });
-                }, 500)
+                // setTimeout(function () {
+                //     layui.layer.tips('点击此处返回后台首页', '.layui-layer-setwin .layui-layer-close', {
+                //         tips: 3
+                //     });
+                // }, 500)
             }
         })
     });

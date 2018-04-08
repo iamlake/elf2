@@ -20,15 +20,14 @@ layui.use(['form', 'layer', 'table', 'laytpl', 'elf'], function () {
             {type: "checkbox", fixed: "left", width: 50},
             {field: 'account', title: '账号', minWidth: 100, align: "center"},
             {field: 'fullname', title: '姓名', minWidth: 100, align: "center"},
-            {
-                field: 'email', title: '邮箱', minWidth: 200, align: 'center', templet: function (d) {
+            {field: 'email', title: '邮箱', minWidth: 200, align: 'center', templet: function (d) {
                     return '<a class="layui-blue" href="mailto:' + d.email + '">' + d.email + '</a>';
                 }
             },
             {field: 'sex', title: '性别', align: 'center'},
-            {
-                field: 'activeFlag', title: '用户状态', align: 'center', templet: function (d) {
+            {field: 'activeFlag', title: '用户状态', align: 'center', templet: function (d) {
                     return d.activeFlag == "1" ? "正常使用" : "限制使用";
+                    // return d.activeFlag == "1" ? '<span class="layui-badge layui-bg-green">正常</span>' : '<span class="layui-badge layui-bg-gray">停用</span>';
                 }
             },
             // {field: 'userGrade', title: '用户等级', align:'center',templet:function(d){
@@ -45,9 +44,17 @@ layui.use(['form', 'layer', 'table', 'laytpl', 'elf'], function () {
             //         }
             //     }},
             // {field: 'userEndTime', title: '最后登录时间', align:'center',minWidth:150},
-            {title: '操作', minWidth: 175, templet: '#userListBar', fixed: "right", align: "center"}
+            {title: '操作', minWidth: 225, templet: '#userListBar', fixed: "right", align: "center"}
         ]]
     });
+
+    // $(window).on("resize", function () {
+    //     setTimeout(function() {
+    //         table.render({ //其它参数在此省略
+    //             height: 'full-125' //高度最大化减去差值
+    //         });
+    //     }, 150)
+    // })
 
     //搜索
     $(".btn_query").on("click", function () {
