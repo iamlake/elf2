@@ -1,7 +1,8 @@
 /*
 	@Author: 驊驊龔頾
 	@Time: 2017-10
-	@Tittle: bodyTab
+	@Title: bodyTab
+	@Modifier: Liyiming
 	@Description: 点击对应按钮添加新窗口
 */
 var tabFilter, menu = [], liIndex, curNav, delMenu,
