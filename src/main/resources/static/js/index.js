@@ -10,16 +10,28 @@ layui.use(['bodyTab', 'form', 'element', 'layer', 'jquery', 'linq', 'elf'], func
         url: basePath + "/menu" //获取菜单json地址
     });
 
-    //通过顶部菜单获取左侧二三级菜单   注：此处只做演示之用，实际开发中通过接口传参的方式获取导航数据
+    //通过顶部菜单获取左侧二三级菜单
     function getData(application) {
-        $.getJSON(tab.tabConfig.url, function (result) {
-            if(result.data.length > 0){
-                var menuList = linq.from(result.data).where(function (x) { return x.appId == application }).toArray();
-                dataStr = elf.transTreeData(menuList, 'menuId', 'parentMenuId', 'children');
-                //重新渲染左侧菜单
-                tab.render();
-            }
-        })
+        if (null == window.sessionStorage.getItem("rolemenu")) {
+            $.getJSON(tab.tabConfig.url, function (result) {
+                if (result.data.length > 0) {
+                    window.sessionStorage.setItem("rolemenu", JSON.stringify(result.data));
+                    var menuList = linq.from(result.data).where(function (x) {
+                        return x.appId == application
+                    }).toArray();
+                    dataStr = elf.transTreeData(menuList, 'menuId', 'parentMenuId', 'children');
+                    //重新渲染左侧菜单
+                    tab.render();
+                }
+            })
+        } else {
+            var menuList = linq.from(JSON.parse(window.sessionStorage.getItem("rolemenu"))).where(function (x) {
+                return x.appId == application
+            }).toArray();
+            dataStr = elf.transTreeData(menuList, 'menuId', 'parentMenuId', 'children');
+            //重新渲染左侧菜单
+            tab.render();
+        }
     }
 
     //页面加载时判断左侧菜单是否显示
@@ -74,8 +86,8 @@ layui.use(['bodyTab', 'form', 'element', 'layer', 'jquery', 'linq', 'elf'], func
                 });
                 innerhtml2 += '</dl></li>';
             }
-            $(".mobileTopLevelMenus").html(innerhtml2);
             $(".topLevelMenus").html(innerhtml);
+            $(".mobileTopLevelMenus").html(innerhtml2);
             //通过顶部菜单获取左侧菜单
             $(".topLevelMenus li,.mobileTopLevelMenus dd").click(function () {
                 if ($(this).parents(".mobileTopLevelMenus").length != "0") {
@@ -96,18 +108,15 @@ layui.use(['bodyTab', 'form', 'element', 'layer', 'jquery', 'linq', 'elf'], func
     }
 
     $(".changePwd").click(function () {
-        var index = layui.layer.open({
+        layui.layer.open({
             title: "修改密码",
             type: 2,
             area : ['770px', '395px'],
-            // offset : 'lt',
-            //maxmin: true,
             content: basePath + "/page/sys_user_changePwd",
             success: function (layero, index) {
                 $.get(basePath + "/user/" + loginUser.account,
                     function (result) {
                         if (result.code == '0') {
-                            var iframeWin = window[layero.find('iframe')[0]['name']];
                             var body = layui.layer.getChildFrame('body', index);
                             elf.setData(body.find(".layui-form"), result.data[0]);
                             form.render();
@@ -116,11 +125,6 @@ layui.use(['bodyTab', 'form', 'element', 'layer', 'jquery', 'linq', 'elf'], func
                         }
                     }
                 );
-                // setTimeout(function () {
-                //     layui.layer.tips('点击此处返回后台首页', '.layui-layer-setwin .layui-layer-close', {
-                //         tips: 3
-                //     });
-                // }, 500)
             }
         })
     });
