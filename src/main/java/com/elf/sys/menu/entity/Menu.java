@@ -10,7 +10,7 @@ import java.util.Date;
 
 @Data
 @TableName("SYS_MENU")
-public class Menu extends DataEntity{
+public class Menu extends DataEntity {
 
     @TableId
     private String menuId;
@@ -26,6 +26,10 @@ public class Menu extends DataEntity{
     private String spread;
 
     private String menuOrder;
+
+    private String level;
+
+    private Boolean leaf;
 
     private String showDefault;
 

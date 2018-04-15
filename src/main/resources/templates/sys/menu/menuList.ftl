@@ -11,9 +11,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="format-detection" content="telephone=no">
     <style type="text/css">
-        .layui-table th {
-            text-align: center !important;
-        }
+
     </style>
 </head>
 <body class="childrenBody">
@@ -27,10 +25,10 @@
                 <a class="layui-btn btn_query" data-type="reload"><i class="layui-icon">&#xe615;</i>搜索</a>
             </div>
             <div class="layui-inline">
-                <a class="layui-btn layui-btn-normal addNews_btn">添加用户</a>
+                <a class="layui-btn layui-btn-normal btn_addRoot"><i class="layui-icon">&#xe608;</i>添加菜单</a>
             </div>
             <div class="layui-inline">
-                <a class="layui-btn layui-btn-danger layui-btn-normal delAll_btn">批量删除</a>
+                <a class="layui-btn layui-btn-danger layui-btn-normal delAll_btn"><i class="layui-icon">&#xe640;</i>批量删除</a>
             </div>
         </form>
     </blockquote>
@@ -38,9 +36,9 @@
 
     <!--操作-->
     <script type="text/html" id="menuListBar">
-        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
-        <a class="layui-btn layui-btn-xs layui-btn-warm" lay-event="usable">已启用</a>
-        <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="del">删除</a>
+        <a class="layui-btn layui-btn-xs" lay-event="doEdit">编辑</a>
+        <a class="layui-btn layui-btn-xs layui-btn-warm" lay-event="doAddChild">添加子菜单</a>
+        <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="doDel">删除</a>
     </script>
 </form>
 <script type="text/javascript" src="${basePath}/static/js/sys/menu/menuList.js"></script>

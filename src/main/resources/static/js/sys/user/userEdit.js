@@ -1,6 +1,6 @@
 layui.use(['form', 'layer', 'laydate', 'util', 'elf'], function () {
-    var form = layui.form
-    layer = parent.layer === undefined ? layui.layer : top.layer,
+    var form = layui.form,
+        layer = parent.layer === undefined ? layui.layer : top.layer,
         $ = layui.jquery,
         laydate = layui.laydate,
         util = layui.util,

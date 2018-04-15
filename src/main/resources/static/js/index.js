@@ -56,6 +56,7 @@ layui.use(['bodyTab', 'form', 'element', 'layer', 'jquery', 'linq', 'elf'], func
             var innerhtml = '';
             var innerhtml2 = '';
             if (result.data.length > 0) {
+                window.sessionStorage.setItem("roleapp", JSON.stringify(result.data));
                 //----topLevelMenus pc
                 linq.from(result.data).forEach(function (value, index) {
                     if (index == 0) {
