@@ -64,6 +64,26 @@ layui.define(['jquery'], function (exports) {
                 }
             })
         },
+        /**
+         * @Description: 绑定下拉列表数据源
+         * @Param: {o} select对象
+         * @Param: {d} 数据集
+         * @Param: {c} value
+         * @Param: {n} name
+         * @return: null
+         * @Author: Liyiming
+         * @Date: 2018/4/15
+         */
+        bindSelect: function (o, d, c, n) {
+            var html = '<option value="">请选择</option>';
+            if (d) {
+                console.log(d);
+                for (var i = 0; i < d.length; i++) {
+                    html += '<option value="' + d[i][c] + '">' + d[i][n] + '</option>';
+                }
+                o.html(html).removeAttr("disabled");
+            }
+        },
 
         /**
          * 将Json对象转换为树形结构
