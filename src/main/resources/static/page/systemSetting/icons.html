@@ -9,7 +9,7 @@
 	<meta name="apple-mobile-web-app-status-bar-style" content="black">
 	<meta name="apple-mobile-web-app-capable" content="yes">
 	<meta name="format-detection" content="telephone=no">
-	<link rel="stylesheet" href="../../layui/css/layui.css" media="all" />
+	<link rel="stylesheet" href="../../assets/layui/css/layui.css" media="all" />
 	<link rel="stylesheet" href="../../assets/css/public.css" media="all" />
 </head>
 <body class="childrenBody">
@@ -19,7 +19,40 @@
 	<textarea id="copyText"></textarea>
 	<ul class="icons layui-row"></ul>
 
-	<script type="text/javascript" src="../../layui/layui.js"></script>
-	<script type="text/javascript" src="icons.js"></script>
+	<script type="text/javascript" src="../../assets/layui/layui.js"></script>
+    <script type="text/javascript">
+        layui.use(['form', 'layer', 'jquery'], function () {
+            var iconUrl = "https://at.alicdn.com/t/font_400842_q6tk84n9ywvu0udi.css";
+            var form = layui.form,
+                layer = parent.layer === undefined ? layui.layer : top.layer,
+                element = layui.element;
+            var $ = layui.jquery;
+
+            $.get(iconUrl, function (data) {
+                var iconHtml = '';
+                for (var i = 1; i < data.split(".icon-").length; i++) {
+                    iconHtml += "<li class='layui-col-xs4 layui-col-sm3 layui-col-md2 layui-col-lg1'>" +
+                        "<i class='seraph icon-" + data.split(".icon-")[i].split(":before")[0] + "'></i>" +
+                        "icon-" + data.split('.icon-')[i].split(':before')[0] +
+                        "</li>";
+                }
+                $(".icons").html(iconHtml);
+                $(".iconsLength").text(data.split(".icon-").length - 1);
+            })
+
+            $("body").on("click", ".icons li", function () {
+                var copyText = document.getElementById("copyText");
+                copyText.innerText = $(this).text();
+                copyText.select();
+                document.execCommand("copy");
+                // layer.msg("复制成功", {anim: 2});
+
+                // var selectIcon = $(this).find("i.layui-icon").html();
+                parent.$("#realIcon").show().html(copyText.innerText);
+                parent.$("#iconValue").val(copyText.innerText);
+                parent.layer.close(parent.layer.getFrameIndex(window.name));
+            })
+        })
+    </script>
 </body>
 </html>

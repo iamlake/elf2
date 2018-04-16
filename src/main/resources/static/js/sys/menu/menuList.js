@@ -1,3 +1,4 @@
+var oData;
 layui.use(['form', 'layer', 'elf', 'treeGrid'], function () {
     var form = layui.form,
         layer = parent.layer === undefined ? layui.layer : top.layer,
@@ -60,21 +61,14 @@ layui.use(['form', 'layer', 'elf', 'treeGrid'], function () {
         menuEditForward(null, 'root');
     })
 
-    function menuEditForward(d, opType) {
-        window.sessionStorage.setItem("menu_edit", d ? JSON.stringify(d) : null);
+    function menuEditForward(d, oType) {
+        // window.sessionStorage.setItem("menu_edit", d ? JSON.stringify(d) : null);
+        oData = d;
         var index = layui.layer.open({
             title: d ? "修改菜单" : "添加菜单",
             type: 2,
-            content: basePath + "/page/sys_menu_menuEdit?opType=" + opType,
+            content: basePath + "/page/sys_menu_menuEdit?oType=" + oType,
             success: function (layero, index) {
-                // var iframeWin = window[layero.find('iframe')[0]['name']];
-                // if (d) {
-                //     var body = layui.layer.getChildFrame('body', index);
-                //     elf.setData(body.find(".layui-form"), d);
-                //     form.render();
-                // } else {
-                //     iframeWin.isNew = true;
-                // }
                 setTimeout(function () {
                     layui.layer.tips('点击此处返回菜单列表', '.layui-layer-setwin .layui-layer-close', {
                         tips: 3

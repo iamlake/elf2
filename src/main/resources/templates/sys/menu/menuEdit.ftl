@@ -48,7 +48,7 @@
         <div class="layui-input-block">
             <input type="hidden" class="layui-input" name="icon" id="iconValue" placeholder="请选择菜单图标">
             <div class="layui-input-inline" style="width: 100px;">
-                <i class="layui-icon" id="realIcon" style="display: none;font-size: 50px"></i>
+                <i class="layui-icon" id="realIcon" style="font-size: 50px"></i>
             </div>
             <div class="layui-input-inline" style="width: 100px;">
                 <a class="layui-btn layui-btn-normal" id="selectIcon">选择一个图标</a>
@@ -117,27 +117,26 @@
     <#--<input type="hidden" name="appId" id="hid_appId">-->
 </form>
 <script>
-    layui.use(['form', 'layer', 'laydate', 'util', 'elf'], function () {
+    var iconShow, $;
+    layui.use(['form', 'layer', 'elf'], function () {
         var form = layui.form,
                 layer = parent.layer === undefined ? layui.layer : top.layer,
-                $ = layui.jquery,
-                laydate = layui.laydate,
-                util = layui.util,
                 elf = layui.elf;
+        $ = layui.jquery;
 
-        var opType = elf.getRequestParam("opType");
+        var oType = elf.getRequestParam("oType");
+        var oData = parent.oData;
 
         $(function () {
-            // alert(opType);
             var appData = JSON.parse(window.sessionStorage.getItem("roleapp"));
             elf.bindSelect($('.appSelect'), appData, 'appId', 'title');
-            if ('root' == opType) {
+            if ('root' == oType) {
                 $('#div_pmenu').attr("style", "display:none");
             } else {
-                if ('child' == opType) {
+                if ('child' == oType) {
                     $('#div_app').attr("style", "display:none");
-                } else if ('edit' == opType) {
-                    elf.setData($(".layui-form"), JSON.parse(window.sessionStorage.getItem("menu_edit")));
+                } else if ('edit' == oType) {
+                    elf.setData($(".layui-form"), oData);
                 }
                 // $('.appSelect').val($('#hid_appId').val());
                 $('.appSelect').attr("disabled", "disabled");
@@ -145,9 +144,24 @@
             form.render();
         });
 
+        //选择图标
+        $("#selectIcon").on("click", function () {
+            iconShow = layui.layer.open({
+                type: 2,
+                title: '选择图标',
+                shadeClose: true,
+                content: basePath + '/static/page/systemSetting/icons.html'
+            });
+            layui.layer.full(iconShow);
+            // $(window).on("resize", function () {
+            //     setTimeout(function () {
+            //         layui.layer.full(iconShow);
+            //     }, 150)
+            // })
+        });
+
         form.on("submit(save)", function (data) {
-            var ext = 'isNew:' + isNew;
-            if (!isNew) {
+            if ('edit' == oType) {
                 ext += ';_method:put';
             }
             var formData = elf.getBinding($('.layui-form'), ext);
