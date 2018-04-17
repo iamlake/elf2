@@ -32,12 +32,6 @@
         </div>
     </div>
     <div class="layui-form-item layui-row layui-col-xs12">
-        <label class="layui-form-label">目标框架</label>
-        <div class="layui-input-block">
-            <input type="text" class="layui-input" lay-verify="required" placeholder="请输入目标框架" name="target">
-        </div>
-    </div>
-    <div class="layui-form-item layui-row layui-col-xs12">
         <label class="layui-form-label">请求URL</label>
         <div class="layui-input-block">
             <input type="text" class="layui-input" lay-verify="required" placeholder="请输入请求URL" name="href">
@@ -47,57 +41,40 @@
         <label class="layui-form-label">菜单图标</label>
         <div class="layui-input-block">
             <input type="hidden" class="layui-input" name="icon" id="iconValue" placeholder="请选择菜单图标">
-            <div class="layui-input-inline" style="width: 100px;">
-                <i class="layui-icon" id="realIcon" style="font-size: 50px"></i>
+            <div class="layui-input-inline" style="width: 60px;" id="realIcon">
             </div>
             <div class="layui-input-inline" style="width: 100px;">
-                <a class="layui-btn layui-btn-normal" id="selectIcon">选择一个图标</a>
+                <a class="layui-btn layui-btn-normal" id="selectIcon">选择图标</a>
             </div>
         </div>
     </div>
-    <div class="layui-form-item">
+    <div class="layui-row">
+        <div class="magb15 layui-col-md4 layui-col-xs12">
+            <label class="layui-form-label">排序</label>
+            <div class="layui-input-block">
+                <input type="text" class="layui-input" lay-verify="required" placeholder="请输入排序值" name="menuOrder">
+            </div>
+        </div>
+        <div class="magb15 layui-col-md4 layui-col-xs12">
+            <label class="layui-form-label">目标框架</label>
+            <div class="layui-input-block">
+                <input type="text" class="layui-input" placeholder="请输入目标框架" name="target">
+            </div>
+        </div>
+        <div class="magb15 layui-col-md4 layui-col-xs12">
+            <label class="layui-form-label">状态</label>
+            <div class="layui-input-block">
+                <select class="activeFlag" lay-filter="activeFlag" name="activeFlag">
+                    <option value="0">限制使用</option>
+                    <option value="1">正常使用</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="layui-form-item layui-row layui-col-xs12">
         <label class="layui-form-label">默认展开</label>
         <div class="layui-input-block">
-            <input type="checkbox" name="spread" lay-skin="switch" lay-text="是|否" checked>
-        </div>
-    </div>
-    <div class="layui-form-item layui-row layui-col-xs12">
-        <label class="layui-form-label">排序</label>
-        <div class="layui-input-block">
-            <input type="text" class="layui-input" lay-verify="required" placeholder="请输入姓名" name="menuOrder">
-        </div>
-    </div>
-    <div class="layui-form-item layui-row layui-col-xs12">
-        <label class="layui-form-label">层级</label>
-        <div class="layui-input-block">
-            <input type="text" class="layui-input" placeholder="请输入姓名" name="level">
-        </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">是否叶子</label>
-        <div class="layui-input-block">
-            <input type="checkbox" name="leaf" lay-skin="switch" lay-text="是|否" checked>
-        </div>
-    </div>
-    <div class="layui-form-item">
-        <label class="layui-form-label">默认显示</label>
-        <div class="layui-input-block">
-            <input type="checkbox" name="showDefault" lay-skin="switch" lay-text="是|否" checked>
-        </div>
-    </div>
-    <div class="layui-form-item layui-row layui-col-xs12">
-        <label class="layui-form-label">应用ID</label>
-        <div class="layui-input-block">
-            <input type="text" class="layui-input" placeholder="请输入姓名" name="appId">
-        </div>
-    </div>
-    <div class="layui-form-item layui-row layui-col-xs12">
-        <label class="layui-form-label">状态</label>
-        <div class="layui-input-block">
-            <select class="activeFlag" lay-filter="activeFlag" name="activeFlag">
-                <option value="0">限制使用</option>
-                <option value="1">正常使用</option>
-            </select>
+            <input type="checkbox" name="spread" lay-skin="switch" value="1" lay-text="是|否">
         </div>
     </div>
     <div class="layui-form-item layui-row layui-col-xs12">
@@ -112,18 +89,28 @@
             <button type="reset" class="layui-btn layui-btn-sm layui-btn-primary">取消</button>
         </div>
     </div>
+    <input type="hidden" name="level" id="hid_level">
     <input type="hidden" name="menuId" id="hid_menuId">
-    <input type="hidden" name="parentMenuId" id="hid_parentMenuId">
+    <#--<input type="hidden" name="parentMenuId" id="hid_parentMenuId">-->
     <#--<input type="hidden" name="appId" id="hid_appId">-->
 </form>
 <script>
     var iconShow, $;
+    var initIcon = function (o, v, s) {
+        var style = s ? ('"font-size: ' + s + ' !important;"') : ('"font-size: 35px !important;"');
+        if (v.indexOf("icon-") != -1) {
+            o.html('<i class="seraph ' + v + '" data-icon="' + v + '" style=' + style + '></i>');
+        } else {
+            o.html('<i class="layui-icon" style=' + style + '>' + v + '</i>');
+        }
+    };
     layui.use(['form', 'layer', 'elf'], function () {
         var form = layui.form,
                 layer = parent.layer === undefined ? layui.layer : top.layer,
                 elf = layui.elf;
         $ = layui.jquery;
 
+        var isNew = true;
         var oType = elf.getRequestParam("oType");
         var oData = parent.oData;
 
@@ -136,9 +123,18 @@
                 if ('child' == oType) {
                     $('#div_app').attr("style", "display:none");
                 } else if ('edit' == oType) {
+                    isNew = false;
                     elf.setData($(".layui-form"), oData);
+                    console.log(oData);
+                    if ($("#iconValue").val()) {
+                        initIcon($("#realIcon"), $("#iconValue").val(), null);
+                        // if ($("#iconValue").val().indexOf("icon-") != -1) {
+                        //     $("#realIcon").html('<i class="seraph ' + $("#iconValue").val() + '" data-icon="' + $("#iconValue").val() + '" style="font-size: 50px !important;"></i>');
+                        // } else {
+                        //     $("#realIcon").html('<i class="layui-icon" style="font-size: 50px !important;">' + $("#iconValue").val() + '</i>');
+                        // }
+                    }
                 }
-                // $('.appSelect').val($('#hid_appId').val());
                 $('.appSelect').attr("disabled", "disabled");
             }
             form.render();
@@ -153,15 +149,16 @@
                 content: basePath + '/static/page/systemSetting/icons.html'
             });
             layui.layer.full(iconShow);
-            // $(window).on("resize", function () {
-            //     setTimeout(function () {
-            //         layui.layer.full(iconShow);
-            //     }, 150)
-            // })
+            $(window).on("resize", function () {
+                setTimeout(function () {
+                    layui.layer.full(iconShow);
+                }, 150)
+            })
         });
 
         form.on("submit(save)", function (data) {
-            if ('edit' == oType) {
+            var ext = 'isNew:' + isNew;
+            if (!isNew) {
                 ext += ';_method:put';
             }
             var formData = elf.getBinding($('.layui-form'), ext);
@@ -172,22 +169,22 @@
                 time: 500,
                 shade: 0.8
             }, function () {
-                // $.post({
-                //     url: basePath + '/user',
-                //     data: formData,
-                //     success: function (result) {
-                //         top.layer.close(index);
-                //         top.layer.msg(result.msg, {
-                //             icon: 1,
-                //             time: 800
-                //             // 0.5秒关闭（如果不配置，默认是3秒）
-                //         }, function () {
-                //             layer.closeAll("iframe");
-                //             // 刷新父页面
-                //             parent.location.reload();
-                //         });
-                //     }
-                // });
+                $.post({
+                    url: basePath + '/menu',
+                    data: formData,
+                    success: function (result) {
+                        top.layer.close(index);
+                        top.layer.msg(result.msg, {
+                            icon: 1,
+                            time: 800
+                            // 0.5秒关闭（如果不配置，默认是3秒）
+                        }, function () {
+                            layer.closeAll("iframe");
+                            // 刷新父页面
+                            parent.location.reload();
+                        });
+                    }
+                });
             });
             return false;
         })

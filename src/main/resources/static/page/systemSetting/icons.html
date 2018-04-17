@@ -47,9 +47,9 @@
                 document.execCommand("copy");
                 // layer.msg("复制成功", {anim: 2});
 
-                // var selectIcon = $(this).find("i.layui-icon").html();
-                parent.$("#realIcon").show().html(copyText.innerText);
-                parent.$("#iconValue").val(copyText.innerText);
+                var iconValue = $(this).text();
+                parent.initIcon(parent.$("#realIcon"), iconValue, null);
+                parent.$("#iconValue").val(iconValue);
                 parent.layer.close(parent.layer.getFrameIndex(window.name));
             })
         })

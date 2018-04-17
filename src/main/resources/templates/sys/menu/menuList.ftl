@@ -10,9 +10,6 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="format-detection" content="telephone=no">
-    <style type="text/css">
-
-    </style>
 </head>
 <body class="childrenBody">
 <form class="layui-form">

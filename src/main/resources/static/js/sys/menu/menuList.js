@@ -23,9 +23,9 @@ layui.use(['form', 'layer', 'elf', 'treeGrid'], function () {
                 {field: 'icon', minWidth: '50', title: '图标', align: 'center', templet: function (d) {
                         if (d.icon != undefined && d.icon != '') {
                             if (d.icon.indexOf("icon-") != -1) {
-                                return '<i class="seraph ' + d.icon + '" data-icon="' + d.icon + '"></i>';
+                                return '<i class="seraph ' + d.icon + '" data-icon="' + d.icon + ' " style="font-size: 25px !important;"></i>';
                             } else {
-                                return '<i class="layui-icon" data-icon="' + d.icon + '">' + d.icon + '</i>';
+                                return '<i class="layui-icon" data-icon="' + d.icon + '" style="font-size: 25px !important;">' + d.icon + '</i>';
                             }
                         } else {
                             return "无";
@@ -62,7 +62,6 @@ layui.use(['form', 'layer', 'elf', 'treeGrid'], function () {
     })
 
     function menuEditForward(d, oType) {
-        // window.sessionStorage.setItem("menu_edit", d ? JSON.stringify(d) : null);
         oData = d;
         var index = layui.layer.open({
             title: d ? "修改菜单" : "添加菜单",
@@ -89,10 +88,9 @@ layui.use(['form', 'layer', 'elf', 'treeGrid'], function () {
     treeGrid.on('tool(menuList)', function (obj) {
         var layEvent = obj.event,
             data = obj.data;
-
-        if (layEvent === 'doAddChild') {//查看
-            layer.msg('菜单名：' + data.title + ' 的查看操作');
-            menuEditForward(null, 'child');
+        if (layEvent === 'doAddChild') { //添加子菜单
+            // layer.msg('菜单名：' + data.title + ' 的查看操作');
+            menuEditForward(data, 'child');
         } else if (layEvent === 'doEdit') { //编辑
             menuEditForward(data, 'edit');
         } else if (layEvent === 'doDel') { //删除
