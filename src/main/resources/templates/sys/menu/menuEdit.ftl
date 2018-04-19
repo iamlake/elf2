@@ -22,7 +22,7 @@
     <div class="layui-form-item layui-row layui-col-xs12" id="div_pmenu">
         <label class="layui-form-label">上级菜单</label>
         <div class="layui-input-block">
-            <input type="text" class="layui-input" name="parentMenuId" readonly>
+            <input type="text" class="layui-input parentMenu" name="parentMenuId" readonly>
         </div>
     </div>
     <div class="layui-form-item layui-row layui-col-xs12">
@@ -34,7 +34,7 @@
     <div class="layui-form-item layui-row layui-col-xs12">
         <label class="layui-form-label">请求URL</label>
         <div class="layui-input-block">
-            <input type="text" class="layui-input" lay-verify="required" placeholder="请输入请求URL" name="href">
+            <input type="text" class="layui-input" placeholder="请输入请求URL" name="href">
         </div>
     </div>
     <div class="layui-form-item">
@@ -52,7 +52,7 @@
         <div class="magb15 layui-col-md4 layui-col-xs12">
             <label class="layui-form-label">排序</label>
             <div class="layui-input-block">
-                <input type="text" class="layui-input" lay-verify="required" placeholder="请输入排序值" name="menuOrder">
+                <input type="text" class="layui-input" lay-verify="required" placeholder="请输入排序号" name="menuOrder">
             </div>
         </div>
         <div class="magb15 layui-col-md4 layui-col-xs12">
@@ -91,8 +91,6 @@
     </div>
     <input type="hidden" name="level" id="hid_level">
     <input type="hidden" name="menuId" id="hid_menuId">
-    <#--<input type="hidden" name="parentMenuId" id="hid_parentMenuId">-->
-    <#--<input type="hidden" name="appId" id="hid_appId">-->
 </form>
 <script>
     var iconShow, $;
@@ -119,23 +117,20 @@
             elf.bindSelect($('.appSelect'), appData, 'appId', 'title');
             if ('root' == oType) {
                 $('#div_pmenu').attr("style", "display:none");
+                $('.parentMenu').val('0');
             } else {
                 if ('child' == oType) {
+                    $('.appSelect').val(oData.appId);
+                    $('.parentMenu').val(oData.menuId);
                     $('#div_app').attr("style", "display:none");
                 } else if ('edit' == oType) {
                     isNew = false;
                     elf.setData($(".layui-form"), oData);
-                    console.log(oData);
                     if ($("#iconValue").val()) {
                         initIcon($("#realIcon"), $("#iconValue").val(), null);
-                        // if ($("#iconValue").val().indexOf("icon-") != -1) {
-                        //     $("#realIcon").html('<i class="seraph ' + $("#iconValue").val() + '" data-icon="' + $("#iconValue").val() + '" style="font-size: 50px !important;"></i>');
-                        // } else {
-                        //     $("#realIcon").html('<i class="layui-icon" style="font-size: 50px !important;">' + $("#iconValue").val() + '</i>');
-                        // }
                     }
+                    $('.appSelect').attr("disabled", "disabled");
                 }
-                $('.appSelect').attr("disabled", "disabled");
             }
             form.render();
         });
@@ -162,7 +157,6 @@
                 ext += ';_method:put';
             }
             var formData = elf.getBinding($('.layui-form'), ext);
-            console.log(formData);
             // 弹出loading
             var index = top.layer.msg('数据提交中，请稍候…', {
                 icon: 16,

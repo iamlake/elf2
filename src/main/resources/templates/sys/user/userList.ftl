@@ -31,7 +31,7 @@
                 <a class="layui-btn btn_query" data-type="reload"><i class="layui-icon">&#xe615;</i>搜索</a>
             </div>
             <div class="layui-inline">
-                <a class="layui-btn layui-btn-normal btn_edit"><i class="layui-icon">&#xe608;</i>添加用户</a>
+                <a class="layui-btn layui-btn-normal btn_edit"><i class="layui-icon">&#xe608;</i>新建用户</a>
             </div>
             <div class="layui-inline">
                 <a class="layui-btn layui-btn-danger layui-btn-normal btn_delAll"><i class="layui-icon">&#xe640;</i>批量删除</a>
@@ -43,7 +43,7 @@
     <!--操作-->
     <script type="text/html" id="userListBar">
         <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="doDetail">查看</a>
-        <a class="layui-btn layui-btn-xs" lay-event="doEdit"><i class="iconfont icon-edit"></i> 编辑</a>
+        <a class="layui-btn layui-btn-xs" lay-event="doEdit"><i class="iconfont icon-edit"></i>编辑</a>
         <a class="layui-btn layui-btn-xs layui-btn-warm" lay-event="enabled">已启用</a>
         <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="doDel"><i class="layui-icon">&#xe640;</i>删除</a>
     </script>

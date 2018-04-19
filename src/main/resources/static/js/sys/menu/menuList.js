@@ -35,7 +35,7 @@ layui.use(['form', 'layer', 'elf', 'treeGrid'], function () {
                 {field: 'target', minWidth: '50', title: '目标框架', align: 'center'},
                 // {field: 'menuOrder', minWidth: '50', title: '排序', align: 'center'},
                 {field: 'appId', minWidth: '50', title: '应用', align: 'center'},
-                {field: 'showDefault', minWidth: '50', title: '默认显示', align: 'center'},
+                // {field: 'showDefault', minWidth: '50', title: '默认显示', align: 'center'},
                 {title: '操作', minWidth: 175, templet: '#menuListBar', fixed: "right", align: "center"}
             ]],
         page: false
@@ -63,8 +63,16 @@ layui.use(['form', 'layer', 'elf', 'treeGrid'], function () {
 
     function menuEditForward(d, oType) {
         oData = d;
+        var title = '';
+        if ('root' == oType) {
+            title = '新建根菜单';
+        }else if('child' == oType){
+            title = '新建子菜单';
+        }else{
+            title = '编辑菜单';
+        }
         var index = layui.layer.open({
-            title: d ? "修改菜单" : "添加菜单",
+            title: title,
             type: 2,
             content: basePath + "/page/sys_menu_menuEdit?oType=" + oType,
             success: function (layero, index) {
@@ -76,7 +84,6 @@ layui.use(['form', 'layer', 'elf', 'treeGrid'], function () {
             }
         })
         layui.layer.full(index);
-        //改变窗口大小时，重置弹窗的宽高，防止超出可视区域（如F12调出debug的操作）
         $(window).on("resize", function () {
             setTimeout(function () {
                 layui.layer.full(index);
@@ -88,7 +95,7 @@ layui.use(['form', 'layer', 'elf', 'treeGrid'], function () {
     treeGrid.on('tool(menuList)', function (obj) {
         var layEvent = obj.event,
             data = obj.data;
-        if (layEvent === 'doAddChild') { //添加子菜单
+        if (layEvent === 'doAddChild') { //新建子菜单
             // layer.msg('菜单名：' + data.title + ' 的查看操作');
             menuEditForward(data, 'child');
         } else if (layEvent === 'doEdit') { //编辑

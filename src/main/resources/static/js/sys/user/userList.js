@@ -1,8 +1,7 @@
-layui.use(['form', 'layer', 'table', 'laytpl', 'elf'], function () {
+layui.use(['form', 'layer', 'table', 'elf'], function () {
     var form = layui.form,
         layer = parent.layer === undefined ? layui.layer : top.layer,
         $ = layui.jquery,
-        laytpl = layui.laytpl,
         table = layui.table,
         elf = layui.elf;
 
@@ -48,14 +47,6 @@ layui.use(['form', 'layer', 'table', 'laytpl', 'elf'], function () {
         ]]
     });
 
-    // $(window).on("resize", function () {
-    //     setTimeout(function() {
-    //         table.render({ //其它参数在此省略
-    //             height: 'full-125' //高度最大化减去差值
-    //         });
-    //     }, 150)
-    // })
-
     //搜索
     $(".btn_query").on("click", function () {
         table.reload("tableJson", {
@@ -69,10 +60,10 @@ layui.use(['form', 'layer', 'table', 'laytpl', 'elf'], function () {
         })
     });
 
-    //添加/修改用户
+    //新建/编辑用户
     function userEditForward(d) {
         var index = layui.layer.open({
-            title: d ? "修改用户" : "添加用户",
+            title: d ? "编辑用户" : "新建用户",
             type: 2,
             content: basePath + "/page/sys_user_userEdit",
             success: function (layero, index) {
@@ -92,7 +83,6 @@ layui.use(['form', 'layer', 'table', 'laytpl', 'elf'], function () {
             }
         })
         layui.layer.full(index);
-        //改变窗口大小时，重置弹窗的宽高，防止超出可视区域（如F12调出debug的操作）
         $(window).on("resize", function () {
             setTimeout(function() {
                 layui.layer.full(index);
