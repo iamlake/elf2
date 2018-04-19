@@ -29,7 +29,7 @@ public class Menu extends DataEntity {
 
     private String level;
 
-    private Boolean leaf;
+    private String leaf;
 
     private String showDefault;
 

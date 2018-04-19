@@ -1,9 +1,7 @@
-var oData;
-layui.use(['form', 'layer', 'elf', 'treeGrid'], function () {
-    var form = layui.form,
-        layer = parent.layer === undefined ? layui.layer : top.layer,
-        $ = layui.jquery,
-        elf = layui.elf;
+var oData, oType;
+layui.use(['layer', 'treeGrid'], function () {
+    var layer = parent.layer === undefined ? layui.layer : top.layer,
+        $ = layui.jquery;
     var treeGrid = layui.treeGrid;
 
     var treeGridIns = treeGrid.render({
@@ -57,24 +55,25 @@ layui.use(['form', 'layer', 'elf', 'treeGrid'], function () {
         }
     });
 
-    $(".btn_addRoot").click(function () {
+    $(".btn_addRoot").on("click", function () {
         menuEditForward(null, 'root');
-    })
+    });
 
-    function menuEditForward(d, oType) {
-        oData = d;
+    function menuEditForward(data, type) {
+        oData = data;
+        oType = type;
         var title = '';
-        if ('root' == oType) {
+        if ('root' == type) {
             title = '新建根菜单';
-        }else if('child' == oType){
+        } else if ('child' == type) {
             title = '新建子菜单';
-        }else{
+        } else {
             title = '编辑菜单';
         }
         var index = layui.layer.open({
             title: title,
             type: 2,
-            content: basePath + "/page/sys_menu_menuEdit?oType=" + oType,
+            content: basePath + "/page/sys_menu_menuEdit",
             success: function (layero, index) {
                 setTimeout(function () {
                     layui.layer.tips('点击此处返回菜单列表', '.layui-layer-setwin .layui-layer-close', {
@@ -96,19 +95,36 @@ layui.use(['form', 'layer', 'elf', 'treeGrid'], function () {
         var layEvent = obj.event,
             data = obj.data;
         if (layEvent === 'doAddChild') { //新建子菜单
-            // layer.msg('菜单名：' + data.title + ' 的查看操作');
             menuEditForward(data, 'child');
         } else if (layEvent === 'doEdit') { //编辑
             menuEditForward(data, 'edit');
         } else if (layEvent === 'doDel') { //删除
-            layer.confirm('确定删除此菜单？', {icon: 3, title: '提示信息'}, function (index) {
-                // $.get("删除文章接口",{
-                //     newsId : data.newsId  //将需要删除的newsId作为参数传入
-                // },function(data){
-                //treeGridIns.reload();
-                layer.close(index);
-                // })
-            });
+            if(data.children.length > 0){
+                layer.msg('不能删除包含子项的菜单！', {
+                    time : 1500,
+                    icon : 5,
+                    anim : 6
+                });
+            }else{
+                layer.confirm('确定删除此菜单？', {icon: 3, title: '提示信息'}, function (index) {
+                    $.post({
+                        url: basePath + "/menu/" + data.menuId,
+                        data : {
+                            _method : "delete"
+                        },
+                        success: function (result) {
+                            layer.close(index);
+                            layer.msg(result.msg, {
+                                icon : 1,
+                                time : 500
+                            }, function() {
+                                treeGridIns.reload();
+                                layer.close(index);
+                            });
+                        }
+                    });
+                });
+            }
         }
     });
 

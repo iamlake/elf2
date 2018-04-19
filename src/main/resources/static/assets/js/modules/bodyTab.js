@@ -7,9 +7,9 @@
 */
 var tabFilter, menu = [], liIndex, curNav, delMenu,
     changeRefreshStr = window.sessionStorage.getItem("changeRefresh");
-layui.define(["element", "jquery"], function (exports) {
+layui.define(["element", "jquery", "common"], function (exports) {
     var element = layui.element,
-        $ = layui.$,
+        $ = layui.$, common = layui.common,
         layId,
         Tab = function () {
             this.tabConfig = {
@@ -28,7 +28,7 @@ layui.define(["element", "jquery"], function (exports) {
         }
         var ulHtml = '';
         for (var i = 0; i < data.length; i++) {
-            if (data[i].spread || data[i].spread == undefined) {
+            if (!data[i].spread) {
                 ulHtml += '<li class="layui-nav-item layui-nav-itemed">';
             } else {
                 ulHtml += '<li class="layui-nav-item">';
@@ -47,10 +47,11 @@ layui.define(["element", "jquery"], function (exports) {
                 ulHtml += '</a>';
                 ulHtml += '<dl class="layui-nav-child">';
                 for (var j = 0; j < data[i].children.length; j++) {
+                    var _href = common.checkUrl(data[i].children[j].href) ? data[i].children[j].href : basePath + data[i].children[j].href;
                     if (data[i].children[j].target == "_blank") {
-                        ulHtml += '<dd><a data-url="' + basePath + data[i].children[j].href + '" target="' + data[i].children[j].target + '">';
+                        ulHtml += '<dd><a data-url="' + _href + '" target="' + data[i].children[j].target + '">';
                     } else {
-                        ulHtml += '<dd><a data-url="' + basePath + data[i].children[j].href + '">';
+                        ulHtml += '<dd><a data-url="' + _href + '">';
                     }
                     if (data[i].children[j].icon != undefined && data[i].children[j].icon != '') {
                         if (data[i].children[j].icon.indexOf("icon-") != -1) {
@@ -63,10 +64,11 @@ layui.define(["element", "jquery"], function (exports) {
                 }
                 ulHtml += "</dl>";
             } else {
+                var _href = common.checkUrl(data[i].href) ? data[i].href : basePath + data[i].href;
                 if (data[i].target == "_blank") {
-                    ulHtml += '<a data-url="' + basePath + data[i].href + '" target="' + data[i].target + '">';
+                    ulHtml += '<a data-url="' + _href + '" target="' + data[i].target + '">';
                 } else {
-                    ulHtml += '<a data-url="' + basePath + data[i].href + '">';
+                    ulHtml += '<a data-url="' + _href + '">';
                 }
                 if (data[i].icon != undefined && data[i].icon != '') {
                     if (data[i].icon.indexOf("icon-") != -1) {

@@ -33,7 +33,6 @@ layui.use(['form', 'layer', 'laydate', 'util', 'elf'], function () {
             ext += ';_method:put';
         }
         var formData = elf.getBinding($('.layui-form'), ext);
-        console.log(formData);
         // 弹出loading
         var index = top.layer.msg('数据提交中，请稍候…', {
             icon: 16,

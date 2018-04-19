@@ -72,7 +72,7 @@
         </div>
     </div>
     <div class="layui-form-item layui-row layui-col-xs12">
-        <label class="layui-form-label">默认展开</label>
+        <label class="layui-form-label">默认折叠</label>
         <div class="layui-input-block">
             <input type="checkbox" name="spread" lay-skin="switch" value="1" lay-text="是|否">
         </div>
@@ -108,9 +108,7 @@
                 elf = layui.elf;
         $ = layui.jquery;
 
-        var isNew = true;
-        var oType = elf.getRequestParam("oType");
-        var oData = parent.oData;
+        var isNew = true, oType = parent.oType, oData = parent.oData;
 
         $(function () {
             var appData = JSON.parse(window.sessionStorage.getItem("roleapp"));

@@ -54,15 +54,15 @@ public class MenuController extends BaseController {
         return new QueryResult<>(Global.RESULT_STAUTS_SUCCESS, "", list, list.size());
     }
 
-    /** 
-    * @Description: 新增菜单信息
-    * @Param: [menu] 
-    * @return: com.elf.core.persistence.result.Result 
-    * @Author: Liyiming
-    * @Date: 2018/4/17 
-    */ 
+    /**
+     * @Description: 新增菜单信息
+     * @Param: [menu]
+     * @return: com.elf.core.persistence.result.Result
+     * @Author: Liyiming
+     * @Date: 2018/4/17
+     */
     @PostMapping("/menu")
-    public Result addMenu(Menu menu){
+    public Result addMenu(Menu menu) {
         JSONResult result = new JSONResult();
         menu.setCreatedBy(getSessionUser().getAccount());
         menu.setModifiedBy(getSessionUser().getAccount());
@@ -79,13 +79,13 @@ public class MenuController extends BaseController {
         return result;
     }
 
-    /** 
-    * @Description: 修改菜单信息 
-    * @Param: [menu] 
-    * @return: com.elf.core.persistence.result.Result 
-    * @Author: Liyiming
-    * @Date: 2018/4/17 
-    */
+    /**
+     * @Description: 修改菜单信息
+     * @Param: [menu]
+     * @return: com.elf.core.persistence.result.Result
+     * @Author: Liyiming
+     * @Date: 2018/4/17
+     */
     @PutMapping("/menu")
     public Result modifyMenu(Menu menu) {
         JSONResult result = new JSONResult();
@@ -98,6 +98,28 @@ public class MenuController extends BaseController {
         } else {
             result.setCode(Global.RESULT_STAUTS_FAILED);
             result.setMsg("修改失败！");
+        }
+        return result;
+    }
+
+    /**
+     * @Description: 删除菜单
+     * @Param: [menu]
+     * @return: com.elf.core.persistence.result.Result
+     * @Author: Liyiming
+     * @Date: 2018/4/19
+     */
+    @DeleteMapping("/menu/{id}")
+    public Result deleteMenuById(@PathVariable("id") String menuId) {
+        JSONResult result = new JSONResult();
+        boolean bRet = menuService.deleteById(menuId);
+        if (bRet) {
+            result.setCode(Global.RESULT_STAUTS_SUCCESS);
+            result.setMsg("删除成功！");
+            result.getParameters().put("", "");
+        } else {
+            result.setCode(Global.RESULT_STAUTS_FAILED);
+            result.setMsg("删除失败！");
         }
         return result;
     }
