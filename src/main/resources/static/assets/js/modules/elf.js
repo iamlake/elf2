@@ -1,5 +1,5 @@
-layui.define(['jquery'], function (exports) {
-    var $ = layui.jquery;
+layui.define(['jquery','linq'], function (exports) {
+    var $ = layui.jquery, linq = layui.linq;
     var obj = {
         /**
          * 获得form中控件的值返回JSON对象
@@ -77,7 +77,6 @@ layui.define(['jquery'], function (exports) {
         bindSelect: function (o, d, c, n, b) {
             var html = b ? '' : '<option value="">请选择</option>';
             if (d) {
-                console.log(d);
                 for (var i = 0; i < d.length; i++) {
                     html += '<option value="' + d[i][c] + '">' + d[i][n] + '</option>';
                 }
@@ -124,6 +123,64 @@ layui.define(['jquery'], function (exports) {
             if (r != null)
                 return unescape(r[2]);
             return "";
+        },
+
+        /**
+         * @Description: 获取codelist
+         * @Param: {re} 是否刷新
+         * @return: JsonObject
+         * @Author: Liyiming
+         * @Date: 2018/4/19
+         */
+        getCodelistCollection: function (re) {
+            var codelist = window.sessionStorage.getItem("cache_codelist");
+            if (codelist == null || codelist == undefined || re) {
+                $.ajax({
+                    url: basePath + '/codelist',
+                    type: 'GET',
+                    async: false,
+                    success: function (result) {
+                        if (result.data) {
+                            window.sessionStorage.setItem("cache_codelist", JSON.stringify(result.data));
+                        }
+                        return result.data;
+                    }
+                });
+            } else {
+                return JSON.parse(codelist);
+            }
+        },
+        /**
+         * @Description: 通过CodeType获取codelist集合
+         * @Param: {type} CodeType
+         * @Param: {re} 是否刷新
+         * @return: codelist
+         * @Author: Liyiming
+         * @Date: 2018/4/20
+         */
+        getCodelist: function (type, re) {
+            var codelistCollection = this.getCodelistCollection(re);
+            var codelist = linq.from(codelistCollection).where(function (x) {
+                return x.codeType == type;
+            }).orderBy(function (x) {
+                return x.codeOrder;
+            }).toArray();
+            return codelist;
+        },
+       /**
+        * @Description: 通过CodeType和CodeValue获取CodeValueName
+        * @Param: {type} CodeType
+        * @Param: {value} CodeValue
+        * @return: CodeValueName
+        * @Author: Liyiming
+        * @Date: 2018/4/21
+        */
+        getCodeValueName:function (type, value) {
+            var codelistCollection = this.getCodelistCollection(false);
+            var codelist = linq.from(codelistCollection).where(function (x) {
+                return x.codeType == type && x.codeValue == value;
+            }).toArray();
+            return codelist[0].codeValueName;
         }
     }
 
