@@ -7,9 +7,9 @@
 */
 var tabFilter, menu = [], liIndex, curNav, delMenu,
     changeRefreshStr = window.sessionStorage.getItem("changeRefresh");
-layui.define(["element", "jquery", "common"], function (exports) {
+layui.define(["element", "jquery", "elf"], function (exports) {
     var element = layui.element,
-        $ = layui.$, common = layui.common,
+        $ = layui.$, elf = layui.elf,
         layId,
         Tab = function () {
             this.tabConfig = {
@@ -47,7 +47,7 @@ layui.define(["element", "jquery", "common"], function (exports) {
                 ulHtml += '</a>';
                 ulHtml += '<dl class="layui-nav-child">';
                 for (var j = 0; j < data[i].children.length; j++) {
-                    var _href = common.checkUrl(data[i].children[j].href) ? data[i].children[j].href : basePath + data[i].children[j].href;
+                    var _href = elf.checkUrl(data[i].children[j].href) ? data[i].children[j].href : basePath + data[i].children[j].href;
                     if (data[i].children[j].target == "_blank") {
                         ulHtml += '<dd><a data-url="' + _href + '" target="' + data[i].children[j].target + '">';
                     } else {
@@ -64,7 +64,7 @@ layui.define(["element", "jquery", "common"], function (exports) {
                 }
                 ulHtml += "</dl>";
             } else {
-                var _href = common.checkUrl(data[i].href) ? data[i].href : basePath + data[i].href;
+                var _href = elf.checkUrl(data[i].href) ? data[i].href : basePath + data[i].href;
                 if (data[i].target == "_blank") {
                     ulHtml += '<a data-url="' + _href + '" target="' + data[i].target + '">';
                 } else {

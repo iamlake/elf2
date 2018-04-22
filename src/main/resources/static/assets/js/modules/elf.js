@@ -1,4 +1,4 @@
-layui.define(['jquery','linq'], function (exports) {
+layui.define(['jquery', 'linq'], function (exports) {
     var $ = layui.jquery, linq = layui.linq;
     var obj = {
         /**
@@ -28,7 +28,6 @@ layui.define(['jquery','linq'], function (exports) {
             }
             return dataBinding;
         },
-
         /**
          * 将Json对象赋值给form
          * @param {formObj} 指定的选择器
@@ -65,26 +64,6 @@ layui.define(['jquery','linq'], function (exports) {
             })
         },
         /**
-         * @Description: 绑定下拉列表数据源
-         * @Param: {o} select对象
-         * @Param: {d} 数据集
-         * @Param: {c} value
-         * @Param: {n} name
-         * @return: null
-         * @Author: Liyiming
-         * @Date: 2018/4/15
-         */
-        bindSelect: function (o, d, c, n, b) {
-            var html = b ? '' : '<option value="">请选择</option>';
-            if (d) {
-                for (var i = 0; i < d.length; i++) {
-                    html += '<option value="' + d[i][c] + '">' + d[i][n] + '</option>';
-                }
-                o.html(html).removeAttr("disabled");
-            }
-        },
-
-        /**
          * 将Json对象转换为树形结构
          * @param {a} json数据
          * @param {idStr} id的字符串
@@ -110,7 +89,25 @@ layui.define(['jquery','linq'], function (exports) {
             }
             return r;
         },
-
+        /**
+         * @Description: 绑定下拉列表数据源
+         * @Param: {o} select对象
+         * @Param: {d} 数据集
+         * @Param: {c} value
+         * @Param: {n} name
+         * @return: null
+         * @Author: Liyiming
+         * @Date: 2018/4/15
+         */
+        bindSelect: function (o, d, c, n, b) {
+            var html = b ? '' : '<option value="">请选择</option>';
+            if (d) {
+                for (var i = 0; i < d.length; i++) {
+                    html += '<option value="' + d[i][c] + '">' + d[i][n] + '</option>';
+                }
+                o.html(html).removeAttr("disabled");
+            }
+        },
         /**
          * 获取GET参数
          * @param {name} 参数名
@@ -124,63 +121,59 @@ layui.define(['jquery','linq'], function (exports) {
                 return unescape(r[2]);
             return "";
         },
-
         /**
-         * @Description: 获取codelist
-         * @Param: {re} 是否刷新
-         * @return: JsonObject
+         * 月(M)、日(d)、小时(h)、分(m)、秒(s)、季度(q) 可以用 1-2 个占位符，
+         * 年(y)可以用 1-4 个占位符，毫秒(S)只能用 1 个占位符(是 1-3 位的数字)
+         * Examples:
+         * dateFormat("2016-10-04 8:9:4.423","yyyy-MM-dd hh:mm:ss.S")        ==> 2016-10-04 08:09:04.423
+         * dateFormat("1507353913000","yyyy-M-d h:m:s.S")                    ==> 2017-10-7 13:25:13.0
+         * @param {datetime} 指定的选择器
+         * @param {pattern} 需要给form赋值的json对象
+         * @method dateFormat
+         * @author Liyiming
+         * */
+        dateFormat: function (datetime, pattern) {
+            console.log(parseInt(datetime));
+            if (parseInt(datetime) == datetime) {
+                if (datetime.length == 10) {
+                    datetime = parseInt(datetime) * 1000;
+                } else if (datetime.length == 13) {
+                    datetime = parseInt(datetime);
+                }
+            }
+            datetime = new Date(datetime);
+            var o = {
+                "M+": datetime.getMonth() + 1, // 月份
+                "d+": datetime.getDate(), // 日
+                "h+": datetime.getHours(), // 小时
+                "m+": datetime.getMinutes(), // 分
+                "s+": datetime.getSeconds(), // 秒
+                "q+": Math.floor((datetime.getMonth() + 3) / 3), // 季度
+                "S": datetime.getMilliseconds()
+                // 毫秒
+            };
+            if (/(y+)/.test(pattern))
+                pattern = pattern.replace(RegExp.$1, (datetime.getFullYear() + "").substr(4 - RegExp.$1.length));
+            for (var k in o)
+                if (new RegExp("(" + k + ")").test(pattern))
+                    pattern = pattern.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+            return pattern;
+        },
+        /**
+         * @Description: 判断是否是合法URL
+         * @Param: {url} url参数
+         * @method checkUrl
          * @Author: Liyiming
          * @Date: 2018/4/19
          */
-        getCodelistCollection: function (re) {
-            var codelist = window.sessionStorage.getItem("cache_codelist");
-            if (codelist == null || codelist == undefined || re) {
-                $.ajax({
-                    url: basePath + '/codelist',
-                    type: 'GET',
-                    async: false,
-                    success: function (result) {
-                        if (result.data) {
-                            window.sessionStorage.setItem("cache_codelist", JSON.stringify(result.data));
-                        }
-                        return result.data;
-                    }
-                });
-            } else {
-                return JSON.parse(codelist);
+        checkUrl: function CheckUrl(url) {
+            var reg = /^([hH][tT]{2}[pP]:\/\/|[hH][tT]{2}[pP][sS]:\/\/)(([A-Za-z0-9-~]+)\.)+([A-Za-z0-9-~\/])+$/;
+            if (!reg.test(url)) {
+                return false;
             }
-        },
-        /**
-         * @Description: 通过CodeType获取codelist集合
-         * @Param: {type} CodeType
-         * @Param: {re} 是否刷新
-         * @return: codelist
-         * @Author: Liyiming
-         * @Date: 2018/4/20
-         */
-        getCodelist: function (type, re) {
-            var codelistCollection = this.getCodelistCollection(re);
-            var codelist = linq.from(codelistCollection).where(function (x) {
-                return x.codeType == type;
-            }).orderBy(function (x) {
-                return x.codeOrder;
-            }).toArray();
-            return codelist;
-        },
-       /**
-        * @Description: 通过CodeType和CodeValue获取CodeValueName
-        * @Param: {type} CodeType
-        * @Param: {value} CodeValue
-        * @return: CodeValueName
-        * @Author: Liyiming
-        * @Date: 2018/4/21
-        */
-        getCodeValueName:function (type, value) {
-            var codelistCollection = this.getCodelistCollection(false);
-            var codelist = linq.from(codelistCollection).where(function (x) {
-                return x.codeType == type && x.codeValue == value;
-            }).toArray();
-            return codelist[0].codeValueName;
+            else {
+                return true;
+            }
         }
     }
 

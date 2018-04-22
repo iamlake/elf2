@@ -1,14 +1,12 @@
-layui.use(['form', 'layer', 'laydate', 'util', 'elf'], function () {
+layui.use(['form', 'layer', 'laydate', 'util', 'elf', 'codelist'], function () {
     var form = layui.form,
         layer = parent.layer === undefined ? layui.layer : top.layer,
         $ = layui.jquery,
-        laydate = layui.laydate,
-        util = layui.util,
-        elf = layui.elf;
-    var isNew = false;
+        elf = layui.elf, codelist = layui.codelist;
+    var isNew = parent.isNew, oData = parent.oData;
 
-    laydate.render({
-        elem: '#txt_birthDate', max: util.toDateString(new Date(), "yyyy-MM-dd")
+    layui.laydate.render({
+        elem: '#txt_birthDate', max: layui.util.toDateString(new Date(), "yyyy-MM-dd")
     });
 
     //监听指定开关
@@ -20,11 +18,15 @@ layui.use(['form', 'layer', 'laydate', 'util', 'elf'], function () {
     });
 
     $(function () {
+        codelist.bindRadio($(".sex"), "sex", "sex");
+        codelist.bindSelect($(".credentialsType"), "credentialsType");
+        if (!isNew) {
+            elf.setData($(".layui-form"), oData);
+        }
         if ($("#hid_isLocked").val() == 'T') {
             $("#switch_isLocked").attr("checked", true);
-            form.render('checkbox');
         }
-        isNew = $("#hid_userId").val() ? false : true;
+        form.render();
     });
 
     form.on("submit(save)", function (data) {
@@ -60,15 +62,16 @@ layui.use(['form', 'layer', 'laydate', 'util', 'elf'], function () {
     })
 
     //格式化时间
-    function filterTime(val){
-        if(val < 10){
+    function filterTime(val) {
+        if (val < 10) {
             return "0" + val;
-        }else{
+        } else {
             return val;
         }
     }
+
     //定时发布
     var time = new Date();
-    var submitTime = time.getFullYear()+'-'+filterTime(time.getMonth()+1)+'-'+filterTime(time.getDate())+' '+filterTime(time.getHours())+':'+filterTime(time.getMinutes())+':'+filterTime(time.getSeconds());
+    var submitTime = time.getFullYear() + '-' + filterTime(time.getMonth() + 1) + '-' + filterTime(time.getDate()) + ' ' + filterTime(time.getHours()) + ':' + filterTime(time.getMinutes()) + ':' + filterTime(time.getSeconds());
 
 })

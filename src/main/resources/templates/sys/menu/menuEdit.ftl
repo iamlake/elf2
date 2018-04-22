@@ -13,13 +13,13 @@
 </head>
 <body class="childrenBody">
 <form class="layui-form" style="width:80%;">
-    <div class="layui-form-item layui-row layui-col-xs12" id="div_app">
+    <div class="layui-form-item layui-row layui-col-xs12 div_app">
         <label class="layui-form-label">所属应用</label>
         <div class="layui-input-block">
             <select class="appSelect" lay-filter="appSelect" name="appId" lay-verify="required"></select>
         </div>
     </div>
-    <div class="layui-form-item layui-row layui-col-xs12" id="div_pmenu">
+    <div class="layui-form-item layui-row layui-col-xs12 div_pmenu">
         <label class="layui-form-label">上级菜单</label>
         <div class="layui-input-block">
             <input type="text" class="layui-input parentMenu" name="parentMenuId" readonly>
@@ -114,13 +114,13 @@
             var appData = JSON.parse(window.sessionStorage.getItem("roleapp"));
             elf.bindSelect($('.appSelect'), appData, 'appId', 'title');
             if ('root' == oType) {
-                $('#div_pmenu').attr("style", "display:none");
                 $('.parentMenu').val('0');
+                $('.div_pmenu').attr("style", "display:none");
             } else {
                 if ('child' == oType) {
                     $('.appSelect').val(oData.appId);
                     $('.parentMenu').val(oData.menuId);
-                    $('#div_app').attr("style", "display:none");
+                    $('.div_app').attr("style", "display:none");
                 } else if ('edit' == oType) {
                     isNew = false;
                     elf.setData($(".layui-form"), oData);

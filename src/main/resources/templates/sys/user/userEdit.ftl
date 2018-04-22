@@ -28,11 +28,7 @@
     <div class="layui-row">
         <div class="magb15 layui-col-md4 layui-col-xs12">
             <label class="layui-form-label">性别</label>
-            <div class="layui-input-block sex">
-                <input type="radio" name="sex" value="男" title="男">
-                <input type="radio" name="sex" value="女" title="女">
-                <input type="radio" name="sex" value="保密" title="保密">
-            </div>
+            <div class="layui-input-block sex"></div>
         </div>
         <div class="magb15 layui-col-md4 layui-col-xs12">
             <label class="layui-form-label">生日</label>
@@ -76,22 +72,7 @@
         <div class="magb15 layui-col-md4 layui-col-xs12">
             <label class="layui-form-label">证件类型</label>
             <div class="layui-input-block">
-                <select class="credentialsType" lay-filter="credentialsType" name="credentialsType">
-                    <option value="100001_IDCARD">身份证</option>
-                    <option value="100002_ARMYMANCARD">军人证</option>
-                    <option value="100003_PASSPORT">护照</option>
-                    <option value="100004_PERMANENTRESIDENT">户口本</option>
-                    <option value="100005_FOREIGN">外国人永久居留证</option>
-                    <option value="100006_POLICECARD">武警证</option>
-                    <option value="100007_CACHET">公章</option>
-                    <option value="100008_BusinessLicense">工商营业执照</option>
-                    <option value="100009_CorporationID">法人代码证</option>
-                    <option value="100010_STUDENTCARD">学生证</option>
-                    <option value="100011_SOLDIERCARD">士兵证</option>
-                    <option value="100016_GAJMLW">港澳居民来往内地通行证</option>
-                    <option value="100017_TWJMLW">台湾居民来往大陆通行证</option>
-                    <option value="100018_QTZJLX">其他证件类型</option>
-                </select>
+                <select class="credentialsType" lay-filter="credentialsType" name="credentialsType"></select>
             </div>
         </div>
         <div class="magb15 layui-col-md4 layui-col-xs12">

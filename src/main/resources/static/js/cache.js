@@ -19,7 +19,7 @@ layui.use(['form','jquery',"layer"],function() {
         $("#userFace").attr("src",window.sessionStorage.getItem('userFace'));
         $(".userAvatar").attr("src",$(".userAvatar").attr("src").split("images/")[0] + "images/" + window.sessionStorage.getItem('userFace').split("images/")[1]);
     }else{
-        $("#userFace").attr("src", basePath + "/static/assets/images/userhead/icelake.jpg");
+        $("#userFace").attr("src", basePath + "/static/assets/images/userhead/default_none.jpg");
     }
 
     //公告层

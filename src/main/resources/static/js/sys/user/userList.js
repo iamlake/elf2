@@ -1,9 +1,9 @@
-layui.use(['form', 'layer', 'table', 'elf'], function () {
-    var form = layui.form,
+var oData, isNew;
+layui.use(['form', 'layer', 'table', 'codelist'], function () {
+    var $ = layui.jquery,
         layer = parent.layer === undefined ? layui.layer : top.layer,
-        $ = layui.jquery,
         table = layui.table,
-        elf = layui.elf;
+        codelist = layui.codelist;
 
     //用户列表
     var tableIns = table.render({
@@ -23,7 +23,10 @@ layui.use(['form', 'layer', 'table', 'elf'], function () {
                     return '<a class="layui-blue" href="mailto:' + d.email + '">' + d.email + '</a>';
                 }
             },
-            {field: 'sex', title: '性别', align: 'center'},
+            {field: 'sex', title: '性别', align: 'center', templet: function (d) {
+                    return codelist.getValueName("sex", d.sex);
+                }
+            },
             {field: 'activeFlag', title: '用户状态', align: 'center', templet: function (d) {
                     return d.activeFlag == "1" ? "正常使用" : "限制使用";
                     // return d.activeFlag == "1" ? '<span class="layui-badge layui-bg-green">正常</span>' : '<span class="layui-badge layui-bg-gray">停用</span>';
@@ -61,20 +64,22 @@ layui.use(['form', 'layer', 'table', 'elf'], function () {
     });
 
     //新建/编辑用户
-    function userEditForward(d) {
+    function userEditForward(data, type) {
+        oData = data;
+        isNew = type;
         var index = layui.layer.open({
-            title: d ? "编辑用户" : "新建用户",
+            title: type ? "新建用户" : "编辑用户",
             type: 2,
             content: basePath + "/page/sys_user_userEdit",
             success: function (layero, index) {
-                var iframeWin = window[layero.find('iframe')[0]['name']];
-                if (d) {
-                    var body = layui.layer.getChildFrame('body', index);
-                    elf.setData(body.find(".layui-form"), d);
-                    form.render();
-                } else {
-                    iframeWin.isNew = true;
-                }
+                // var iframeWin = window[layero.find('iframe')[0]['name']];
+                // if (d) {
+                //     var body = layui.layer.getChildFrame('body', index);
+                //     elf.setData(body.find(".layui-form"), d);
+                //     form.render();
+                // } else {
+                //     iframeWin.isNew = true;
+                // }
                 setTimeout(function () {
                     layui.layer.tips('点击此处返回用户列表', '.layui-layer-setwin .layui-layer-close', {
                         tips: 3
@@ -91,7 +96,7 @@ layui.use(['form', 'layer', 'table', 'elf'], function () {
     }
 
     $(".btn_edit").click(function () {
-        userEditForward();
+        userEditForward(null, true);
     })
 
     //TODO-----批量删除
@@ -124,7 +129,7 @@ layui.use(['form', 'layer', 'table', 'elf'], function () {
         if (layEvent === 'doDetail') {//查看
             layer.msg('姓名：' + data.fullname + ' 的查看操作');
         } else if (layEvent === 'doEdit') { //编辑
-            userEditForward(data);
+            userEditForward(data, false);
         } else if (layEvent === 'enabled') { //启用停用
             var _this = $(this),
                 enabledText = "是否确定停用此用户？",

@@ -6,7 +6,7 @@ layui.config({
     address: 'modules/address',
     treeGrid: 'modules/treeGrid',
     elf: 'modules/elf',
-    common: 'modules/common',
+    codelist: 'modules/codelist',
 
     //--------2、plugins
     echarts: 'plugins/echarts', //echarts 核心包
