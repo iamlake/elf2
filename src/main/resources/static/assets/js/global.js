@@ -11,5 +11,6 @@ layui.config({
     //--------2、plugins
     echarts: 'plugins/echarts', //echarts 核心包
     echartsTheme: 'plugins/echartsTheme', //echarts 主题
-    linq: 'plugins/linq'
+    linq: 'plugins/linq',
+    zTree: 'plugins/zTree'
 });

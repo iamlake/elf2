@@ -10,9 +10,14 @@
 (function (root, undefined) {
     // ReadOnly Function
     var Functions = {
-        Identity: function (x) { return x; },
-        True: function () { return true; },
-        Blank: function () { }
+        Identity: function (x) {
+            return x;
+        },
+        True: function () {
+            return true;
+        },
+        Blank: function () {
+        }
     };
 
     // const Type
@@ -22,11 +27,12 @@
         String: typeof "",
         Object: typeof {},
         Undefined: typeof undefined,
-        Function: typeof function () { }
+        Function: typeof function () {
+        }
     };
 
     // createLambda cache
-    var funcCache = { "": Functions.Identity };
+    var funcCache = {"": Functions.Identity};
 
     // private utility methods
     var Utils = {
@@ -83,7 +89,8 @@
                     new Enumerator(obj); // check JScript(IE)'s Enumerator
                     return true;
                 }
-                catch (e) { }
+                catch (e) {
+                }
             }
 
             return false;
@@ -105,8 +112,8 @@
 
         compare: function (a, b) {
             return (a === b) ? 0
-                 : (a > b) ? 1
-                 : -1;
+                : (a > b) ? 1
+                    : -1;
         },
 
         dispose: function (obj) {
@@ -115,7 +122,7 @@
     };
 
     // IEnumerator State
-    var State = { Before: 0, Running: 1, After: 2 };
+    var State = {Before: 0, Running: 1, After: 2};
 
     // "Enumerator" is conflict JScript's "Enumerator"
     var IEnumerator = function (initialize, tryGetNext, dispose) {
@@ -130,7 +137,7 @@
                     case State.Before:
                         state = State.Running;
                         initialize();
-                        // fall through
+                    // fall through
                     case State.Running:
                         if (tryGetNext.apply(yielder)) {
                             return true;
@@ -164,7 +171,9 @@
     // for tryGetNext
     var Yielder = function () {
         var current = null;
-        this.current = function () { return current; };
+        this.current = function () {
+            return current;
+        };
         this.yieldReturn = function (value) {
             current = value;
             return true;
@@ -241,7 +250,7 @@
                 function () {
                     args = (args[0] instanceof Array) ? args[0]
                         : (args[0].getEnumerator != null) ? args[0].toArray()
-                        : args;
+                            : args;
                 },
                 function () {
                     return this.yieldReturn(args[Math.floor(Math.random() * args.length)]);
@@ -260,7 +269,7 @@
                 function () {
                     args = (args[0] instanceof Array) ? args[0]
                         : (args[0].getEnumerator != null) ? args[0].toArray()
-                        : args;
+                            : args;
                 },
                 function () {
                     if (index >= args.length) index = 0;
@@ -274,7 +283,9 @@
         return new Enumerable(function () {
             return new IEnumerator(
                 Functions.Blank,
-                function () { return false; },
+                function () {
+                    return false;
+                },
                 Functions.Blank);
         });
     };
@@ -312,7 +323,9 @@
                     var isFirst = true;
                     var enumerator;
                     return new IEnumerator(
-                        function () { enumerator = new Enumerator(obj); },
+                        function () {
+                            enumerator = new Enumerator(obj);
+                        },
                         function () {
                             if (isFirst) isFirst = false;
                             else enumerator.moveNext();
@@ -329,7 +342,9 @@
                     var isFirst = true;
                     var enumerator;
                     return new IEnumerator(
-                        function () { enumerator = obj.first(); },
+                        function () {
+                            enumerator = obj.first();
+                        },
                         function () {
                             if (isFirst) isFirst = false;
                             else enumerator.moveNext();
@@ -351,7 +366,7 @@
                     for (var key in obj) {
                         var value = obj[key];
                         if (!(value instanceof Function) && Object.prototype.hasOwnProperty.call(obj, key)) {
-                            array.push({ key: key, value: value });
+                            array.push({key: key, value: value});
                         }
                     }
                 },
@@ -364,9 +379,9 @@
         });
     },
 
-    Enumerable.make = function (element) {
-        return Enumerable.repeat(element, 1);
-    };
+        Enumerable.make = function (element) {
+            return Enumerable.repeat(element, 1);
+        };
 
     // Overload:function(input, pattern)
     // Overload:function(input, pattern, flags)
@@ -382,7 +397,9 @@
         return new Enumerable(function () {
             var regex;
             return new IEnumerator(
-                function () { regex = new RegExp(pattern, flags); },
+                function () {
+                    regex = new RegExp(pattern, flags);
+                },
                 function () {
                     var match = regex.exec(input);
                     return (match) ? this.yieldReturn(match) : false;
@@ -401,7 +418,9 @@
             var index = 0;
 
             return new IEnumerator(
-                function () { value = start - step; },
+                function () {
+                    value = start - step;
+                },
                 function () {
                     return (index++ < count)
                         ? this.yieldReturn(value += step)
@@ -421,7 +440,9 @@
             var index = 0;
 
             return new IEnumerator(
-                function () { value = start + step; },
+                function () {
+                    value = start + step;
+                },
                 function () {
                     return (index++ < count)
                         ? this.yieldReturn(value -= step)
@@ -441,14 +462,16 @@
                 var value;
 
                 return new IEnumerator(
-                function () { value = start - step; },
-                function () {
-                    var next = value += step;
-                    return (next <= to)
-                        ? this.yieldReturn(next)
-                        : this.yieldBreak();
-                },
-                Functions.Blank);
+                    function () {
+                        value = start - step;
+                    },
+                    function () {
+                        var next = value += step;
+                        return (next <= to)
+                            ? this.yieldReturn(next)
+                            : this.yieldBreak();
+                    },
+                    Functions.Blank);
             });
         }
         else {
@@ -456,14 +479,16 @@
                 var value;
 
                 return new IEnumerator(
-                function () { value = start + step; },
-                function () {
-                    var next = value -= step;
-                    return (next >= to)
-                        ? this.yieldReturn(next)
-                        : this.yieldBreak();
-                },
-                Functions.Blank);
+                    function () {
+                        value = start + step;
+                    },
+                    function () {
+                        var next = value -= step;
+                        return (next >= to)
+                            ? this.yieldReturn(next)
+                            : this.yieldBreak();
+                    },
+                    Functions.Blank);
             });
         }
     };
@@ -476,7 +501,9 @@
         return new Enumerable(function () {
             return new IEnumerator(
                 Functions.Blank,
-                function () { return this.yieldReturn(element); },
+                function () {
+                    return this.yieldReturn(element);
+                },
                 Functions.Blank);
         });
     };
@@ -488,8 +515,12 @@
         return new Enumerable(function () {
             var element;
             return new IEnumerator(
-                function () { element = initializer(); },
-                function () { return this.yieldReturn(element); },
+                function () {
+                    element = initializer();
+                },
+                function () {
+                    return this.yieldReturn(element);
+                },
                 function () {
                     if (element != null) {
                         finalizer(element);
@@ -508,7 +539,9 @@
         return new Enumerable(function () {
             return new IEnumerator(
                 Functions.Blank,
-                function () { return this.yieldReturn(func()); },
+                function () {
+                    return this.yieldReturn(func());
+                },
                 Functions.Blank);
         });
     };
@@ -523,8 +556,12 @@
         return new Enumerable(function () {
             var value;
             return new IEnumerator(
-                function () { value = start - step; },
-                function () { return this.yieldReturn(value += step); },
+                function () {
+                    value = start - step;
+                },
+                function () {
+                    return this.yieldReturn(value += step);
+                },
                 Functions.Blank);
         });
     };
@@ -539,8 +576,12 @@
         return new Enumerable(function () {
             var value;
             return new IEnumerator(
-                function () { value = start + step; },
-                function () { return this.yieldReturn(value -= step); },
+                function () {
+                    value = start + step;
+                },
+                function () {
+                    return this.yieldReturn(value -= step);
+                },
                 Functions.Blank);
         });
     };
@@ -572,7 +613,9 @@
             var enumerator;
 
             return new IEnumerator(
-                function () { enumerator = Enumerable.from(enumerableFactory()).getEnumerator(); },
+                function () {
+                    enumerator = Enumerable.from(enumerableFactory()).getEnumerator();
+                },
                 function () {
                     return (enumerator.moveNext())
                         ? this.yieldReturn(enumerator.current())
@@ -602,7 +645,9 @@
             var buffer = [];
 
             return new IEnumerator(
-                function () { enumerator = source.getEnumerator(); },
+                function () {
+                    enumerator = source.getEnumerator();
+                },
                 function () {
                     while (true) {
                         if (enumerator.moveNext()) {
@@ -610,7 +655,9 @@
                             return this.yieldReturn(resultSelector(enumerator.current(), nestLevel));
                         }
 
-                        var next = Enumerable.from(buffer).selectMany(function (x) { return func(x); });
+                        var next = Enumerable.from(buffer).selectMany(function (x) {
+                            return func(x);
+                        });
                         if (!next.any()) {
                             return false;
                         }
@@ -622,7 +669,9 @@
                         }
                     }
                 },
-                function () { Utils.dispose(enumerator); });
+                function () {
+                    Utils.dispose(enumerator);
+                });
         });
     };
 
@@ -639,7 +688,9 @@
             var enumerator;
 
             return new IEnumerator(
-                function () { enumerator = source.getEnumerator(); },
+                function () {
+                    enumerator = source.getEnumerator();
+                },
                 function () {
                     while (true) {
                         if (enumerator.moveNext()) {
@@ -659,7 +710,9 @@
                         Utils.dispose(enumerator);
                     }
                     finally {
-                        Enumerable.from(enumeratorStack).forEach(function (s) { s.dispose(); });
+                        Enumerable.from(enumeratorStack).forEach(function (s) {
+                            s.dispose();
+                        });
                     }
                 });
         });
@@ -673,7 +726,9 @@
             var middleEnumerator = null;
 
             return new IEnumerator(
-                function () { enumerator = source.getEnumerator(); },
+                function () {
+                    enumerator = source.getEnumerator();
+                },
                 function () {
                     while (true) {
                         if (middleEnumerator != null) {
@@ -731,7 +786,9 @@
                         ? this.yieldReturn(selector(prev, enumerator.current()))
                         : false;
                 },
-                function () { Utils.dispose(enumerator); });
+                function () {
+                    Utils.dispose(enumerator);
+                });
         });
     };
 
@@ -754,7 +811,9 @@
             var isFirst = true;
 
             return new IEnumerator(
-                function () { enumerator = source.getEnumerator(); },
+                function () {
+                    enumerator = source.getEnumerator();
+                },
                 function () {
                     if (isFirst) {
                         isFirst = false;
@@ -772,7 +831,9 @@
                         ? this.yieldReturn(value = func(value, enumerator.current()))
                         : false;
                 },
-                function () { Utils.dispose(enumerator); });
+                function () {
+                    Utils.dispose(enumerator);
+                });
         });
     };
 
@@ -792,13 +853,17 @@
                 var index = 0;
 
                 return new IEnumerator(
-                    function () { enumerator = source.getEnumerator(); },
+                    function () {
+                        enumerator = source.getEnumerator();
+                    },
                     function () {
                         return (enumerator.moveNext())
                             ? this.yieldReturn(selector(enumerator.current(), index++))
                             : false;
                     },
-                    function () { Utils.dispose(enumerator); });
+                    function () {
+                        Utils.dispose(enumerator);
+                    });
             });
         }
     };
@@ -810,7 +875,9 @@
     Enumerable.prototype.selectMany = function (collectionSelector, resultSelector) {
         var source = this;
         collectionSelector = Utils.createLambda(collectionSelector);
-        if (resultSelector == null) resultSelector = function (a, b) { return b; };
+        if (resultSelector == null) resultSelector = function (a, b) {
+            return b;
+        };
         resultSelector = Utils.createLambda(resultSelector);
 
         return new Enumerable(function () {
@@ -819,7 +886,9 @@
             var index = 0;
 
             return new IEnumerator(
-                function () { enumerator = source.getEnumerator(); },
+                function () {
+                    enumerator = source.getEnumerator();
+                },
                 function () {
                     if (middleEnumerator === undefined) {
                         if (!enumerator.moveNext()) return false;
@@ -864,7 +933,9 @@
                 var index = 0;
 
                 return new IEnumerator(
-                    function () { enumerator = source.getEnumerator(); },
+                    function () {
+                        enumerator = source.getEnumerator();
+                    },
                     function () {
                         while (enumerator.moveNext()) {
                             if (predicate(enumerator.current(), index++)) {
@@ -873,7 +944,9 @@
                         }
                         return false;
                     },
-                    function () { Utils.dispose(enumerator); });
+                    function () {
+                        Utils.dispose(enumerator);
+                    });
             });
         }
     };
@@ -890,7 +963,9 @@
             var index = 0;
 
             return new IEnumerator(
-                function () { enumerator = source.getEnumerator(); },
+                function () {
+                    enumerator = source.getEnumerator();
+                },
                 function () {
                     while (enumerator.moveNext()) {
                         var result = selector(enumerator.current(), index++);
@@ -900,7 +975,9 @@
                     }
                     return this.yieldBreak();
                 },
-                function () { Utils.dispose(enumerator); });
+                function () {
+                    Utils.dispose(enumerator);
+                });
         });
     };
 
@@ -924,8 +1001,12 @@
                 break;
         }
         return (typeName === null)
-            ? this.where(function (x) { return x instanceof type; })
-            : this.where(function (x) { return typeof x === typeName; });
+            ? this.where(function (x) {
+                return x instanceof type;
+            })
+            : this.where(function (x) {
+                return typeof x === typeName;
+            });
     };
 
     // mutiple arguments, last one is selector, others are enumerable
@@ -944,23 +1025,23 @@
                 var index = 0;
 
                 return new IEnumerator(
-                function () {
-                    firstEnumerator = source.getEnumerator();
-                    secondEnumerator = Enumerable.from(second).getEnumerator();
-                },
-                function () {
-                    if (firstEnumerator.moveNext() && secondEnumerator.moveNext()) {
-                        return this.yieldReturn(selector(firstEnumerator.current(), secondEnumerator.current(), index++));
-                    }
-                    return false;
-                },
-                function () {
-                    try {
-                        Utils.dispose(firstEnumerator);
-                    } finally {
-                        Utils.dispose(secondEnumerator);
-                    }
-                });
+                    function () {
+                        firstEnumerator = source.getEnumerator();
+                        secondEnumerator = Enumerable.from(second).getEnumerator();
+                    },
+                    function () {
+                        if (firstEnumerator.moveNext() && secondEnumerator.moveNext()) {
+                            return this.yieldReturn(selector(firstEnumerator.current(), secondEnumerator.current(), index++));
+                        }
+                        return false;
+                    },
+                    function () {
+                        try {
+                            Utils.dispose(firstEnumerator);
+                        } finally {
+                            Utils.dispose(secondEnumerator);
+                        }
+                    });
             });
         }
         else {
@@ -969,28 +1050,34 @@
                 var index = 0;
 
                 return new IEnumerator(
-                function () {
-                    var array = Enumerable.make(source)
-                        .concat(Enumerable.from(args).takeExceptLast().select(Enumerable.from))
-                        .select(function (x) { return x.getEnumerator() })
-                        .toArray();
-                    enumerators = Enumerable.from(array);
-                },
-                function () {
-                    if (enumerators.all(function (x) { return x.moveNext() })) {
-                        var array = enumerators
-                            .select(function (x) { return x.current() })
+                    function () {
+                        var array = Enumerable.make(source)
+                            .concat(Enumerable.from(args).takeExceptLast().select(Enumerable.from))
+                            .select(function (x) {
+                                return x.getEnumerator()
+                            })
                             .toArray();
-                        array.push(index++);
-                        return this.yieldReturn(selector.apply(null, array));
-                    }
-                    else {
-                        return this.yieldBreak();
-                    }
-                },
-                function () {
-                    Enumerable.from(enumerators).forEach(Utils.dispose);
-                });
+                        enumerators = Enumerable.from(array);
+                    },
+                    function () {
+                        if (enumerators.all(function (x) {
+                                return x.moveNext()
+                            })) {
+                            var array = enumerators
+                                .select(function (x) {
+                                    return x.current()
+                                })
+                                .toArray();
+                            array.push(index++);
+                            return this.yieldReturn(selector.apply(null, array));
+                        }
+                        else {
+                            return this.yieldBreak();
+                        }
+                    },
+                    function () {
+                        Enumerable.from(enumerators).forEach(Utils.dispose);
+                    });
             });
         }
     };
@@ -1008,7 +1095,9 @@
                 function () {
                     enumerators = Enumerable.make(source)
                         .concat(Enumerable.from(args).select(Enumerable.from))
-                        .select(function (x) { return x.getEnumerator() })
+                        .select(function (x) {
+                            return x.getEnumerator()
+                        })
                         .toArray();
                 },
                 function () {
@@ -1074,7 +1163,9 @@
                         }
                     }
                 },
-                function () { Utils.dispose(outerEnumerator); });
+                function () {
+                    Utils.dispose(outerEnumerator);
+                });
         });
     };
 
@@ -1103,7 +1194,9 @@
                     }
                     return false;
                 },
-                function () { Utils.dispose(enumerator); });
+                function () {
+                    Utils.dispose(enumerator);
+                });
         });
     };
 
@@ -1158,23 +1251,25 @@
                 var secondEnumerator;
 
                 return new IEnumerator(
-                function () { firstEnumerator = source.getEnumerator(); },
-                function () {
-                    if (secondEnumerator == null) {
-                        if (firstEnumerator.moveNext()) return this.yieldReturn(firstEnumerator.current());
-                        secondEnumerator = Enumerable.from(second).getEnumerator();
-                    }
-                    if (secondEnumerator.moveNext()) return this.yieldReturn(secondEnumerator.current());
-                    return false;
-                },
-                function () {
-                    try {
-                        Utils.dispose(firstEnumerator);
-                    }
-                    finally {
-                        Utils.dispose(secondEnumerator);
-                    }
-                });
+                    function () {
+                        firstEnumerator = source.getEnumerator();
+                    },
+                    function () {
+                        if (secondEnumerator == null) {
+                            if (firstEnumerator.moveNext()) return this.yieldReturn(firstEnumerator.current());
+                            secondEnumerator = Enumerable.from(second).getEnumerator();
+                        }
+                        if (secondEnumerator.moveNext()) return this.yieldReturn(secondEnumerator.current());
+                        return false;
+                    },
+                    function () {
+                        try {
+                            Utils.dispose(firstEnumerator);
+                        }
+                        finally {
+                            Utils.dispose(secondEnumerator);
+                        }
+                    });
             });
         }
         else {
@@ -1187,7 +1282,9 @@
                     function () {
                         enumerators = Enumerable.make(source)
                             .concat(Enumerable.from(args).select(Enumerable.from))
-                            .select(function (x) { return x.getEnumerator() })
+                            .select(function (x) {
+                                return x.getEnumerator()
+                            })
                             .toArray();
                     },
                     function () {
@@ -1331,7 +1428,9 @@
             var isFirst = true;
 
             return new IEnumerator(
-                function () { enumerator = source.getEnumerator(); },
+                function () {
+                    enumerator = source.getEnumerator();
+                },
                 function () {
                     if (enumerator.moveNext()) {
                         isFirst = false;
@@ -1343,7 +1442,9 @@
                     }
                     return false;
                 },
-                function () { Utils.dispose(enumerator); });
+                function () {
+                    Utils.dispose(enumerator);
+                });
         });
     };
 
@@ -1385,7 +1486,9 @@
                     }
                     return this.yieldBreak();
                 },
-                function () { Utils.dispose(enumerator); });
+                function () {
+                    Utils.dispose(enumerator);
+                });
         });
     };
 
@@ -1403,7 +1506,9 @@
                 function () {
                     enumerator = source.getEnumerator();
                     keys = new Dictionary(compareSelector);
-                    Enumerable.from(second).forEach(function (key) { keys.add(key); });
+                    Enumerable.from(second).forEach(function (key) {
+                        keys.add(key);
+                    });
                 },
                 function () {
                     while (enumerator.moveNext()) {
@@ -1415,7 +1520,9 @@
                     }
                     return false;
                 },
-                function () { Utils.dispose(enumerator); });
+                function () {
+                    Utils.dispose(enumerator);
+                });
         });
     };
 
@@ -1435,7 +1542,9 @@
                     enumerator = source.getEnumerator();
 
                     keys = new Dictionary(compareSelector);
-                    Enumerable.from(second).forEach(function (key) { keys.add(key); });
+                    Enumerable.from(second).forEach(function (key) {
+                        keys.add(key);
+                    });
                     outs = new Dictionary(compareSelector);
                 },
                 function () {
@@ -1448,7 +1557,9 @@
                     }
                     return false;
                 },
-                function () { Utils.dispose(enumerator); });
+                function () {
+                    Utils.dispose(enumerator);
+                });
         });
     };
 
@@ -1463,7 +1574,7 @@
             try {
                 while (firstEnumerator.moveNext()) {
                     if (!secondEnumerator.moveNext()
-                    || compareSelector(firstEnumerator.current()) !== compareSelector(secondEnumerator.current())) {
+                        || compareSelector(firstEnumerator.current()) !== compareSelector(secondEnumerator.current())) {
                         return false;
                     }
                 }
@@ -1564,7 +1675,9 @@
             var buffer;
 
             return new IEnumerator(
-                function () { buffer = source.toArray(); },
+                function () {
+                    buffer = source.toArray();
+                },
                 function () {
                     if (buffer.length > 0) {
                         var i = Math.floor(Math.random() * buffer.length);
@@ -1592,7 +1705,7 @@
                             if (weight <= 0) return null; // ignore 0
 
                             totalWeight += weight;
-                            return { value: x, bound: totalWeight };
+                            return {value: x, bound: totalWeight};
                         })
                         .toArray();
                 },
@@ -1651,7 +1764,9 @@
                     }
                     return false;
                 },
-                function () { Utils.dispose(enumerator); });
+                function () {
+                    Utils.dispose(enumerator);
+                });
         });
     };
 
@@ -1668,7 +1783,9 @@
         var hasResultSelector;
         if (resultSelector == null) {
             hasResultSelector = false;
-            resultSelector = function (key, group) { return new Grouping(key, group); };
+            resultSelector = function (key, group) {
+                return new Grouping(key, group);
+            };
         }
         else {
             hasResultSelector = true;
@@ -1715,7 +1832,9 @@
 
                     return false;
                 },
-                function () { Utils.dispose(enumerator); });
+                function () {
+                    Utils.dispose(enumerator);
+                });
         });
     };
 
@@ -1726,7 +1845,9 @@
             var enumerator;
 
             return new IEnumerator(
-                function () { enumerator = source.getEnumerator(); },
+                function () {
+                    enumerator = source.getEnumerator();
+                },
                 function () {
                     var array = [];
                     var index = 0;
@@ -1737,7 +1858,9 @@
                     if (array.length > 0) return this.yieldReturn(array);
                     return false;
                 },
-                function () { Utils.dispose(enumerator); });
+                function () {
+                    Utils.dispose(enumerator);
+                });
         });
     };
 
@@ -1773,7 +1896,7 @@
 
         var count = 0;
         this.forEach(function (x, i) {
-            if (predicate(x, i))++count;
+            if (predicate(x, i)) ++count;
         });
         return count;
     };
@@ -1782,31 +1905,41 @@
     // Overload:function(selector)
     Enumerable.prototype.max = function (selector) {
         if (selector == null) selector = Functions.Identity;
-        return this.select(selector).aggregate(function (a, b) { return (a > b) ? a : b; });
+        return this.select(selector).aggregate(function (a, b) {
+            return (a > b) ? a : b;
+        });
     };
 
     // Overload:function()
     // Overload:function(selector)
     Enumerable.prototype.min = function (selector) {
         if (selector == null) selector = Functions.Identity;
-        return this.select(selector).aggregate(function (a, b) { return (a < b) ? a : b; });
+        return this.select(selector).aggregate(function (a, b) {
+            return (a < b) ? a : b;
+        });
     };
 
     Enumerable.prototype.maxBy = function (keySelector) {
         keySelector = Utils.createLambda(keySelector);
-        return this.aggregate(function (a, b) { return (keySelector(a) > keySelector(b)) ? a : b; });
+        return this.aggregate(function (a, b) {
+            return (keySelector(a) > keySelector(b)) ? a : b;
+        });
     };
 
     Enumerable.prototype.minBy = function (keySelector) {
         keySelector = Utils.createLambda(keySelector);
-        return this.aggregate(function (a, b) { return (keySelector(a) < keySelector(b)) ? a : b; });
+        return this.aggregate(function (a, b) {
+            return (keySelector(a) < keySelector(b)) ? a : b;
+        });
     };
 
     // Overload:function()
     // Overload:function(selector)
     Enumerable.prototype.sum = function (selector) {
         if (selector == null) selector = Functions.Identity;
-        return this.select(selector).aggregate(0, function (a, b) { return a + b; });
+        return this.select(selector).aggregate(0, function (a, b) {
+            return a + b;
+        });
     };
 
     /* Paging Methods */
@@ -1958,7 +2091,9 @@
                         ? this.yieldReturn(enumerator.current())
                         : false;
                 },
-                function () { Utils.dispose(enumerator); });
+                function () {
+                    Utils.dispose(enumerator);
+                });
         });
     };
 
@@ -1974,7 +2109,9 @@
             var isSkipEnd = false;
 
             return new IEnumerator(
-                function () { enumerator = source.getEnumerator(); },
+                function () {
+                    enumerator = source.getEnumerator();
+                },
                 function () {
                     while (!isSkipEnd) {
                         if (enumerator.moveNext()) {
@@ -1991,7 +2128,9 @@
                         : false;
 
                 },
-                function () { Utils.dispose(enumerator); });
+                function () {
+                    Utils.dispose(enumerator);
+                });
         });
     };
 
@@ -2003,13 +2142,17 @@
             var index = 0;
 
             return new IEnumerator(
-                function () { enumerator = source.getEnumerator(); },
+                function () {
+                    enumerator = source.getEnumerator();
+                },
                 function () {
                     return (index++ < count && enumerator.moveNext())
                         ? this.yieldReturn(enumerator.current())
                         : false;
                 },
-                function () { Utils.dispose(enumerator); }
+                function () {
+                    Utils.dispose(enumerator);
+                }
             );
         });
     };
@@ -2025,13 +2168,17 @@
             var index = 0;
 
             return new IEnumerator(
-                function () { enumerator = source.getEnumerator(); },
+                function () {
+                    enumerator = source.getEnumerator();
+                },
                 function () {
                     return (enumerator.moveNext() && predicate(enumerator.current(), index++))
                         ? this.yieldReturn(enumerator.current())
                         : false;
                 },
-                function () { Utils.dispose(enumerator); });
+                function () {
+                    Utils.dispose(enumerator);
+                });
         });
     };
 
@@ -2048,7 +2195,9 @@
             var q = [];
 
             return new IEnumerator(
-                function () { enumerator = source.getEnumerator(); },
+                function () {
+                    enumerator = source.getEnumerator();
+                },
                 function () {
                     while (enumerator.moveNext()) {
                         if (q.length == count) {
@@ -2059,7 +2208,9 @@
                     }
                     return false;
                 },
-                function () { Utils.dispose(enumerator); });
+                function () {
+                    Utils.dispose(enumerator);
+                });
         });
     };
 
@@ -2073,7 +2224,9 @@
             var q = [];
 
             return new IEnumerator(
-                function () { sourceEnumerator = source.getEnumerator(); },
+                function () {
+                    sourceEnumerator = source.getEnumerator();
+                },
                 function () {
                     while (sourceEnumerator.moveNext()) {
                         if (q.length == count) q.shift();
@@ -2086,7 +2239,9 @@
                         ? this.yieldReturn(enumerator.current())
                         : false;
                 },
-                function () { Utils.dispose(enumerator); });
+                function () {
+                    Utils.dispose(enumerator);
+                });
         });
     };
 
@@ -2148,7 +2303,9 @@
 
     Enumerable.prototype.toArray = function () {
         var array = [];
-        this.forEach(function (x) { array.push(x); });
+        this.forEach(function (x) {
+            array.push(x);
+        });
         return array;
     };
 
@@ -2231,7 +2388,9 @@
             var index = 0;
 
             return new IEnumerator(
-                function () { enumerator = source.getEnumerator(); },
+                function () {
+                    enumerator = source.getEnumerator();
+                },
                 function () {
                     if (enumerator.moveNext()) {
                         action(enumerator.current(), index++);
@@ -2239,7 +2398,9 @@
                     }
                     return false;
                 },
-                function () { Utils.dispose(enumerator); });
+                function () {
+                    Utils.dispose(enumerator);
+                });
         });
     };
 
@@ -2316,7 +2477,9 @@
                         ? this.yieldReturn(enumerator.current())
                         : false;
                 },
-                function () { Utils.dispose(enumerator); });
+                function () {
+                    Utils.dispose(enumerator);
+                });
         });
     };
 
@@ -2394,7 +2557,9 @@
             var enumerator;
 
             return new IEnumerator(
-                function () { enumerator = source.getEnumerator(); },
+                function () {
+                    enumerator = source.getEnumerator();
+                },
                 function () {
                     try {
                         return (enumerator.moveNext())
@@ -2405,7 +2570,9 @@
                         return false;
                     }
                 },
-                function () { Utils.dispose(enumerator); });
+                function () {
+                    Utils.dispose(enumerator);
+                });
         });
     };
 
@@ -2417,7 +2584,9 @@
             var enumerator;
 
             return new IEnumerator(
-                function () { enumerator = source.getEnumerator(); },
+                function () {
+                    enumerator = source.getEnumerator();
+                },
                 function () {
                     return (enumerator.moveNext())
                         ? this.yieldReturn(enumerator.current())
@@ -2500,7 +2669,9 @@
                 var sortContext = SortContext.create(self, null);
                 sortContext.GenerateKeys(buffer);
 
-                indexes.sort(function (a, b) { return sortContext.compare(a, b); });
+                indexes.sort(function (a, b) {
+                    return sortContext.compare(a, b);
+                });
             },
             function () {
                 return (index < indexes.length)
@@ -2554,7 +2725,9 @@
     // optimize array or arraylike object
 
     var ArrayEnumerable = function (source) {
-        this.getSource = function () { return source; };
+        this.getSource = function () {
+            return source;
+        };
     };
     ArrayEnumerable.prototype = new Enumerable();
 
@@ -2626,7 +2799,9 @@
             var index;
 
             return new IEnumerator(
-                function () { index = (count < 0) ? 0 : count; },
+                function () {
+                    index = (count < 0) ? 0 : count;
+                },
                 function () {
                     return (index < source.length)
                         ? this.yieldReturn(source[index++])
@@ -2690,7 +2865,9 @@
 
         // fast and simple enumerator
         return {
-            current: function () { return source[index]; },
+            current: function () {
+                return source[index];
+            },
             moveNext: function () {
                 return ++index < source.length;
             },
@@ -2711,7 +2888,9 @@
 
         if (predicate.length <= 1) {
             var prevPredicate = this.prevPredicate;
-            var composedPredicate = function (x) { return prevPredicate(x) && predicate(x); };
+            var composedPredicate = function (x) {
+                return prevPredicate(x) && predicate(x);
+            };
             return new WhereEnumerable(this.prevSource, composedPredicate);
         }
         else {
@@ -2734,7 +2913,9 @@
         var enumerator;
 
         return new IEnumerator(
-            function () { enumerator = source.getEnumerator(); },
+            function () {
+                enumerator = source.getEnumerator();
+            },
             function () {
                 while (enumerator.moveNext()) {
                     if (predicate(enumerator.current())) {
@@ -2743,7 +2924,9 @@
                 }
                 return false;
             },
-            function () { Utils.dispose(enumerator); });
+            function () {
+                Utils.dispose(enumerator);
+            });
     };
 
     var WhereSelectEnumerable = function (source, predicate, selector) {
@@ -2766,7 +2949,9 @@
 
         if (selector.length <= 1) {
             var prevSelector = this.prevSelector;
-            var composedSelector = function (x) { return selector(prevSelector(x)); };
+            var composedSelector = function (x) {
+                return selector(prevSelector(x));
+            };
             return new WhereSelectEnumerable(this.prevSource, this.prevPredicate, composedSelector);
         }
         else {
@@ -2782,7 +2967,9 @@
         var enumerator;
 
         return new IEnumerator(
-            function () { enumerator = source.getEnumerator(); },
+            function () {
+                enumerator = source.getEnumerator();
+            },
             function () {
                 while (enumerator.moveNext()) {
                     if (predicate == null || predicate(enumerator.current())) {
@@ -2791,7 +2978,9 @@
                 }
                 return false;
             },
-            function () { Utils.dispose(enumerator); });
+            function () {
+                Utils.dispose(enumerator);
+            });
     };
 
     // Collections
@@ -2824,36 +3013,36 @@
             this.last = null;
         };
         EntryList.prototype =
-        {
-            addLast: function (entry) {
-                if (this.last != null) {
-                    this.last.next = entry;
-                    entry.prev = this.last;
-                    this.last = entry;
-                } else this.first = this.last = entry;
-            },
+            {
+                addLast: function (entry) {
+                    if (this.last != null) {
+                        this.last.next = entry;
+                        entry.prev = this.last;
+                        this.last = entry;
+                    } else this.first = this.last = entry;
+                },
 
-            replace: function (entry, newEntry) {
-                if (entry.prev != null) {
-                    entry.prev.next = newEntry;
-                    newEntry.prev = entry.prev;
-                } else this.first = newEntry;
+                replace: function (entry, newEntry) {
+                    if (entry.prev != null) {
+                        entry.prev.next = newEntry;
+                        newEntry.prev = entry.prev;
+                    } else this.first = newEntry;
 
-                if (entry.next != null) {
-                    entry.next.prev = newEntry;
-                    newEntry.next = entry.next;
-                } else this.last = newEntry;
+                    if (entry.next != null) {
+                        entry.next.prev = newEntry;
+                        newEntry.next = entry.next;
+                    } else this.last = newEntry;
 
-            },
+                },
 
-            remove: function (entry) {
-                if (entry.prev != null) entry.prev.next = entry.next;
-                else this.first = entry.next;
+                remove: function (entry) {
+                    if (entry.prev != null) entry.prev.next = entry.next;
+                    else this.first = entry.next;
 
-                if (entry.next != null) entry.next.prev = entry.prev;
-                else this.last = entry.prev;
-            }
-        };
+                    if (entry.next != null) entry.next.prev = entry.prev;
+                    else this.last = entry.prev;
+                }
+            };
 
         // Overload:function()
         // Overload:function(compareSelector)
@@ -2864,116 +3053,118 @@
             this.compareSelector = (compareSelector == null) ? Functions.Identity : compareSelector;
         };
         Dictionary.prototype =
-        {
-            add: function (key, value) {
-                var compareKey = this.compareSelector(key);
-                var hash = computeHashCode(compareKey);
-                var entry = new HashEntry(key, value);
-                if (callHasOwnProperty(this.buckets, hash)) {
+            {
+                add: function (key, value) {
+                    var compareKey = this.compareSelector(key);
+                    var hash = computeHashCode(compareKey);
+                    var entry = new HashEntry(key, value);
+                    if (callHasOwnProperty(this.buckets, hash)) {
+                        var array = this.buckets[hash];
+                        for (var i = 0; i < array.length; i++) {
+                            if (this.compareSelector(array[i].key) === compareKey) {
+                                this.entryList.replace(array[i], entry);
+                                array[i] = entry;
+                                return;
+                            }
+                        }
+                        array.push(entry);
+                    } else {
+                        this.buckets[hash] = [entry];
+                    }
+                    this.countField++;
+                    this.entryList.addLast(entry);
+                },
+
+                get: function (key) {
+                    var compareKey = this.compareSelector(key);
+                    var hash = computeHashCode(compareKey);
+                    if (!callHasOwnProperty(this.buckets, hash)) return undefined;
+
+                    var array = this.buckets[hash];
+                    for (var i = 0; i < array.length; i++) {
+                        var entry = array[i];
+                        if (this.compareSelector(entry.key) === compareKey) return entry.value;
+                    }
+                    return undefined;
+                },
+
+                set: function (key, value) {
+                    var compareKey = this.compareSelector(key);
+                    var hash = computeHashCode(compareKey);
+                    if (callHasOwnProperty(this.buckets, hash)) {
+                        var array = this.buckets[hash];
+                        for (var i = 0; i < array.length; i++) {
+                            if (this.compareSelector(array[i].key) === compareKey) {
+                                var newEntry = new HashEntry(key, value);
+                                this.entryList.replace(array[i], newEntry);
+                                array[i] = newEntry;
+                                return true;
+                            }
+                        }
+                    }
+                    return false;
+                },
+
+                contains: function (key) {
+                    var compareKey = this.compareSelector(key);
+                    var hash = computeHashCode(compareKey);
+                    if (!callHasOwnProperty(this.buckets, hash)) return false;
+
+                    var array = this.buckets[hash];
+                    for (var i = 0; i < array.length; i++) {
+                        if (this.compareSelector(array[i].key) === compareKey) return true;
+                    }
+                    return false;
+                },
+
+                clear: function () {
+                    this.countField = 0;
+                    this.buckets = {};
+                    this.entryList = new EntryList();
+                },
+
+                remove: function (key) {
+                    var compareKey = this.compareSelector(key);
+                    var hash = computeHashCode(compareKey);
+                    if (!callHasOwnProperty(this.buckets, hash)) return;
+
                     var array = this.buckets[hash];
                     for (var i = 0; i < array.length; i++) {
                         if (this.compareSelector(array[i].key) === compareKey) {
-                            this.entryList.replace(array[i], entry);
-                            array[i] = entry;
+                            this.entryList.remove(array[i]);
+                            array.splice(i, 1);
+                            if (array.length == 0) delete this.buckets[hash];
+                            this.countField--;
                             return;
                         }
                     }
-                    array.push(entry);
-                } else {
-                    this.buckets[hash] = [entry];
+                },
+
+                count: function () {
+                    return this.countField;
+                },
+
+                toEnumerable: function () {
+                    var self = this;
+                    return new Enumerable(function () {
+                        var currentEntry;
+
+                        return new IEnumerator(
+                            function () {
+                                currentEntry = self.entryList.first;
+                            },
+                            function () {
+                                if (currentEntry != null) {
+                                    var result = {key: currentEntry.key, value: currentEntry.value};
+                                    currentEntry = currentEntry.next;
+                                    return this.yieldReturn(result);
+                                }
+                                return false;
+                            },
+                            Functions.Blank);
+                    });
                 }
-                this.countField++;
-                this.entryList.addLast(entry);
-            },
-
-            get: function (key) {
-                var compareKey = this.compareSelector(key);
-                var hash = computeHashCode(compareKey);
-                if (!callHasOwnProperty(this.buckets, hash)) return undefined;
-
-                var array = this.buckets[hash];
-                for (var i = 0; i < array.length; i++) {
-                    var entry = array[i];
-                    if (this.compareSelector(entry.key) === compareKey) return entry.value;
-                }
-                return undefined;
-            },
-
-            set: function (key, value) {
-                var compareKey = this.compareSelector(key);
-                var hash = computeHashCode(compareKey);
-                if (callHasOwnProperty(this.buckets, hash)) {
-                    var array = this.buckets[hash];
-                    for (var i = 0; i < array.length; i++) {
-                        if (this.compareSelector(array[i].key) === compareKey) {
-                            var newEntry = new HashEntry(key, value);
-                            this.entryList.replace(array[i], newEntry);
-                            array[i] = newEntry;
-                            return true;
-                        }
-                    }
-                }
-                return false;
-            },
-
-            contains: function (key) {
-                var compareKey = this.compareSelector(key);
-                var hash = computeHashCode(compareKey);
-                if (!callHasOwnProperty(this.buckets, hash)) return false;
-
-                var array = this.buckets[hash];
-                for (var i = 0; i < array.length; i++) {
-                    if (this.compareSelector(array[i].key) === compareKey) return true;
-                }
-                return false;
-            },
-
-            clear: function () {
-                this.countField = 0;
-                this.buckets = {};
-                this.entryList = new EntryList();
-            },
-
-            remove: function (key) {
-                var compareKey = this.compareSelector(key);
-                var hash = computeHashCode(compareKey);
-                if (!callHasOwnProperty(this.buckets, hash)) return;
-
-                var array = this.buckets[hash];
-                for (var i = 0; i < array.length; i++) {
-                    if (this.compareSelector(array[i].key) === compareKey) {
-                        this.entryList.remove(array[i]);
-                        array.splice(i, 1);
-                        if (array.length == 0) delete this.buckets[hash];
-                        this.countField--;
-                        return;
-                    }
-                }
-            },
-
-            count: function () {
-                return this.countField;
-            },
-
-            toEnumerable: function () {
-                var self = this;
-                return new Enumerable(function () {
-                    var currentEntry;
-
-                    return new IEnumerator(
-                        function () { currentEntry = self.entryList.first; },
-                        function () {
-                            if (currentEntry != null) {
-                                var result = { key: currentEntry.key, value: currentEntry.value };
-                                currentEntry = currentEntry.next;
-                                return this.yieldReturn(result);
-                            }
-                            return false;
-                        },
-                        Functions.Blank);
-                });
-            }
-        };
+            };
 
         return Dictionary;
     })();
@@ -3006,16 +3197,18 @@
 
     // module export
     if (typeof define === Types.Function && define.amd) { // AMD
-        define("linqjs", [], function () { return Enumerable; });
+        define("linqjs", [], function () {
+            return Enumerable;
+        });
     }
     else if (typeof module !== Types.Undefined && module.exports) { // Node
         module.exports = Enumerable;
     }
     else if (window.layui && layui.define) { // layui加载
-		layui.define(function(exports) {
-			exports('linq', Enumerable);
-		});
-	}    
+        layui.define(function (exports) {
+            exports('linq', Enumerable);
+        });
+    }
     else {
         root.Enumerable = Enumerable;
     }
