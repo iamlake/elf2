@@ -3836,6 +3836,5 @@ layui.define(['jquery'], function (exports) {
         }
     })(jQuery);
 
-    //输出接口
     exports('zTree', jQuery.fn.zTree);
 });

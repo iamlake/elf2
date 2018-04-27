@@ -88,10 +88,9 @@ layui.use(['form', 'layer', 'table', 'codelist'], function () {
             }
         })
         layui.layer.full(index);
+        window.sessionStorage.setItem("index", index);
         $(window).on("resize", function () {
-            setTimeout(function() {
-                layui.layer.full(index);
-            }, 150)
+            layui.layer.full(window.sessionStorage.getItem("index"));
         })
     }
 

@@ -20,6 +20,7 @@ layui.use(['form', 'layer', 'laydate', 'util', 'elf', 'codelist'], function () {
     $(function () {
         codelist.bindRadio($(".sex"), "sex", "sex");
         codelist.bindSelect($(".credentialsType"), "credentialsType");
+        codelist.bindSelect($(".activeFlag"), "activeFlag");
         if (!isNew) {
             elf.setData($(".layui-form"), oData);
         }

@@ -85,10 +85,7 @@
         <div class="magb15 layui-col-md4 layui-col-xs12">
             <label class="layui-form-label">状态</label>
             <div class="layui-input-block">
-                <select class="activeFlag" lay-filter="activeFlag" name="activeFlag">
-                    <option value="0">限制使用</option>
-                    <option value="1">正常使用</option>
-                </select>
+                <select class="activeFlag" lay-filter="activeFlag" name="activeFlag"></select>
             </div>
         </div>
     </div>
