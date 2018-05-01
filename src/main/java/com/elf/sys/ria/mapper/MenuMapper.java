@@ -1,7 +1,7 @@
-package com.elf.sys.menu.mapper;
+package com.elf.sys.ria.mapper;
 
 import com.elf.core.persistence.BaseMapper;
-import com.elf.sys.menu.entity.Menu;
+import com.elf.sys.ria.entity.Menu;
 
 /**
  * @Title MenuMapper

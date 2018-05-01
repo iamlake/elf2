@@ -23,4 +23,8 @@ public class Global {
      */
     public static final int RESULT_STAUTS_FAILED = -1;
 
+    public static final String SEX_MALE = "1";
+    public static final String SEX_FEMALE = "2";
+    public static final String SEX_UNKNOWN = "3";
+
 }

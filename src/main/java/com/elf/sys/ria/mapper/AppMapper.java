@@ -1,7 +1,7 @@
-package com.elf.sys.app.mapper;
+package com.elf.sys.ria.mapper;
 
 import com.elf.core.persistence.BaseMapper;
-import com.elf.sys.app.entity.App;
+import com.elf.sys.ria.entity.App;
 
 /**
  * @program: elf

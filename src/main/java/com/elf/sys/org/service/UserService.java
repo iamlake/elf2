@@ -1,19 +1,20 @@
 package com.elf.sys.org.service;
 
+import com.elf.core.service.BaseService;
 import com.elf.sys.org.entity.User;
 
 import java.util.List;
 
-public interface UserService {
+public interface UserService extends BaseService<User> {
 
-	User getUserByAccount(String account);
+    List<User> getUsers(User user);
 
-	User saveUser(User user);
+    User saveUser(User user);
 
-	User updateUser(User user);
+    User updateUser(User user);
 
-	List<User> getUsers(User user);
+    User getUserByAccount(String account);
 
-	List<User> getUsersByUnitId(String unitId);
+    List<User> getUsersByUnitId(String unitId);
 
 }

@@ -1,4 +1,4 @@
-package com.elf.sys.app.entity;
+package com.elf.sys.ria.entity;
 
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;

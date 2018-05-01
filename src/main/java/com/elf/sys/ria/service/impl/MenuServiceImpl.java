@@ -1,9 +1,9 @@
-package com.elf.sys.menu.service.impl;
+package com.elf.sys.ria.service.impl;
 
 import com.elf.core.service.impl.BaseServiceImpl;
-import com.elf.sys.menu.entity.Menu;
-import com.elf.sys.menu.mapper.MenuMapper;
-import com.elf.sys.menu.service.MenuService;
+import com.elf.sys.ria.entity.Menu;
+import com.elf.sys.ria.mapper.MenuMapper;
+import com.elf.sys.ria.service.MenuService;
 import org.springframework.stereotype.Service;
 
 /**

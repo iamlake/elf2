@@ -1,82 +1,81 @@
 package com.elf.sys.org.service.impl;
 
+import com.baomidou.mybatisplus.enums.SqlLike;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.elf.core.common.utils.StringUtils;
 import com.elf.core.context.context.ContextHolder;
+import com.elf.core.persistence.constants.Global;
+import com.elf.core.service.impl.BaseServiceImpl;
 import com.elf.sys.org.entity.User;
-import com.elf.sys.org.entity.UserExample;
 import com.elf.sys.org.mapper.UserMapper;
 import com.elf.sys.org.service.UserService;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.util.List;
-import java.util.UUID;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implements UserService {
 
-	@Autowired
+    @Autowired
     private UserMapper userMapper;
-    
+
     @Override
     public User getUserByAccount(String account) {
-    	UserExample example = new UserExample();
-    	example.or().andAccountEqualTo(account);
-    	List<User> userList = userMapper.selectByExample(example);
-    	if(userList.size()>0) {
-    		return userList.get(0);
-    	}
-    	return null;
+        return userMapper.selectByAccount(account);
     }
-    
+
     @Override
     public User saveUser(User user) {
-    	User currentUser = ContextHolder.getContext().getCurrentUser();
-    	String account = currentUser.getAccount();
-		Timestamp time = new Timestamp(System.currentTimeMillis());
-		String id = UUID.randomUUID().toString().replaceAll("-", "");
-		user.setUserId(id);
-		user.setCreatedBy(account);
-		user.setCreationTime(time);
-		user.setModifiedBy(account);
-		user.setModificationTime(time);
-		userMapper.insertSelective(user);
+        User currentUser = ContextHolder.getContext().getCurrentUser();
+        Timestamp currentTime = new Timestamp(System.currentTimeMillis());
+        user.setCreatedBy(currentUser.getAccount());
+        user.setCreationTime(currentTime);
+        user.setModifiedBy(currentUser.getAccount());
+        user.setModificationTime(currentTime);
+        user.setUserId(StringUtils.getUUID());
+        user.setPassword("1");
+        if (StringUtils.isBlank(user.getUserHead())) {
+            if (Global.SEX_MALE.equals(user.getSex())) {
+                user.setUserHead("/static/assets/images/userhead/default_male.jpg");
+            } else if (Global.SEX_FEMALE.equals(user.getSex())) {
+                user.setUserHead("/static/assets/images/userhead/default_female.jpg");
+            } else {
+                user.setUserHead("/static/assets/images/userhead/default_none.jpg");
+            }
+        }
+        userMapper.insert(user);
         return user;
-        
     }
-    
+
     @Override
     public User updateUser(User user) {
-    	User currentUser = ContextHolder.getContext().getCurrentUser();
-    	String account = currentUser.getAccount();
-		Timestamp time = new Timestamp(System.currentTimeMillis());
-		user.setModifiedBy(account);
-		user.setModificationTime(time);
-		userMapper.updateByPrimaryKeySelective(user);
+        User currentUser = ContextHolder.getContext().getCurrentUser();
+        Timestamp currentTime = new Timestamp(System.currentTimeMillis());
+        user.setModifiedBy(currentUser.getAccount());
+        user.setModificationTime(currentTime);
+        userMapper.updateById(user);
         return user;
-        
     }
-    
+
     @Override
     public List<User> getUsers(User user) {
-    	UserExample example = new UserExample();
-    	if(StringUtils.isNotBlank(user.getAccount())) {
-    		example.or().andAccountEqualTo(user.getAccount());
-    	}
-    	if(StringUtils.isNotBlank(user.getFullname())) {
-    		example.or().andFullnameLike("%"+ user.getFullname() +"%");
-    	} 	
-    	List<User> userList = userMapper.selectByExample(example);
-    	return userList;
-        
+        EntityWrapper entityWrapper = new EntityWrapper();
+        if (StringUtils.isNotBlank(user.getAccount())) {
+            entityWrapper.eq("account", user.getAccount());
+        }
+        if (StringUtils.isNotBlank(user.getFullname())) {
+            entityWrapper.like("fullname", user.getFullname(), SqlLike.DEFAULT);
+        }
+        List<User> userList = userMapper.selectList(entityWrapper);
+        return userList;
     }
-    
+
     @Override
-    public List<User> getUsersByUnitId(String unitId) {	
-    	List<User> userList = userMapper.getUsersByUnitId(unitId);
-    	return userList;
-        
+    public List<User> getUsersByUnitId(String unitId) {
+        List<User> userList = userMapper.getUsersByUnitId(unitId);
+        return userList;
     }
 
 }

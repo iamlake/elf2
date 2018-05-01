@@ -1,9 +1,9 @@
-package com.elf.sys.app.service.impl;
+package com.elf.sys.ria.service.impl;
 
 import com.elf.core.service.impl.BaseServiceImpl;
-import com.elf.sys.app.entity.App;
-import com.elf.sys.app.mapper.AppMapper;
-import com.elf.sys.app.service.AppService;
+import com.elf.sys.ria.entity.App;
+import com.elf.sys.ria.mapper.AppMapper;
+import com.elf.sys.ria.service.AppService;
 import org.springframework.stereotype.Service;
 
 /**

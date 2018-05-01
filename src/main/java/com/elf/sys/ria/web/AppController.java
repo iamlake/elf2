@@ -1,13 +1,12 @@
-package com.elf.sys.app.web;
+package com.elf.sys.ria.web;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.elf.core.persistence.constants.Global;
 import com.elf.core.persistence.result.QueryResult;
 import com.elf.core.persistence.result.Result;
 import com.elf.core.web.BaseController;
-import com.elf.sys.app.entity.App;
-import com.elf.sys.app.service.AppService;
-import com.elf.sys.org.entity.SysOrgUnit;
+import com.elf.sys.ria.entity.App;
+import com.elf.sys.ria.service.AppService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -117,13 +117,6 @@ public class UserController extends BaseController {
     @GetMapping("/user")
     @ResponseBody
     public Result findUsers(User user) {
-        /*EntityWrapper entityWrapper = new EntityWrapper();
-        if (StringUtils.isNotEmpty(user.getAccount())) {
-            entityWrapper.eq("account", user.getAccount());
-        }
-        if (StringUtils.isNotEmpty(user.getFullname())) {
-            entityWrapper.like("fullname", user.getFullname(), SqlLike.DEFAULT);
-        }*/
         List<User> list = userService.getUsers(user);
         return new QueryResult<>(Global.RESULT_STAUTS_SUCCESS, "", list, list.size());
     }

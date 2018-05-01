@@ -10,7 +10,7 @@ public class ContextImpl implements Context {
 
     private static final long serialVersionUID = 5499258733594920432L;
     private User currentUser;
-    private Map<Object, Object> customProperties = new HashMap<Object, Object>();
+    private Map<Object, Object> customProperties = new HashMap<>();
 
     public ContextImpl() {
         this.currentUser = new User();

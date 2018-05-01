@@ -1,7 +1,7 @@
-package com.elf.sys.menu.service;
+package com.elf.sys.ria.service;
 
 import com.elf.core.service.BaseService;
-import com.elf.sys.menu.entity.Menu;
+import com.elf.sys.ria.entity.Menu;
 
 /**
  * @Title MenuService

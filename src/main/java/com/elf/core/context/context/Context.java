@@ -7,7 +7,7 @@ import java.util.Map;
 
 public abstract interface Context extends Serializable {
 
-    public static final String ELF_CONTEXT_KEY = "com.neusoft.unieap.core.context.UniEAPContext";
+    public static final String ELF_CONTEXT_KEY = "com.elf.core.context.context.ELFContext";
 
     public abstract User getCurrentUser();
 

@@ -1,10 +1,10 @@
 package com.elf.core.exception;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class CoreException extends RuntimeException {
 
@@ -13,7 +13,7 @@ public class CoreException extends RuntimeException {
 	private String code;
 	private Object[] args;
 	private String message;
-	private Map<Object, Object> attributeMap = new HashMap<Object, Object>();
+	private Map<Object, Object> attributeMap = new HashMap<>();
 
 	public CoreException(String paramString, Object[] paramArrayOfObject) {
 		this.code = paramString;
@@ -42,6 +42,7 @@ public class CoreException extends RuntimeException {
 		this.args = args;
 	}
 
+	@Override
 	public String getMessage() {
 		return message;
 	}

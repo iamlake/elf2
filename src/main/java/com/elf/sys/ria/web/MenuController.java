@@ -1,12 +1,12 @@
-package com.elf.sys.menu.web;
+package com.elf.sys.ria.web;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.elf.core.persistence.constants.Global;
 import com.elf.core.persistence.result.QueryResult;
 import com.elf.core.persistence.result.Result;
 import com.elf.core.web.BaseController;
-import com.elf.sys.menu.entity.Menu;
-import com.elf.sys.menu.service.MenuService;
+import com.elf.sys.ria.entity.Menu;
+import com.elf.sys.ria.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
