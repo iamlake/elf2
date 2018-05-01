@@ -54,8 +54,10 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
     /**
      * 是否包含字符串
      *
-     * @param str  验证字符串
-     * @param strs 字符串组
+     * @param str
+     *            验证字符串
+     * @param strs
+     *            字符串组
      * @return 包含返回true
      */
     public static boolean inString(String str, String... strs) {
@@ -99,8 +101,10 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
     /**
      * 缩略字符串（不区分中英文字符）
      *
-     * @param str    目标字符串
-     * @param length 截取长度
+     * @param str
+     *            目标字符串
+     * @param length
+     *            截取长度
      * @return
      */
     public static String abbr(String str, int length) {
@@ -164,9 +168,9 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
     /**
      * 驼峰命名法工具
      *
-     * @return toCamelCase(" hello_world ") == "helloWorld"
-     * toCapitalizeCamelCase("hello_world") == "HelloWorld"
-     * toUnderScoreCase("helloWorld") = "hello_world"
+     * @return toCamelCase("hello_world") == "helloWorld"
+     *         toCapitalizeCamelCase("hello_world") == "HelloWorld"
+     *         toUnderScoreCase("helloWorld") = "hello_world"
      */
     public static String toCamelCase(String s) {
         if (s == null) {
@@ -195,9 +199,9 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
     /**
      * 驼峰命名法工具
      *
-     * @return toCamelCase(" hello_world ") == "helloWorld"
-     * toCapitalizeCamelCase("hello_world") == "HelloWorld"
-     * toUnderScoreCase("helloWorld") = "hello_world"
+     * @return toCamelCase("hello_world") == "helloWorld"
+     *         toCapitalizeCamelCase("hello_world") == "HelloWorld"
+     *         toUnderScoreCase("helloWorld") = "hello_world"
      */
     public static String toCapitalizeCamelCase(String s) {
         if (s == null) {
@@ -210,9 +214,9 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
     /**
      * 驼峰命名法工具
      *
-     * @return toCamelCase(" hello_world ") == "helloWorld"
-     * toCapitalizeCamelCase("hello_world") == "HelloWorld"
-     * toUnderScoreCase("helloWorld") = "hello_world"
+     * @return toCamelCase("hello_world") == "helloWorld"
+     *         toCapitalizeCamelCase("hello_world") == "HelloWorld"
+     *         toUnderScoreCase("helloWorld") = "hello_world"
      */
     public static String toUnderScoreCase(String s) {
         if (s == null) {
@@ -276,23 +280,22 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
      * <br>Description: 格式化空串
      * <br>Author:李一鸣(liyiming.neu@neusoft.com)
      * <br>Date:2017年9月27日
-     *
      * @param o
      * @return
      */
     public static String trimToEmpty(Object o) {
-        if (o != null) {
+        if (o != null)
             return trimToEmpty(o.toString());
-        } else {
+        else
             return "";
-        }
     }
 
     /**
      * 转换为JS获取对象值，生成三目运算返回结果
      *
-     * @param objectString 对象串 例如：row.user.id
-     *                     返回：!row?'':!row.user?'':!row.user.id?'':row.user.id
+     * @param objectString
+     *            对象串 例如：row.user.id
+     *            返回：!row?'':!row.user?'':!row.user.id?'':row.user.id
      */
     public static String jsGetVal(String objectString) {
         StringBuilder result = new StringBuilder();
@@ -310,7 +313,6 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
      * <br>Description: 去掉字符串右边的空格
      * <br>Author:李一鸣(li-yiming@neusoft.com)
      * <br>Date:2013-6-5
-     *
      * @param str 要处理的字符串
      * @return 处理后的字符串
      */
@@ -334,14 +336,13 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
      * <br>Description: 判断字符串是否为正整数
      * <br>Author:李一鸣(li-yiming@neusoft.com)
      * <br>Date:2013-6-14
-     *
      * @param str
      * @return
      */
     public static boolean isPositiveInt(String str) {
         boolean bRet;
-        String numberPattern = "[0-9]*";
-        Pattern pattern = Pattern.compile(numberPattern);
+
+        Pattern pattern = Pattern.compile("[0-9]*");
         Matcher isNum = pattern.matcher(str);
 
         if (isNum.matches()) {
@@ -356,16 +357,14 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
      * <br>Description: 判断字符串是否为数字(包括正负小数)
      * <br>Author:李一鸣(li-yiming@neusoft.com)
      * <br>Date:2013-6-6
-     *
      * @param str
      * @return
      */
     public static boolean isNumeric(String str) {
         boolean bRet;
-        String integerPattern = "^\\d+$|-\\d+$";
-        Pattern pnInteger = Pattern.compile(integerPattern);
-        String decimalPattern = "\\d+\\.\\d+$|-\\d+\\.\\d+$";
-        Pattern pnDecimal = Pattern.compile(decimalPattern);
+
+        Pattern pnInteger = Pattern.compile("^\\d+$|-\\d+$");
+        Pattern pnDecimal = Pattern.compile("\\d+\\.\\d+$|-\\d+\\.\\d+$");
 
         Matcher isInteger = pnInteger.matcher(str);
         Matcher isDecimal = pnDecimal.matcher(str);
@@ -384,7 +383,6 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
      * <br>Description: 判断字符串是否为日期类型
      * <br>Author:李一鸣(li-yiming@neusoft.com)
      * <br>Date:2013-6-7
-     *
      * @param sDate
      * @return
      */
@@ -414,7 +412,6 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
      * <br>Description: 执行正则表达式进行校验
      * <br>Author:李一鸣(li-yiming@neusoft.com)
      * <br>Date:2013-6-18
-     *
      * @param value
      * @param regex
      * @return
@@ -429,7 +426,6 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
      * <br>Description: 获取字符串的长度(中文字符长度为2，其他字符为1)
      * <br>Author:李一鸣(li-yiming@neusoft.com)
      * <br>Date:2013-6-7
-     *
      * @param value
      * @return
      */
@@ -456,7 +452,6 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
      * <br>Description: 获取文件扩展名
      * <br>Author:李一鸣(li-yiming@neusoft.com)
      * <br>Date:2013-6-19
-     *
      * @param filename
      * @return
      */
@@ -474,7 +469,6 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
      * <br>Description: 获取不带扩展名的文件名
      * <br>Author:李一鸣(li-yiming@neusoft.com)
      * <br>Date:2013-6-19
-     *
      * @param filename
      * @return
      */
@@ -492,7 +486,6 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
      * <br>Description: 获取UUID
      * <br>Author:李一鸣(liyiming.neu@neusoft.com)
      * <br>Date:2017年9月27日
-     *
      * @param b
      * @return
      */
@@ -505,7 +498,6 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
      * <br>Description: 获取32位UUID
      * <br>Author:李一鸣(liyiming.neu@neusoft.com)
      * <br>Date:2017年9月27日
-     *
      * @return
      */
     public static String getUUID() {

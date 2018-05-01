@@ -7,6 +7,8 @@ import com.elf.core.persistence.result.Result;
 import com.elf.core.web.BaseController;
 import com.elf.sys.app.entity.App;
 import com.elf.sys.app.service.AppService;
+import com.elf.sys.org.entity.SysOrgUnit;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,6 +26,7 @@ public class AppController extends BaseController {
 
     @Autowired
     private AppService appService;
+    
 
     /**
      * @Description: 查询应用信息
@@ -37,4 +40,5 @@ public class AppController extends BaseController {
         List<App> list = appService.selectList(new EntityWrapper<>(app));
         return new QueryResult<>(Global.RESULT_STAUTS_SUCCESS, "", list, list.size());
     }
+
 }

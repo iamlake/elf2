@@ -43,4 +43,60 @@ public class App extends DataEntity {
      * @Date:2017年11月15日
      */
     private static final long serialVersionUID = 1L;
+
+	public String getAppId() {
+		return appId;
+	}
+
+	public void setAppId(String appId) {
+		this.appId = appId;
+	}
+
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public String getStyle() {
+		return style;
+	}
+
+	public void setStyle(String style) {
+		this.style = style;
+	}
+
+	public String getAppType() {
+		return appType;
+	}
+
+	public void setAppType(String appType) {
+		this.appType = appType;
+	}
+
+	public String getAppOrder() {
+		return appOrder;
+	}
+
+	public void setAppOrder(String appOrder) {
+		this.appOrder = appOrder;
+	}
+
+	public String getHref() {
+		return href;
+	}
+
+	public void setHref(String href) {
+		this.href = href;
+	}
+
+	public String getShowDefault() {
+		return showDefault;
+	}
+
+	public void setShowDefault(String showDefault) {
+		this.showDefault = showDefault;
+	}
 }

@@ -1,6 +1,6 @@
 package com.elf.core.config;
 
-import com.elf.sys.user.realm.UserRealm;
+import com.elf.core.security.realm.UserRealm;
 import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.spring.LifecycleBeanPostProcessor;

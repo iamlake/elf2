@@ -1,0 +1,522 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.elf.sys.org.mapper.DimensionUnitMapper">
+  <resultMap id="BaseResultMap" type="com.elf.sys.org.entity.SysOrgDimensionUnit">
+    <id column="dimension_unit_id" jdbcType="VARCHAR" property="dimensionUnitId" />
+    <result column="dimension_id" jdbcType="VARCHAR" property="dimensionId" />
+    <result column="unit_id" jdbcType="VARCHAR" property="unitId" />
+    <result column="parent_dimension_unit_id" jdbcType="VARCHAR" property="parentDimensionUnitId" />
+    <result column="alias_name" jdbcType="VARCHAR" property="aliasName" />
+    <result column="unit_path" jdbcType="VARCHAR" property="unitPath" />
+    <result column="depth" jdbcType="DECIMAL" property="depth" />
+    <result column="sort" jdbcType="DECIMAL" property="sort" />
+    <result column="time_begin" jdbcType="TIMESTAMP" property="timeBegin" />
+    <result column="time_end" jdbcType="TIMESTAMP" property="timeEnd" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="is_enabled" jdbcType="CHAR" property="isEnabled" />
+    <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+    <result column="creation_date" jdbcType="TIMESTAMP" property="creationDate" />
+    <result column="last_updated_by" jdbcType="VARCHAR" property="lastUpdatedBy" />
+    <result column="last_update_date" jdbcType="TIMESTAMP" property="lastUpdateDate" />
+    <result column="deletion_date" jdbcType="TIMESTAMP" property="deletionDate" />
+    <result column="active_flag" jdbcType="CHAR" property="activeFlag" />
+    <association property="dimension" javaType="com.elf.sys.org.entity.SysOrgDimension">
+		<id column="dimension$id" jdbcType="VARCHAR" property="id" />
+	    <result column="dimension$name" jdbcType="VARCHAR" property="name" />
+	    <result column="dimension$type" jdbcType="CHAR" property="type" />
+	    <result column="dimension$description" jdbcType="VARCHAR" property="description" />
+	    <result column="dimension$is_default" jdbcType="CHAR" property="isDefault" />
+	    <result column="dimension$sort" jdbcType="DECIMAL" property="sort" />
+	    <result column="dimension$time_begin" jdbcType="TIMESTAMP" property="timeBegin" />
+	    <result column="dimension$time_end" jdbcType="TIMESTAMP" property="timeEnd" />
+	    <result column="dimension$is_enabled" jdbcType="CHAR" property="isEnabled" />
+	    <result column="dimension$created_by" jdbcType="VARCHAR" property="createdBy" />
+	    <result column="dimension$creation_date" jdbcType="TIMESTAMP" property="creationDate" />
+	    <result column="dimension$last_updated_by" jdbcType="VARCHAR" property="lastUpdatedBy" />
+	    <result column="dimension$last_update_date" jdbcType="TIMESTAMP" property="lastUpdateDate" />
+	</association>
+	<association property="unit" javaType="com.elf.sys.org.entity.SysOrgUnit">
+	    <id column="unit$id" jdbcType="VARCHAR" property="id" />
+	    <result column="unit$name" jdbcType="VARCHAR" property="name" />
+	    <result column="unit$description" jdbcType="VARCHAR" property="description" />
+	    <result column="unit$code" jdbcType="VARCHAR" property="code" />
+	    <result column="unit$type_id" jdbcType="VARCHAR" property="typeId" />
+	    <result column="unit$time_begin" jdbcType="TIMESTAMP" property="timeBegin" />
+	    <result column="unit$time_end" jdbcType="TIMESTAMP" property="timeEnd" />
+	    <result column="unit$is_enabled" jdbcType="CHAR" property="isEnabled" />
+	    <result column="unit$created_by" jdbcType="VARCHAR" property="createdBy" />
+	    <result column="unit$creation_date" jdbcType="TIMESTAMP" property="creationDate" />
+	    <result column="unit$last_updated_by" jdbcType="VARCHAR" property="lastUpdatedBy" />
+	    <result column="unit$last_update_date" jdbcType="TIMESTAMP" property="lastUpdateDate" />
+	    <result column="unit$deletion_date" jdbcType="TIMESTAMP" property="deletionDate" />
+	    <result column="unit$active_flag" jdbcType="CHAR" property="activeFlag" />
+    </association>
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    dimension_unit_id, dimension_id, unit_id, parent_dimension_unit_id, alias_name, unit_path, 
+    depth, sort, time_begin, time_end, description, is_enabled, REMARK, ACTIVE_FLAG, 
+    CREATED_BY, CREATION_TIME, MODIFIED_BY, MODIFICATION_TIME, EXT1, EXT2, EXT3
+  </sql>
+  <select id="selectByExample" parameterType="com.elf.sys.org.entity.SysOrgDimensionUnitExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from sys_org_dimension_unit
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sys_org_dimension_unit
+    where dimension_unit_id = #{dimensionUnitId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from sys_org_dimension_unit
+    where dimension_unit_id = #{dimensionUnitId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.elf.sys.org.entity.SysOrgDimensionUnitExample">
+    delete from sys_org_dimension_unit
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.elf.sys.org.entity.SysOrgDimensionUnit">
+    insert into sys_org_dimension_unit (dimension_unit_id, dimension_id, unit_id, 
+      parent_dimension_unit_id, alias_name, unit_path, 
+      depth, sort, time_begin, 
+      time_end, description, is_enabled, 
+      REMARK, ACTIVE_FLAG, CREATED_BY, 
+      CREATION_TIME, MODIFIED_BY, MODIFICATION_TIME, 
+      EXT1, EXT2, EXT3)
+    values (#{dimensionUnitId,jdbcType=VARCHAR}, #{dimensionId,jdbcType=VARCHAR}, #{unitId,jdbcType=VARCHAR}, 
+      #{parentDimensionUnitId,jdbcType=VARCHAR}, #{aliasName,jdbcType=VARCHAR}, #{unitPath,jdbcType=VARCHAR}, 
+      #{depth,jdbcType=DECIMAL}, #{sort,jdbcType=DECIMAL}, #{timeBegin,jdbcType=TIMESTAMP}, 
+      #{timeEnd,jdbcType=TIMESTAMP}, #{description,jdbcType=VARCHAR}, #{isEnabled,jdbcType=CHAR}, 
+      #{remark,jdbcType=VARCHAR}, #{activeFlag,jdbcType=VARCHAR}, #{createdBy,jdbcType=VARCHAR}, 
+      #{creationTime,jdbcType=TIMESTAMP}, #{modifiedBy,jdbcType=VARCHAR}, #{modificationTime,jdbcType=TIMESTAMP}, 
+      #{ext1,jdbcType=VARCHAR}, #{ext2,jdbcType=VARCHAR}, #{ext3,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.elf.sys.org.entity.SysOrgDimensionUnit">
+    insert into sys_org_dimension_unit
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="dimensionUnitId != null">
+        dimension_unit_id,
+      </if>
+      <if test="dimensionId != null">
+        dimension_id,
+      </if>
+      <if test="unitId != null">
+        unit_id,
+      </if>
+      <if test="parentDimensionUnitId != null">
+        parent_dimension_unit_id,
+      </if>
+      <if test="aliasName != null">
+        alias_name,
+      </if>
+      <if test="unitPath != null">
+        unit_path,
+      </if>
+      <if test="depth != null">
+        depth,
+      </if>
+      <if test="sort != null">
+        sort,
+      </if>
+      <if test="timeBegin != null">
+        time_begin,
+      </if>
+      <if test="timeEnd != null">
+        time_end,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="isEnabled != null">
+        is_enabled,
+      </if>
+      <if test="remark != null">
+        REMARK,
+      </if>
+      <if test="activeFlag != null">
+        ACTIVE_FLAG,
+      </if>
+      <if test="createdBy != null">
+        CREATED_BY,
+      </if>
+      <if test="creationTime != null">
+        CREATION_TIME,
+      </if>
+      <if test="modifiedBy != null">
+        MODIFIED_BY,
+      </if>
+      <if test="modificationTime != null">
+        MODIFICATION_TIME,
+      </if>
+      <if test="ext1 != null">
+        EXT1,
+      </if>
+      <if test="ext2 != null">
+        EXT2,
+      </if>
+      <if test="ext3 != null">
+        EXT3,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="dimensionUnitId != null">
+        #{dimensionUnitId,jdbcType=VARCHAR},
+      </if>
+      <if test="dimensionId != null">
+        #{dimensionId,jdbcType=VARCHAR},
+      </if>
+      <if test="unitId != null">
+        #{unitId,jdbcType=VARCHAR},
+      </if>
+      <if test="parentDimensionUnitId != null">
+        #{parentDimensionUnitId,jdbcType=VARCHAR},
+      </if>
+      <if test="aliasName != null">
+        #{aliasName,jdbcType=VARCHAR},
+      </if>
+      <if test="unitPath != null">
+        #{unitPath,jdbcType=VARCHAR},
+      </if>
+      <if test="depth != null">
+        #{depth,jdbcType=DECIMAL},
+      </if>
+      <if test="sort != null">
+        #{sort,jdbcType=DECIMAL},
+      </if>
+      <if test="timeBegin != null">
+        #{timeBegin,jdbcType=TIMESTAMP},
+      </if>
+      <if test="timeEnd != null">
+        #{timeEnd,jdbcType=TIMESTAMP},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="isEnabled != null">
+        #{isEnabled,jdbcType=CHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="activeFlag != null">
+        #{activeFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="createdBy != null">
+        #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="creationTime != null">
+        #{creationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedBy != null">
+        #{modifiedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modificationTime != null">
+        #{modificationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ext1 != null">
+        #{ext1,jdbcType=VARCHAR},
+      </if>
+      <if test="ext2 != null">
+        #{ext2,jdbcType=VARCHAR},
+      </if>
+      <if test="ext3 != null">
+        #{ext3,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.elf.sys.org.entity.SysOrgDimensionUnitExample" resultType="java.lang.Long">
+    select count(*) from sys_org_dimension_unit
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update sys_org_dimension_unit
+    <set>
+      <if test="record.dimensionUnitId != null">
+        dimension_unit_id = #{record.dimensionUnitId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dimensionId != null">
+        dimension_id = #{record.dimensionId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.unitId != null">
+        unit_id = #{record.unitId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.parentDimensionUnitId != null">
+        parent_dimension_unit_id = #{record.parentDimensionUnitId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.aliasName != null">
+        alias_name = #{record.aliasName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.unitPath != null">
+        unit_path = #{record.unitPath,jdbcType=VARCHAR},
+      </if>
+      <if test="record.depth != null">
+        depth = #{record.depth,jdbcType=DECIMAL},
+      </if>
+      <if test="record.sort != null">
+        sort = #{record.sort,jdbcType=DECIMAL},
+      </if>
+      <if test="record.timeBegin != null">
+        time_begin = #{record.timeBegin,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.timeEnd != null">
+        time_end = #{record.timeEnd,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.description != null">
+        description = #{record.description,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isEnabled != null">
+        is_enabled = #{record.isEnabled,jdbcType=CHAR},
+      </if>
+      <if test="record.remark != null">
+        REMARK = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.activeFlag != null">
+        ACTIVE_FLAG = #{record.activeFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdBy != null">
+        CREATED_BY = #{record.createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.creationTime != null">
+        CREATION_TIME = #{record.creationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifiedBy != null">
+        MODIFIED_BY = #{record.modifiedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modificationTime != null">
+        MODIFICATION_TIME = #{record.modificationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.ext1 != null">
+        EXT1 = #{record.ext1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ext2 != null">
+        EXT2 = #{record.ext2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ext3 != null">
+        EXT3 = #{record.ext3,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update sys_org_dimension_unit
+    set dimension_unit_id = #{record.dimensionUnitId,jdbcType=VARCHAR},
+      dimension_id = #{record.dimensionId,jdbcType=VARCHAR},
+      unit_id = #{record.unitId,jdbcType=VARCHAR},
+      parent_dimension_unit_id = #{record.parentDimensionUnitId,jdbcType=VARCHAR},
+      alias_name = #{record.aliasName,jdbcType=VARCHAR},
+      unit_path = #{record.unitPath,jdbcType=VARCHAR},
+      depth = #{record.depth,jdbcType=DECIMAL},
+      sort = #{record.sort,jdbcType=DECIMAL},
+      time_begin = #{record.timeBegin,jdbcType=TIMESTAMP},
+      time_end = #{record.timeEnd,jdbcType=TIMESTAMP},
+      description = #{record.description,jdbcType=VARCHAR},
+      is_enabled = #{record.isEnabled,jdbcType=CHAR},
+      REMARK = #{record.remark,jdbcType=VARCHAR},
+      ACTIVE_FLAG = #{record.activeFlag,jdbcType=VARCHAR},
+      CREATED_BY = #{record.createdBy,jdbcType=VARCHAR},
+      CREATION_TIME = #{record.creationTime,jdbcType=TIMESTAMP},
+      MODIFIED_BY = #{record.modifiedBy,jdbcType=VARCHAR},
+      MODIFICATION_TIME = #{record.modificationTime,jdbcType=TIMESTAMP},
+      EXT1 = #{record.ext1,jdbcType=VARCHAR},
+      EXT2 = #{record.ext2,jdbcType=VARCHAR},
+      EXT3 = #{record.ext3,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.elf.sys.org.entity.SysOrgDimensionUnit">
+    update sys_org_dimension_unit
+    <set>
+      <if test="dimensionId != null">
+        dimension_id = #{dimensionId,jdbcType=VARCHAR},
+      </if>
+      <if test="unitId != null">
+        unit_id = #{unitId,jdbcType=VARCHAR},
+      </if>
+      <if test="parentDimensionUnitId != null">
+        parent_dimension_unit_id = #{parentDimensionUnitId,jdbcType=VARCHAR},
+      </if>
+      <if test="aliasName != null">
+        alias_name = #{aliasName,jdbcType=VARCHAR},
+      </if>
+      <if test="unitPath != null">
+        unit_path = #{unitPath,jdbcType=VARCHAR},
+      </if>
+      <if test="depth != null">
+        depth = #{depth,jdbcType=DECIMAL},
+      </if>
+      <if test="sort != null">
+        sort = #{sort,jdbcType=DECIMAL},
+      </if>
+      <if test="timeBegin != null">
+        time_begin = #{timeBegin,jdbcType=TIMESTAMP},
+      </if>
+      <if test="timeEnd != null">
+        time_end = #{timeEnd,jdbcType=TIMESTAMP},
+      </if>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="isEnabled != null">
+        is_enabled = #{isEnabled,jdbcType=CHAR},
+      </if>
+      <if test="remark != null">
+        REMARK = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="activeFlag != null">
+        ACTIVE_FLAG = #{activeFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="createdBy != null">
+        CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="creationTime != null">
+        CREATION_TIME = #{creationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedBy != null">
+        MODIFIED_BY = #{modifiedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modificationTime != null">
+        MODIFICATION_TIME = #{modificationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ext1 != null">
+        EXT1 = #{ext1,jdbcType=VARCHAR},
+      </if>
+      <if test="ext2 != null">
+        EXT2 = #{ext2,jdbcType=VARCHAR},
+      </if>
+      <if test="ext3 != null">
+        EXT3 = #{ext3,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where dimension_unit_id = #{dimensionUnitId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.elf.sys.org.entity.SysOrgDimensionUnit">
+    update sys_org_dimension_unit
+    set dimension_id = #{dimensionId,jdbcType=VARCHAR},
+      unit_id = #{unitId,jdbcType=VARCHAR},
+      parent_dimension_unit_id = #{parentDimensionUnitId,jdbcType=VARCHAR},
+      alias_name = #{aliasName,jdbcType=VARCHAR},
+      unit_path = #{unitPath,jdbcType=VARCHAR},
+      depth = #{depth,jdbcType=DECIMAL},
+      sort = #{sort,jdbcType=DECIMAL},
+      time_begin = #{timeBegin,jdbcType=TIMESTAMP},
+      time_end = #{timeEnd,jdbcType=TIMESTAMP},
+      description = #{description,jdbcType=VARCHAR},
+      is_enabled = #{isEnabled,jdbcType=CHAR},
+      REMARK = #{remark,jdbcType=VARCHAR},
+      ACTIVE_FLAG = #{activeFlag,jdbcType=VARCHAR},
+      CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      CREATION_TIME = #{creationTime,jdbcType=TIMESTAMP},
+      MODIFIED_BY = #{modifiedBy,jdbcType=VARCHAR},
+      MODIFICATION_TIME = #{modificationTime,jdbcType=TIMESTAMP},
+      EXT1 = #{ext1,jdbcType=VARCHAR},
+      EXT2 = #{ext2,jdbcType=VARCHAR},
+      EXT3 = #{ext3,jdbcType=VARCHAR}
+    where dimension_unit_id = #{dimensionUnitId,jdbcType=VARCHAR}
+  </update>
+  <!-- <select id="getDimensionUnitByUnitId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sys_org_dimension_unit
+    where unit_id = #{unitId,jdbcType=VARCHAR}
+  </select>
+  <select id="getRootDimensionUnit" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sys_org_dimension_unit du
+    where du.dimension_id = #{dimensionId,jdbcType=VARCHAR}
+    and du.parent_dimension_unit_id = '-1'
+  </select> -->
+  <select id="getChildDimensionUnitList" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    du.*, d.id as dimension$id, d.name as dimension$name, u.id as unit$id, u.code as unit$code 
+    from sys_org_dimension_unit du, sys_org_dimension d, sys_org_unit u
+    where du.dimension_id = d.id
+    and du.unit_id = u.id
+    and du.parent_dimension_unit_id = #{parentDimensionUnitId,jdbcType=VARCHAR}
+    and d.id = #{dimensionId,jdbcType=VARCHAR}
+  </select>
+  <select id="getDimensionUnitsByUnitPath" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    du.*, d.id as dimension$id, d.name as dimension$name, u.id as unit$id, u.name as unit$name, u.code as unit$code 
+    from sys_org_dimension_unit du, sys_org_dimension d, sys_org_unit u
+    where du.dimension_id = d.id
+    and du.unit_id = u.id
+    and du.unit_path like #{unitPath,jdbcType=VARCHAR}
+    and d.id = #{dimensionId,jdbcType=VARCHAR}
+  </select>
+</mapper>

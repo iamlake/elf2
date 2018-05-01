@@ -31,4 +31,20 @@ public class Result implements Serializable {
      * <br>Date:2017年11月24日
      */
     private static final long serialVersionUID = 1L;
+
+	public int getCode() {
+		return code;
+	}
+
+	public void setCode(int code) {
+		this.code = code;
+	}
+
+	public String getMsg() {
+		return msg;
+	}
+
+	public void setMsg(String msg) {
+		this.msg = msg;
+	}
 }

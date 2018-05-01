@@ -67,7 +67,7 @@
 </div>
 
 <script type="text/javascript">
-    var oData, isNew;
+    var cUnitId = null, tData, isNew;
     layui.use(['form', 'layer', 'table', 'codelist', 'zTree'], function () {
         var $ = layui.jquery,
                 layer = parent.layer === undefined ? layui.layer : top.layer,
@@ -106,7 +106,7 @@
                 selectedMulti: false
             },
             check: {
-                enable: true
+                enable: false
             },
             data: {
                 key: {
@@ -124,35 +124,46 @@
                 onClick: onTreeNodeClick
             },
             edit: {
+                drag: {
+                    isCopy: false,
+                    isMove: false
+                },
                 enable: true
             }
         };
 
         function createDimUnitTree() {
-            $.get(basePath + "/static/assets/json/dimensionUnits.json", function (result) {
+            // $.get(basePath + "/static/assets/json/dimensionUnits.json", function (result) {
+            $.get(basePath + "/org/unit/getAllChildDimensionUnitList?parentDimensionUnitId=dimension_ln&dimensionId=city", function (result) {
                 zTree.init($("#treeDemo"), setting, result.data);
             })
         }
 
         function beforeTreeNodeClick(treeId, treeNode, clickFlag) {
-            console.log("===beforeTreeNodeClick===");
-            console.log("treeId===" + treeId);
-            console.log("treeNode===" + JSON.stringify(treeNode));
-            console.log("clickFlag===" + clickFlag);
+            // console.log("===beforeTreeNodeClick===");
+            // console.log("treeId===" + treeId);
+            // console.log("treeNode===" + JSON.stringify(treeNode));
+            // console.log("clickFlag===" + clickFlag);
         }
 
         function onTreeNodeClick(event, treeId, treeNode, clickFlag) {
-            layer.alert("当前节点的unitId是：" + treeNode.unitId);
-            console.log("event===" + event);
-            console.log("treeId===" + treeId);
-            console.log("treeNode===" + JSON.stringify(treeNode));
-            console.log("clickFlag===" + clickFlag);
+            cUnitId = treeNode.unitId;
+            table.reload("tableJson", {
+                url: basePath + '/user/unitId/' + treeNode.unitId,
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                },
+                done: function () {
+                    tData = table.cache.tableJson;
+                    console.log(JSON.stringify(tData));
+                }
+            });
         }
 
         //用户列表
         var tableIns = table.render({
             elem: '#table_user',
-            url: basePath + '/user',
+            url: basePath + '/user/unitId/' + cUnitId,
             cellMinWidth: 95,
             page: true,
             height: "full-125",
@@ -175,7 +186,7 @@
                 },
                 {
                     field: 'activeFlag', title: '用户状态', align: 'center', templet: function (d) {
-                        return d.activeFlag == "1" ? "正常使用" : "限制使用";
+                        return codelist.getValueName("activeFlag", d.activeFlag);
                     }
                 },
                 {title: '操作', minWidth: 225, templet: '#userListBar', fixed: "right", align: "center"}
@@ -199,20 +210,22 @@
             var index = layui.layer.open({
                 title: "添加用户",
                 type: 2,
+                maxmin: true,
+                area : ['1280px', '768px'],
                 content: basePath + "/page/sys_dimension_unitUserAdd",
                 success: function (layero, index) {
-                    setTimeout(function () {
-                        layui.layer.tips('点击此处返回用户列表', '.layui-layer-setwin .layui-layer-close', {
-                            tips: 3
-                        });
-                    }, 500)
+                    // setTimeout(function () {
+                    //     layui.layer.tips('点击此处返回用户列表', '.layui-layer-setwin .layui-layer-close', {
+                    //         tips: 3
+                    //     });
+                    // }, 500)
                 }
             })
-            layui.layer.full(index);
-            window.sessionStorage.setItem("index", index);
-            $(window).on("resize", function () {
-                layui.layer.full(window.sessionStorage.getItem("index"));
-            })
+            // layui.layer.full(index);
+            // window.sessionStorage.setItem("index", index);
+            // $(window).on("resize", function () {
+            //     layui.layer.full(window.sessionStorage.getItem("index"));
+            // })
         })
 
         //TODO-----批量删除

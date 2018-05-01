@@ -43,4 +43,20 @@ public class QueryResult<T> extends Result {
      */
     private static final long serialVersionUID = 1L;
 
+	public int getCount() {
+		return count;
+	}
+
+	public void setCount(int count) {
+		this.count = count;
+	}
+
+	public List<T> getData() {
+		return data;
+	}
+
+	public void setData(List<T> data) {
+		this.data = data;
+	}
+
 }

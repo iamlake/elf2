@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.elf.sys.security.mapper.SysSecResourceAuthorityMapper">
+  <resultMap id="BaseResultMap" type="com.elf.sys.security.entity.SysSecResourceAuthority">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="role_id" jdbcType="VARCHAR" property="roleId" />
+    <result column="role_type" jdbcType="VARCHAR" property="roleType" />
+    <result column="resource_id" jdbcType="VARCHAR" property="resourceId" />
+    <result column="resource_type" jdbcType="VARCHAR" property="resourceType" />
+    <result column="authority_type" jdbcType="VARCHAR" property="authorityType" />
+    <result column="dimension_constraint" jdbcType="VARCHAR" property="dimensionConstraint" />
+    <result column="circumstance_id" jdbcType="VARCHAR" property="circumstanceId" />
+    <result column="circumstance_type" jdbcType="VARCHAR" property="circumstanceType" />
+    <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
+    <result column="creation_date" jdbcType="TIMESTAMP" property="creationDate" />
+    <result column="last_updated_by" jdbcType="VARCHAR" property="lastUpdatedBy" />
+    <result column="last_update_date" jdbcType="TIMESTAMP" property="lastUpdateDate" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    id, description, role_id, role_type, resource_id, resource_type, authority_type, 
+    dimension_constraint, circumstance_id, circumstance_type, created_by, creation_date, 
+    last_updated_by, last_update_date
+  </sql>
+  <select id="selectByExample" parameterType="com.elf.sys.security.entity.SysSecResourceAuthorityExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from sys_sec_resource_authority
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from sys_sec_resource_authority
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from sys_sec_resource_authority
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.elf.sys.security.entity.SysSecResourceAuthorityExample">
+    delete from sys_sec_resource_authority
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.elf.sys.security.entity.SysSecResourceAuthority">
+    insert into sys_sec_resource_authority (id, description, role_id, 
+      role_type, resource_id, resource_type, 
+      authority_type, dimension_constraint, circumstance_id, 
+      circumstance_type, created_by, creation_date, 
+      last_updated_by, last_update_date)
+    values (#{id,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{roleId,jdbcType=VARCHAR}, 
+      #{roleType,jdbcType=VARCHAR}, #{resourceId,jdbcType=VARCHAR}, #{resourceType,jdbcType=VARCHAR}, 
+      #{authorityType,jdbcType=VARCHAR}, #{dimensionConstraint,jdbcType=VARCHAR}, #{circumstanceId,jdbcType=VARCHAR}, 
+      #{circumstanceType,jdbcType=VARCHAR}, #{createdBy,jdbcType=VARCHAR}, #{creationDate,jdbcType=TIMESTAMP}, 
+      #{lastUpdatedBy,jdbcType=VARCHAR}, #{lastUpdateDate,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.elf.sys.security.entity.SysSecResourceAuthority">
+    insert into sys_sec_resource_authority
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="description != null">
+        description,
+      </if>
+      <if test="roleId != null">
+        role_id,
+      </if>
+      <if test="roleType != null">
+        role_type,
+      </if>
+      <if test="resourceId != null">
+        resource_id,
+      </if>
+      <if test="resourceType != null">
+        resource_type,
+      </if>
+      <if test="authorityType != null">
+        authority_type,
+      </if>
+      <if test="dimensionConstraint != null">
+        dimension_constraint,
+      </if>
+      <if test="circumstanceId != null">
+        circumstance_id,
+      </if>
+      <if test="circumstanceType != null">
+        circumstance_type,
+      </if>
+      <if test="createdBy != null">
+        created_by,
+      </if>
+      <if test="creationDate != null">
+        creation_date,
+      </if>
+      <if test="lastUpdatedBy != null">
+        last_updated_by,
+      </if>
+      <if test="lastUpdateDate != null">
+        last_update_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null">
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="roleId != null">
+        #{roleId,jdbcType=VARCHAR},
+      </if>
+      <if test="roleType != null">
+        #{roleType,jdbcType=VARCHAR},
+      </if>
+      <if test="resourceId != null">
+        #{resourceId,jdbcType=VARCHAR},
+      </if>
+      <if test="resourceType != null">
+        #{resourceType,jdbcType=VARCHAR},
+      </if>
+      <if test="authorityType != null">
+        #{authorityType,jdbcType=VARCHAR},
+      </if>
+      <if test="dimensionConstraint != null">
+        #{dimensionConstraint,jdbcType=VARCHAR},
+      </if>
+      <if test="circumstanceId != null">
+        #{circumstanceId,jdbcType=VARCHAR},
+      </if>
+      <if test="circumstanceType != null">
+        #{circumstanceType,jdbcType=VARCHAR},
+      </if>
+      <if test="createdBy != null">
+        #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="creationDate != null">
+        #{creationDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdatedBy != null">
+        #{lastUpdatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="lastUpdateDate != null">
+        #{lastUpdateDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.elf.sys.security.entity.SysSecResourceAuthorityExample" resultType="java.lang.Long">
+    select count(*) from sys_sec_resource_authority
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update sys_sec_resource_authority
+    <set>
+      <if test="record.id != null">
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.description != null">
+        description = #{record.description,jdbcType=VARCHAR},
+      </if>
+      <if test="record.roleId != null">
+        role_id = #{record.roleId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.roleType != null">
+        role_type = #{record.roleType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.resourceId != null">
+        resource_id = #{record.resourceId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.resourceType != null">
+        resource_type = #{record.resourceType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.authorityType != null">
+        authority_type = #{record.authorityType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dimensionConstraint != null">
+        dimension_constraint = #{record.dimensionConstraint,jdbcType=VARCHAR},
+      </if>
+      <if test="record.circumstanceId != null">
+        circumstance_id = #{record.circumstanceId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.circumstanceType != null">
+        circumstance_type = #{record.circumstanceType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdBy != null">
+        created_by = #{record.createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.creationDate != null">
+        creation_date = #{record.creationDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.lastUpdatedBy != null">
+        last_updated_by = #{record.lastUpdatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.lastUpdateDate != null">
+        last_update_date = #{record.lastUpdateDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update sys_sec_resource_authority
+    set id = #{record.id,jdbcType=VARCHAR},
+      description = #{record.description,jdbcType=VARCHAR},
+      role_id = #{record.roleId,jdbcType=VARCHAR},
+      role_type = #{record.roleType,jdbcType=VARCHAR},
+      resource_id = #{record.resourceId,jdbcType=VARCHAR},
+      resource_type = #{record.resourceType,jdbcType=VARCHAR},
+      authority_type = #{record.authorityType,jdbcType=VARCHAR},
+      dimension_constraint = #{record.dimensionConstraint,jdbcType=VARCHAR},
+      circumstance_id = #{record.circumstanceId,jdbcType=VARCHAR},
+      circumstance_type = #{record.circumstanceType,jdbcType=VARCHAR},
+      created_by = #{record.createdBy,jdbcType=VARCHAR},
+      creation_date = #{record.creationDate,jdbcType=TIMESTAMP},
+      last_updated_by = #{record.lastUpdatedBy,jdbcType=VARCHAR},
+      last_update_date = #{record.lastUpdateDate,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.elf.sys.security.entity.SysSecResourceAuthority">
+    update sys_sec_resource_authority
+    <set>
+      <if test="description != null">
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="roleId != null">
+        role_id = #{roleId,jdbcType=VARCHAR},
+      </if>
+      <if test="roleType != null">
+        role_type = #{roleType,jdbcType=VARCHAR},
+      </if>
+      <if test="resourceId != null">
+        resource_id = #{resourceId,jdbcType=VARCHAR},
+      </if>
+      <if test="resourceType != null">
+        resource_type = #{resourceType,jdbcType=VARCHAR},
+      </if>
+      <if test="authorityType != null">
+        authority_type = #{authorityType,jdbcType=VARCHAR},
+      </if>
+      <if test="dimensionConstraint != null">
+        dimension_constraint = #{dimensionConstraint,jdbcType=VARCHAR},
+      </if>
+      <if test="circumstanceId != null">
+        circumstance_id = #{circumstanceId,jdbcType=VARCHAR},
+      </if>
+      <if test="circumstanceType != null">
+        circumstance_type = #{circumstanceType,jdbcType=VARCHAR},
+      </if>
+      <if test="createdBy != null">
+        created_by = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="creationDate != null">
+        creation_date = #{creationDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="lastUpdatedBy != null">
+        last_updated_by = #{lastUpdatedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="lastUpdateDate != null">
+        last_update_date = #{lastUpdateDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.elf.sys.security.entity.SysSecResourceAuthority">
+    update sys_sec_resource_authority
+    set description = #{description,jdbcType=VARCHAR},
+      role_id = #{roleId,jdbcType=VARCHAR},
+      role_type = #{roleType,jdbcType=VARCHAR},
+      resource_id = #{resourceId,jdbcType=VARCHAR},
+      resource_type = #{resourceType,jdbcType=VARCHAR},
+      authority_type = #{authorityType,jdbcType=VARCHAR},
+      dimension_constraint = #{dimensionConstraint,jdbcType=VARCHAR},
+      circumstance_id = #{circumstanceId,jdbcType=VARCHAR},
+      circumstance_type = #{circumstanceType,jdbcType=VARCHAR},
+      created_by = #{createdBy,jdbcType=VARCHAR},
+      creation_date = #{creationDate,jdbcType=TIMESTAMP},
+      last_updated_by = #{lastUpdatedBy,jdbcType=VARCHAR},
+      last_update_date = #{lastUpdateDate,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

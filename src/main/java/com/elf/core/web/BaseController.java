@@ -1,7 +1,8 @@
 package com.elf.core.web;
 
 import com.elf.core.persistence.constants.Global;
-import com.elf.sys.user.entity.User;
+import com.elf.sys.org.entity.User;
+
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

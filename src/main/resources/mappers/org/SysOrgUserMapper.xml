@@ -1,0 +1,535 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.elf.sys.org.mapper.UserMapper">
+  <resultMap id="BaseResultMap" type="com.elf.sys.org.entity.User">
+    <id column="USER_ID" jdbcType="VARCHAR" property="userId" />
+    <result column="ACCOUNT" jdbcType="VARCHAR" property="account" />
+    <result column="PASSWORD" jdbcType="VARCHAR" property="password" />
+    <result column="FULLNAME" jdbcType="VARCHAR" property="fullname" />
+    <result column="USER_TYPE" jdbcType="VARCHAR" property="userType" />
+    <result column="PWD_CHANGED_TIME" jdbcType="TIMESTAMP" property="pwdChangedTime" />
+    <result column="IS_LOCKED" jdbcType="VARCHAR" property="isLocked" />
+    <result column="LOCKED_REASON" jdbcType="VARCHAR" property="lockedReason" />
+    <result column="USER_HEAD" jdbcType="VARCHAR" property="userHead" />
+    <result column="SEX" jdbcType="VARCHAR" property="sex" />
+    <result column="BIRTHDATE" jdbcType="VARCHAR" property="birthdate" />
+    <result column="MOBILE_TELEPHONE" jdbcType="VARCHAR" property="mobileTelephone" />
+    <result column="EMAIL" jdbcType="VARCHAR" property="email" />
+    <result column="CREDENTIALS_TYPE" jdbcType="VARCHAR" property="credentialsType" />
+    <result column="CREDENTIALS_NUMBER" jdbcType="VARCHAR" property="credentialsNumber" />
+    <result column="HOME_ADDRESS" jdbcType="VARCHAR" property="homeAddress" />
+    <result column="REMARK" jdbcType="VARCHAR" property="remark" />
+    <result column="ACTIVE_FLAG" jdbcType="VARCHAR" property="activeFlag" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATION_TIME" jdbcType="TIMESTAMP" property="creationTime" />
+    <result column="MODIFIED_BY" jdbcType="VARCHAR" property="modifiedBy" />
+    <result column="MODIFICATION_TIME" jdbcType="TIMESTAMP" property="modificationTime" />
+    <result column="EXT1" jdbcType="VARCHAR" property="ext1" />
+    <result column="EXT2" jdbcType="VARCHAR" property="ext2" />
+    <result column="EXT3" jdbcType="VARCHAR" property="ext3" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    USER_ID, ACCOUNT, PASSWORD, FULLNAME, USER_TYPE, PWD_CHANGED_TIME, IS_LOCKED, LOCKED_REASON, 
+    USER_HEAD, SEX, BIRTHDATE, MOBILE_TELEPHONE, EMAIL, CREDENTIALS_TYPE, CREDENTIALS_NUMBER, 
+    HOME_ADDRESS, REMARK, ACTIVE_FLAG, CREATED_BY, CREATION_TIME, MODIFIED_BY, MODIFICATION_TIME, 
+    EXT1, EXT2, EXT3
+  </sql>
+  <select id="selectByExample" parameterType="com.elf.sys.org.entity.UserExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from sys_org_user
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from sys_org_user
+    where USER_ID = #{userId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from sys_org_user
+    where USER_ID = #{userId,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.elf.sys.org.entity.UserExample">
+    delete from sys_org_user
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.elf.sys.org.entity.User">
+    insert into sys_org_user (USER_ID, ACCOUNT, PASSWORD, 
+      FULLNAME, USER_TYPE, PWD_CHANGED_TIME, 
+      IS_LOCKED, LOCKED_REASON, USER_HEAD, 
+      SEX, BIRTHDATE, MOBILE_TELEPHONE, 
+      EMAIL, CREDENTIALS_TYPE, CREDENTIALS_NUMBER, 
+      HOME_ADDRESS, REMARK, ACTIVE_FLAG, 
+      CREATED_BY, CREATION_TIME, MODIFIED_BY, 
+      MODIFICATION_TIME, EXT1, EXT2, 
+      EXT3)
+    values (#{userId,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{fullname,jdbcType=VARCHAR}, #{userType,jdbcType=VARCHAR}, #{pwdChangedTime,jdbcType=TIMESTAMP}, 
+      #{isLocked,jdbcType=VARCHAR}, #{lockedReason,jdbcType=VARCHAR}, #{userHead,jdbcType=VARCHAR}, 
+      #{sex,jdbcType=VARCHAR}, #{birthdate,jdbcType=VARCHAR}, #{mobileTelephone,jdbcType=VARCHAR}, 
+      #{email,jdbcType=VARCHAR}, #{credentialsType,jdbcType=VARCHAR}, #{credentialsNumber,jdbcType=VARCHAR}, 
+      #{homeAddress,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{activeFlag,jdbcType=VARCHAR}, 
+      #{createdBy,jdbcType=VARCHAR}, #{creationTime,jdbcType=TIMESTAMP}, #{modifiedBy,jdbcType=VARCHAR}, 
+      #{modificationTime,jdbcType=TIMESTAMP}, #{ext1,jdbcType=VARCHAR}, #{ext2,jdbcType=VARCHAR}, 
+      #{ext3,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.elf.sys.org.entity.User">
+    insert into sys_org_user
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        USER_ID,
+      </if>
+      <if test="account != null">
+        ACCOUNT,
+      </if>
+      <if test="password != null">
+        PASSWORD,
+      </if>
+      <if test="fullname != null">
+        FULLNAME,
+      </if>
+      <if test="userType != null">
+        USER_TYPE,
+      </if>
+      <if test="pwdChangedTime != null">
+        PWD_CHANGED_TIME,
+      </if>
+      <if test="isLocked != null">
+        IS_LOCKED,
+      </if>
+      <if test="lockedReason != null">
+        LOCKED_REASON,
+      </if>
+      <if test="userHead != null">
+        USER_HEAD,
+      </if>
+      <if test="sex != null">
+        SEX,
+      </if>
+      <if test="birthdate != null">
+        BIRTHDATE,
+      </if>
+      <if test="mobileTelephone != null">
+        MOBILE_TELEPHONE,
+      </if>
+      <if test="email != null">
+        EMAIL,
+      </if>
+      <if test="credentialsType != null">
+        CREDENTIALS_TYPE,
+      </if>
+      <if test="credentialsNumber != null">
+        CREDENTIALS_NUMBER,
+      </if>
+      <if test="homeAddress != null">
+        HOME_ADDRESS,
+      </if>
+      <if test="remark != null">
+        REMARK,
+      </if>
+      <if test="activeFlag != null">
+        ACTIVE_FLAG,
+      </if>
+      <if test="createdBy != null">
+        CREATED_BY,
+      </if>
+      <if test="creationTime != null">
+        CREATION_TIME,
+      </if>
+      <if test="modifiedBy != null">
+        MODIFIED_BY,
+      </if>
+      <if test="modificationTime != null">
+        MODIFICATION_TIME,
+      </if>
+      <if test="ext1 != null">
+        EXT1,
+      </if>
+      <if test="ext2 != null">
+        EXT2,
+      </if>
+      <if test="ext3 != null">
+        EXT3,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="userId != null">
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="account != null">
+        #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="fullname != null">
+        #{fullname,jdbcType=VARCHAR},
+      </if>
+      <if test="userType != null">
+        #{userType,jdbcType=VARCHAR},
+      </if>
+      <if test="pwdChangedTime != null">
+        #{pwdChangedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isLocked != null">
+        #{isLocked,jdbcType=VARCHAR},
+      </if>
+      <if test="lockedReason != null">
+        #{lockedReason,jdbcType=VARCHAR},
+      </if>
+      <if test="userHead != null">
+        #{userHead,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="birthdate != null">
+        #{birthdate,jdbcType=VARCHAR},
+      </if>
+      <if test="mobileTelephone != null">
+        #{mobileTelephone,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="credentialsType != null">
+        #{credentialsType,jdbcType=VARCHAR},
+      </if>
+      <if test="credentialsNumber != null">
+        #{credentialsNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="homeAddress != null">
+        #{homeAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="activeFlag != null">
+        #{activeFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="createdBy != null">
+        #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="creationTime != null">
+        #{creationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedBy != null">
+        #{modifiedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modificationTime != null">
+        #{modificationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ext1 != null">
+        #{ext1,jdbcType=VARCHAR},
+      </if>
+      <if test="ext2 != null">
+        #{ext2,jdbcType=VARCHAR},
+      </if>
+      <if test="ext3 != null">
+        #{ext3,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.elf.sys.org.entity.UserExample" resultType="java.lang.Long">
+    select count(*) from sys_org_user
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update sys_org_user
+    <set>
+      <if test="record.userId != null">
+        USER_ID = #{record.userId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.account != null">
+        ACCOUNT = #{record.account,jdbcType=VARCHAR},
+      </if>
+      <if test="record.password != null">
+        PASSWORD = #{record.password,jdbcType=VARCHAR},
+      </if>
+      <if test="record.fullname != null">
+        FULLNAME = #{record.fullname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userType != null">
+        USER_TYPE = #{record.userType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pwdChangedTime != null">
+        PWD_CHANGED_TIME = #{record.pwdChangedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.isLocked != null">
+        IS_LOCKED = #{record.isLocked,jdbcType=VARCHAR},
+      </if>
+      <if test="record.lockedReason != null">
+        LOCKED_REASON = #{record.lockedReason,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userHead != null">
+        USER_HEAD = #{record.userHead,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sex != null">
+        SEX = #{record.sex,jdbcType=VARCHAR},
+      </if>
+      <if test="record.birthdate != null">
+        BIRTHDATE = #{record.birthdate,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mobileTelephone != null">
+        MOBILE_TELEPHONE = #{record.mobileTelephone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.email != null">
+        EMAIL = #{record.email,jdbcType=VARCHAR},
+      </if>
+      <if test="record.credentialsType != null">
+        CREDENTIALS_TYPE = #{record.credentialsType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.credentialsNumber != null">
+        CREDENTIALS_NUMBER = #{record.credentialsNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.homeAddress != null">
+        HOME_ADDRESS = #{record.homeAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.remark != null">
+        REMARK = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.activeFlag != null">
+        ACTIVE_FLAG = #{record.activeFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdBy != null">
+        CREATED_BY = #{record.createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.creationTime != null">
+        CREATION_TIME = #{record.creationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.modifiedBy != null">
+        MODIFIED_BY = #{record.modifiedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.modificationTime != null">
+        MODIFICATION_TIME = #{record.modificationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.ext1 != null">
+        EXT1 = #{record.ext1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ext2 != null">
+        EXT2 = #{record.ext2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ext3 != null">
+        EXT3 = #{record.ext3,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update sys_org_user
+    set USER_ID = #{record.userId,jdbcType=VARCHAR},
+    ACCOUNT = #{record.account,jdbcType=VARCHAR},
+    PASSWORD = #{record.password,jdbcType=VARCHAR},
+    FULLNAME = #{record.fullname,jdbcType=VARCHAR},
+    USER_TYPE = #{record.userType,jdbcType=VARCHAR},
+    PWD_CHANGED_TIME = #{record.pwdChangedTime,jdbcType=TIMESTAMP},
+    IS_LOCKED = #{record.isLocked,jdbcType=VARCHAR},
+    LOCKED_REASON = #{record.lockedReason,jdbcType=VARCHAR},
+    USER_HEAD = #{record.userHead,jdbcType=VARCHAR},
+    SEX = #{record.sex,jdbcType=VARCHAR},
+    BIRTHDATE = #{record.birthdate,jdbcType=VARCHAR},
+    MOBILE_TELEPHONE = #{record.mobileTelephone,jdbcType=VARCHAR},
+    EMAIL = #{record.email,jdbcType=VARCHAR},
+    CREDENTIALS_TYPE = #{record.credentialsType,jdbcType=VARCHAR},
+    CREDENTIALS_NUMBER = #{record.credentialsNumber,jdbcType=VARCHAR},
+    HOME_ADDRESS = #{record.homeAddress,jdbcType=VARCHAR},
+    REMARK = #{record.remark,jdbcType=VARCHAR},
+    ACTIVE_FLAG = #{record.activeFlag,jdbcType=VARCHAR},
+    CREATED_BY = #{record.createdBy,jdbcType=VARCHAR},
+    CREATION_TIME = #{record.creationTime,jdbcType=TIMESTAMP},
+    MODIFIED_BY = #{record.modifiedBy,jdbcType=VARCHAR},
+    MODIFICATION_TIME = #{record.modificationTime,jdbcType=TIMESTAMP},
+    EXT1 = #{record.ext1,jdbcType=VARCHAR},
+    EXT2 = #{record.ext2,jdbcType=VARCHAR},
+    EXT3 = #{record.ext3,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.elf.sys.org.entity.User">
+    update sys_org_user
+    <set>
+      <if test="account != null">
+        ACCOUNT = #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null">
+        PASSWORD = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="fullname != null">
+        FULLNAME = #{fullname,jdbcType=VARCHAR},
+      </if>
+      <if test="userType != null">
+        USER_TYPE = #{userType,jdbcType=VARCHAR},
+      </if>
+      <if test="pwdChangedTime != null">
+        PWD_CHANGED_TIME = #{pwdChangedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isLocked != null">
+        IS_LOCKED = #{isLocked,jdbcType=VARCHAR},
+      </if>
+      <if test="lockedReason != null">
+        LOCKED_REASON = #{lockedReason,jdbcType=VARCHAR},
+      </if>
+      <if test="userHead != null">
+        USER_HEAD = #{userHead,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null">
+        SEX = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="birthdate != null">
+        BIRTHDATE = #{birthdate,jdbcType=VARCHAR},
+      </if>
+      <if test="mobileTelephone != null">
+        MOBILE_TELEPHONE = #{mobileTelephone,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null">
+        EMAIL = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="credentialsType != null">
+        CREDENTIALS_TYPE = #{credentialsType,jdbcType=VARCHAR},
+      </if>
+      <if test="credentialsNumber != null">
+        CREDENTIALS_NUMBER = #{credentialsNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="homeAddress != null">
+        HOME_ADDRESS = #{homeAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null">
+        REMARK = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="activeFlag != null">
+        ACTIVE_FLAG = #{activeFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="createdBy != null">
+        CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      </if>
+      <if test="creationTime != null">
+        CREATION_TIME = #{creationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="modifiedBy != null">
+        MODIFIED_BY = #{modifiedBy,jdbcType=VARCHAR},
+      </if>
+      <if test="modificationTime != null">
+        MODIFICATION_TIME = #{modificationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ext1 != null">
+        EXT1 = #{ext1,jdbcType=VARCHAR},
+      </if>
+      <if test="ext2 != null">
+        EXT2 = #{ext2,jdbcType=VARCHAR},
+      </if>
+      <if test="ext3 != null">
+        EXT3 = #{ext3,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where USER_ID = #{userId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.elf.sys.org.entity.User">
+    update sys_org_user
+    set ACCOUNT = #{account,jdbcType=VARCHAR},
+      PASSWORD = #{password,jdbcType=VARCHAR},
+      FULLNAME = #{fullname,jdbcType=VARCHAR},
+      USER_TYPE = #{userType,jdbcType=VARCHAR},
+      PWD_CHANGED_TIME = #{pwdChangedTime,jdbcType=TIMESTAMP},
+      IS_LOCKED = #{isLocked,jdbcType=VARCHAR},
+      LOCKED_REASON = #{lockedReason,jdbcType=VARCHAR},
+      USER_HEAD = #{userHead,jdbcType=VARCHAR},
+      SEX = #{sex,jdbcType=VARCHAR},
+      BIRTHDATE = #{birthdate,jdbcType=VARCHAR},
+      MOBILE_TELEPHONE = #{mobileTelephone,jdbcType=VARCHAR},
+      EMAIL = #{email,jdbcType=VARCHAR},
+      CREDENTIALS_TYPE = #{credentialsType,jdbcType=VARCHAR},
+      CREDENTIALS_NUMBER = #{credentialsNumber,jdbcType=VARCHAR},
+      HOME_ADDRESS = #{homeAddress,jdbcType=VARCHAR},
+      REMARK = #{remark,jdbcType=VARCHAR},
+      ACTIVE_FLAG = #{activeFlag,jdbcType=VARCHAR},
+      CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      CREATION_TIME = #{creationTime,jdbcType=TIMESTAMP},
+      MODIFIED_BY = #{modifiedBy,jdbcType=VARCHAR},
+      MODIFICATION_TIME = #{modificationTime,jdbcType=TIMESTAMP},
+      EXT1 = #{ext1,jdbcType=VARCHAR},
+      EXT2 = #{ext2,jdbcType=VARCHAR},
+      EXT3 = #{ext3,jdbcType=VARCHAR}
+    where USER_ID = #{userId,jdbcType=VARCHAR}
+  </update>
+  <select id="getUsersByUnitId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    u.*
+    from sys_org_user u, sys_org_unit_user uu
+    where u.user_id = uu.user_id
+    and uu.unit_id = #{unitId,jdbcType=VARCHAR}
+  </select>
+</mapper>

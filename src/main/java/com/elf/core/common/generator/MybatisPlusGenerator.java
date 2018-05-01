@@ -35,7 +35,7 @@ public class MybatisPlusGenerator {
 
         // 全局配置
         GlobalConfig globalConfig = new GlobalConfig();
-        globalConfig.setOutputDir("D://");
+        globalConfig.setOutputDir("D://mp//");
         globalConfig.setFileOverride(true);
         globalConfig.setActiveRecord(true);// 不需要ActiveRecord特性的请改为false
         globalConfig.setEnableCache(false);// XML 二级缓存
@@ -65,9 +65,9 @@ public class MybatisPlusGenerator {
             }
         });
         dataSourceConfig.setDriverName("com.mysql.jdbc.Driver");
-        dataSourceConfig.setUsername("root");
-        dataSourceConfig.setPassword("102526");
-        dataSourceConfig.setUrl("jdbc:mysql://localhost:3306/elfdb?useUnicode=true&characterEncoding=UTF-8");
+        dataSourceConfig.setUsername("sa");
+        dataSourceConfig.setPassword("1234");
+        dataSourceConfig.setUrl("jdbc:mysql://192.168.46.132:3306/elfdb?useUnicode=true&characterEncoding=UTF-8");
         autoGenerator.setDataSource(dataSourceConfig);
 
         // 策略配置
@@ -119,7 +119,7 @@ public class MybatisPlusGenerator {
             @Override
             public String outputFile(TableInfo tableInfo) {
                 // 自定义输入文件名称
-                return "D://my_" + tableInfo.getEntityName() + ".jsp";
+                return "D://mp//my_" + tableInfo.getEntityName() + ".jsp";
             }
         });
         cfg.setFileOutConfigList(focList);
