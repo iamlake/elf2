@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.elf.sys.org.mapper.UnitMapper">
+    <resultMap id="BaseResultMap" type="com.elf.sys.org.entity.Unit">
+        <id column="id" jdbcType="VARCHAR" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="description" jdbcType="VARCHAR" property="description"/>
+        <result column="code" jdbcType="VARCHAR" property="code"/>
+        <result column="type_id" jdbcType="VARCHAR" property="typeId"/>
+        <result column="time_begin" jdbcType="TIMESTAMP" property="timeBegin"/>
+        <result column="time_end" jdbcType="TIMESTAMP" property="timeEnd"/>
+        <result column="is_enabled" jdbcType="CHAR" property="isEnabled"/>
+        <result column="REMARK" jdbcType="VARCHAR" property="remark"/>
+        <result column="ACTIVE_FLAG" jdbcType="VARCHAR" property="activeFlag"/>
+        <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy"/>
+        <result column="CREATION_TIME" jdbcType="TIMESTAMP" property="creationTime"/>
+        <result column="MODIFIED_BY" jdbcType="VARCHAR" property="modifiedBy"/>
+        <result column="MODIFICATION_TIME" jdbcType="TIMESTAMP" property="modificationTime"/>
+        <result column="EXT1" jdbcType="VARCHAR" property="ext1"/>
+        <result column="EXT2" jdbcType="VARCHAR" property="ext2"/>
+        <result column="EXT3" jdbcType="VARCHAR" property="ext3"/>
+        <association property="unitType" javaType="com.elf.sys.org.entity.UnitType">
+            <id column="unitType$id" jdbcType="VARCHAR" property="id"/>
+            <result column="unitType$name" jdbcType="VARCHAR" property="name"/>
+            <result column="unitType$code" jdbcType="VARCHAR" property="code"/>
+            <result column="unitType$description" jdbcType="VARCHAR" property="description"/>
+            <result column="unitType$parent_id" jdbcType="VARCHAR" property="parentId"/>
+            <result column="unitType$is_leaf" jdbcType="CHAR" property="isLeaf"/>
+            <result column="unitType$REMARK" jdbcType="VARCHAR" property="remark"/>
+            <result column="unitType$ACTIVE_FLAG" jdbcType="VARCHAR" property="activeFlag"/>
+            <result column="unitType$CREATED_BY" jdbcType="VARCHAR" property="createdBy"/>
+            <result column="unitType$CREATION_TIME" jdbcType="TIMESTAMP" property="creationTime"/>
+            <result column="unitType$MODIFIED_BY" jdbcType="VARCHAR" property="modifiedBy"/>
+            <result column="unitType$MODIFICATION_TIME" jdbcType="TIMESTAMP" property="modificationTime"/>
+            <result column="unitType$EXT1" jdbcType="VARCHAR" property="ext1"/>
+            <result column="unitType$EXT2" jdbcType="VARCHAR" property="ext2"/>
+            <result column="unitType$EXT3" jdbcType="VARCHAR" property="ext3"/>
+        </association>
+    </resultMap>
+    <select id="getUnitById" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    u.*, ut.id as unitType$id, ut.name as unitType$name, ut.code as unitType$code, 
+    ut.description as unitType$description
+    from 
+    sys_org_unit u,
+	sys_org_unit_type ut
+    where u.type_id = ut.id
+	and u.id = #{id,jdbcType=VARCHAR}
+  </select>
+</mapper>

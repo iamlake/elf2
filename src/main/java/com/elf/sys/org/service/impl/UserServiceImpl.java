@@ -60,7 +60,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
     }
 
     @Override
-    public List<User> getUsers(User user) {
+    public List<User> getUsers(User user, List<String> withoutIds) {
         EntityWrapper entityWrapper = new EntityWrapper();
         if (StringUtils.isNotBlank(user.getAccount())) {
             entityWrapper.eq("account", user.getAccount());
@@ -68,14 +68,16 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
         if (StringUtils.isNotBlank(user.getFullname())) {
             entityWrapper.like("fullname", user.getFullname(), SqlLike.DEFAULT);
         }
+        if (withoutIds != null && withoutIds.size() > 0) {
+            entityWrapper.notIn("user_id", withoutIds);
+        }
         List<User> userList = userMapper.selectList(entityWrapper);
         return userList;
     }
 
     @Override
-    public List<User> getUsersByUnitId(String unitId) {
-        List<User> userList = userMapper.getUsersByUnitId(unitId);
+    public List<User> getUnitUsers(String unitId, User user) {
+        List<User> userList = userMapper.selectUnitUsers(unitId, user.getAccount(), user.getFullname());
         return userList;
     }
-
 }

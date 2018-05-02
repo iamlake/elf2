@@ -25,6 +25,5 @@ public interface UserMapper extends BaseMapper<User> {
      * @Author: Liyiming
      * @Date: 2018/5/1
      */
-    @Select("select u.* from sys_org_user u, sys_org_unit_user uu where u.user_id = uu.user_id and uu.unit_id = #{unitId}")
-    List<User> getUsersByUnitId(@Param("unitId") String unitId);
+    List<User> selectUnitUsers(@Param("unitId") String unitId, @Param("account") String account, @Param("fullname") String fullname);
 }

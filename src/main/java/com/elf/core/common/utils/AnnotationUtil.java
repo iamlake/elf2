@@ -1,4 +1,4 @@
-package com.elf.common.util;
+package com.elf.core.common.utils;
 
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 

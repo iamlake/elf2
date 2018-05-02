@@ -1,5 +1,6 @@
 package com.elf.sys.org.web;
 
+import com.elf.core.common.utils.StringUtils;
 import com.elf.core.context.context.Context;
 import com.elf.core.context.context.ContextHolder;
 import com.elf.core.context.context.impl.ContextImpl;
@@ -22,6 +23,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -109,15 +111,21 @@ public class UserController extends BaseController {
 
     /**
      * @Description: 查询用户列表
-     * @Param: [user]
+     * @Param: [user] user查询条件
+     * @Param: [withoutIds] 排除的UserId
      * @return: com.elf.core.persistence.result.Result
      * @Author: Liyiming
-     * @Date: 2018/3/24
+     * @Date: 2018/5/1
      */
     @GetMapping("/user")
     @ResponseBody
-    public Result findUsers(User user) {
-        List<User> list = userService.getUsers(user);
+    public Result findUsers(User user, String withoutIds) {
+        List<String> withoutIdsList = null;
+        if (StringUtils.isNotBlank(withoutIds)) {
+            withoutIdsList = new ArrayList<>();
+            Collections.addAll(withoutIdsList, withoutIds.split(","));
+        }
+        List<User> list = userService.getUsers(user, withoutIdsList);
         return new QueryResult<>(Global.RESULT_STAUTS_SUCCESS, "", list, list.size());
     }
 
@@ -167,10 +175,17 @@ public class UserController extends BaseController {
         return result;
     }
 
-    @GetMapping("/user/unitId/{unitId}")
+    /**
+     * @Description: 根据unitId查询用户信息
+     * @Param: [unitId, user]
+     * @return: com.elf.core.persistence.result.Result
+     * @Author: Liyiming
+     * @Date: 2018/5/1
+     */
+    @GetMapping("/user/unitUser")
     @ResponseBody
-    public Result findUsersByUnitId(@PathVariable("unitId") String unitId) {
-        List<User> list = userService.getUsersByUnitId(unitId);
+    public Result findUnitUsers(String unitId, User user) {
+        List<User> list = userService.getUnitUsers(unitId, user);
         return new QueryResult<>(Global.RESULT_STAUTS_SUCCESS, "", list, list.size());
     }
 }

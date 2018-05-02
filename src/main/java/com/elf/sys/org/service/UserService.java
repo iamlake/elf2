@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface UserService extends BaseService<User> {
 
-    List<User> getUsers(User user);
+    List<User> getUsers(User user, List<String> withoutIds);
 
     User saveUser(User user);
 
@@ -15,6 +15,6 @@ public interface UserService extends BaseService<User> {
 
     User getUserByAccount(String account);
 
-    List<User> getUsersByUnitId(String unitId);
+    List<User> getUnitUsers(String unitId, User user);
 
 }

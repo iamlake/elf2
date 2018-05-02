@@ -1,35 +1,41 @@
 package com.elf.sys.org.service;
 
+import com.elf.core.service.BaseService;
+import com.elf.sys.org.entity.Dimension;
+import com.elf.sys.org.entity.DimensionUnit;
+import com.elf.sys.org.entity.Unit;
+import com.elf.sys.org.entity.UnitUser;
+
 import java.util.List;
 
-import com.elf.sys.org.entity.SysOrgDimension;
-import com.elf.sys.org.entity.SysOrgDimensionUnit;
-import com.elf.sys.org.entity.SysOrgUnit;
+public interface UnitService extends BaseService<Unit> {
 
-public interface UnitService {
+    List<Dimension> getDimensionList();
 
-	List<SysOrgDimension> getDimensionList();
+    List<DimensionUnit> getChildDimensionUnitList(String parentDimensionUnitId, String dimensionId);
 
-	List<SysOrgDimensionUnit> getChildDimensionUnitList(String parentDimensionUnitId, String dimensionId);
+    List<DimensionUnit> getAllChildDimensionUnitList(String parentDimensionUnitId, String dimensionId);
 
-	List<SysOrgDimensionUnit> getAllChildDimensionUnitList(String parentDimensionUnitId, String dimensionId);
+    Unit getUnitById(String id);
 
-	SysOrgUnit getUnitById(String id);
+    DimensionUnit getRootDimensionUnit(String dimensionId);
 
-	SysOrgDimensionUnit getRootDimensionUnit(String dimensionId);
+    DimensionUnit saveUnitAndDimensionUnit(Unit paramUnit, String parentDimensionUnitId, String dimensionId);
 
-	SysOrgDimensionUnit saveUnitAndDimensionUnit(SysOrgUnit paramUnit, String parentDimensionUnitId, String dimensionId);
+    DimensionUnit updateUnitAndDimensionUnit(Unit paramUnit);
 
-	SysOrgDimensionUnit updateUnitAndDimensionUnit(SysOrgUnit paramUnit);
+    void deleteUnitAndDimensionUnit(String dimensionUnitId);
 
-	void deleteUnitAndDimensionUnit(String dimensionUnitId);
+    UnitUser saveUnitUser(String userId, String unitId);
 
-	void saveUnitUser(String userId, String unitId);
+    void saveUnitUsers(List<String> userIdsList, String unitId) throws Exception;
 
-	void deleteUnitUser(String userId, String unitId);
+    void deleteUnitUsers(List<String> userIdsList, String unitId) throws Exception;
 
-	SysOrgDimension saveDimension(SysOrgDimension dimension);
+    int deleteUnitUser(String userId, String unitId);
 
-	void deleteDimension(String dimensionId);
+    Dimension saveDimension(Dimension dimension);
+
+    int deleteDimension(String dimensionId);
 
 }
