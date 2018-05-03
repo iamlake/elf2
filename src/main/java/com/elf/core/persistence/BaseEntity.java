@@ -30,20 +30,6 @@ public abstract class BaseEntity implements Serializable {
     }
 
     /**
-     * @Description: 插入之前执行方法，子类实现
-     * @Author:李一鸣(liyiming.neu@neusoft.com)
-     * @Date:2017年11月23日
-     */
-    public abstract void preInsert();
-
-    /**
-     * @Description: 更新之前执行方法，子类实现
-     * @Author:李一鸣(liyiming.neu@neusoft.com)
-     * @Date:2017年11月23日
-     */
-    public abstract void preUpdate();
-
-    /**
      * @Description: serialVersionUID
      * @Author:李一鸣(liyiming.neu@neusoft.com)
      * @Date:2017年11月12日

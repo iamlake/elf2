@@ -138,6 +138,7 @@
                 parentDimensionUnitId: 'dimension_ln',
                 dimensionId: 'city'
             }, function (result) {
+                console.log(result.data);
                 zTree.init($("#treeDemo"), setting, result.data);
             })
         }

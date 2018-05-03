@@ -1,6 +1,8 @@
 package com.elf.core.persistence;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.util.Date;
 
@@ -10,7 +12,9 @@ import java.util.Date;
  * @Author:李一鸣(liyiming.neu@neusoft.com)
  * @Date:2017年11月12日
  */
-@Data
+@Setter
+@Getter
+@ToString
 public abstract class DataEntity extends BaseEntity {
 
     protected String remark;

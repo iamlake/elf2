@@ -1,5 +1,6 @@
 package com.elf;
 
+import com.elf.core.filter.ContextIntegrationFilter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
@@ -11,6 +12,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.springframework.web.filter.HttpPutFormContentFilter;
 import org.springframework.web.filter.RequestContextFilter;
+
+import javax.servlet.Filter;
 
 /**
  * @Description: ElfApplication
@@ -57,5 +60,18 @@ public class ElfApplication {
 		filterRegistrationBean.setFilter(new RequestContextFilter());
 		filterRegistrationBean.setOrder(3);
 		return filterRegistrationBean;
+	}
+
+	@Bean
+	public FilterRegistrationBean contextIntegrationFilterRegistration() {
+		FilterRegistrationBean registration = new FilterRegistrationBean();
+		registration.setFilter(contextIntegrationFilter());
+		registration.setOrder(4);
+		return registration;
+	}
+
+	@Bean
+	public Filter contextIntegrationFilter() {
+		return new ContextIntegrationFilter();
 	}
 }

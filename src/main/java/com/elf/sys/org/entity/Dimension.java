@@ -3,14 +3,18 @@ package com.elf.sys.org.entity;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.elf.core.persistence.DataEntity;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.math.BigDecimal;
 import java.util.Date;
 
-@Data
+@Setter
+@Getter
+@ToString
 @TableName("sys_org_dimension")
-public class Dimension extends DataEntity{
+public class Dimension extends DataEntity {
 
     @TableId
     private String id;
@@ -31,13 +35,10 @@ public class Dimension extends DataEntity{
 
     private String isEnabled;
 
-    @Override
-    public void preInsert() {
-
-    }
-
-    @Override
-    public void preUpdate() {
-
-    }
+    /**
+     * @Description: serialVersionUID
+     * @Author: Liyiming
+     * @Date: 2018/3/30
+     */
+    private static final long serialVersionUID = 1L;
 }

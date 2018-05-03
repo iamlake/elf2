@@ -60,6 +60,17 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
     }
 
     @Override
+    public User updateUserPassword(User user) {
+        User currentUser = ContextHolder.getContext().getCurrentUser();
+        Timestamp currentTime = new Timestamp(System.currentTimeMillis());
+        user.setPwdChangedTime(currentTime);
+        user.setModifiedBy(currentUser.getAccount());
+        user.setModificationTime(currentTime);
+        userMapper.updateById(user);
+        return user;
+    }
+
+    @Override
     public List<User> getUsers(User user, List<String> withoutIds) {
         EntityWrapper entityWrapper = new EntityWrapper();
         if (StringUtils.isNotBlank(user.getAccount())) {

@@ -13,6 +13,8 @@ public interface UserService extends BaseService<User> {
 
     User updateUser(User user);
 
+    User updateUserPassword(User user);
+
     User getUserByAccount(String account);
 
     List<User> getUnitUsers(String unitId, User user);

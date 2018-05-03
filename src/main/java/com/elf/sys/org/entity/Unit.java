@@ -4,11 +4,15 @@ import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.elf.core.persistence.DataEntity;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.util.Date;
 
-@Data
+@Setter
+@Getter
+@ToString
 @TableName("sys_org_unit")
 public class Unit extends DataEntity {
 
@@ -32,13 +36,10 @@ public class Unit extends DataEntity {
     @TableField(exist = false)
     private UnitType unitType;
 
-    @Override
-    public void preInsert() {
-
-    }
-
-    @Override
-    public void preUpdate() {
-
-    }
+    /**
+     * @Description: serialVersionUID
+     * @Author: Liyiming
+     * @Date: 2018/3/30
+     */
+    private static final long serialVersionUID = 1L;
 }

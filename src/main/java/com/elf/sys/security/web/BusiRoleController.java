@@ -27,8 +27,8 @@ public class BusiRoleController extends BaseController {
     @ResponseBody
     public Result getBusiRoleById(String busiRoleId) {
     	SysSecBusiRole busiRole = busiRoleService.getBusiRoleById(busiRoleId);
-    	QueryResult<SysSecBusiRole> result = new QueryResult<SysSecBusiRole>();
-    	ArrayList<SysSecBusiRole> busiRoleList = new ArrayList<SysSecBusiRole>();
+    	QueryResult<SysSecBusiRole> result = new QueryResult<>();
+    	ArrayList<SysSecBusiRole> busiRoleList = new ArrayList<>();
     	busiRoleList.add(busiRole);
     	result.setCode(Global.RESULT_STAUTS_SUCCESS);
     	result.setData(busiRoleList);
@@ -40,8 +40,8 @@ public class BusiRoleController extends BaseController {
     @ResponseBody
     public Result saveBusiRole(SysSecBusiRole paramBusiRole) {
     	SysSecBusiRole busiRole = busiRoleService.saveBusiRole(paramBusiRole);
-    	QueryResult<SysSecBusiRole> result = new QueryResult<SysSecBusiRole>();
-    	ArrayList<SysSecBusiRole> busiRoleList = new ArrayList<SysSecBusiRole>();
+    	QueryResult<SysSecBusiRole> result = new QueryResult<>();
+    	ArrayList<SysSecBusiRole> busiRoleList = new ArrayList<>();
     	busiRoleList.add(busiRole);
     	result.setCode(Global.RESULT_STAUTS_SUCCESS);
     	result.setData(busiRoleList);
@@ -53,8 +53,8 @@ public class BusiRoleController extends BaseController {
     @ResponseBody
     public Result updateBusiRole(SysSecBusiRole paramBusiRole) {
     	SysSecBusiRole busiRole = busiRoleService.updateBusiRole(paramBusiRole);
-    	QueryResult<SysSecBusiRole> result = new QueryResult<SysSecBusiRole>();
-    	ArrayList<SysSecBusiRole> busiRoleList = new ArrayList<SysSecBusiRole>();
+    	QueryResult<SysSecBusiRole> result = new QueryResult<>();
+    	ArrayList<SysSecBusiRole> busiRoleList = new ArrayList<>();
     	busiRoleList.add(busiRole);
     	result.setCode(Global.RESULT_STAUTS_SUCCESS);
     	result.setData(busiRoleList);
@@ -66,7 +66,7 @@ public class BusiRoleController extends BaseController {
     @ResponseBody
     public Result deleteBusiRoleById(String busiRoleId) {
     	busiRoleService.deleteBusiRoleById(busiRoleId);
-    	QueryResult<SysSecBusiRole> result = new QueryResult<SysSecBusiRole>();
+    	QueryResult<SysSecBusiRole> result = new QueryResult<>();
     	result.setCode(Global.RESULT_STAUTS_SUCCESS);
         return result;
     }
@@ -75,7 +75,7 @@ public class BusiRoleController extends BaseController {
     @ResponseBody
     public Result getBusiRoles() {
     	List<SysSecBusiRole> BusiRoleList = busiRoleService.getBusiRoles();
-    	QueryResult<SysSecBusiRole> result = new QueryResult<SysSecBusiRole>();
+    	QueryResult<SysSecBusiRole> result = new QueryResult<>();
     	result.setCode(Global.RESULT_STAUTS_SUCCESS);
     	result.setData(BusiRoleList);
     	result.setCount(BusiRoleList.size());
@@ -86,7 +86,7 @@ public class BusiRoleController extends BaseController {
     @ResponseBody
     public Result getBusiRolesByUserId(String userId) {
     	List<SysSecBusiRole> BusiRoleList = busiRoleService.getBusiRolesByUserId(userId);
-    	QueryResult<SysSecBusiRole> result = new QueryResult<SysSecBusiRole>();
+    	QueryResult<SysSecBusiRole> result = new QueryResult<>();
     	result.setCode(Global.RESULT_STAUTS_SUCCESS);
     	result.setData(BusiRoleList);
     	result.setCount(BusiRoleList.size());
@@ -97,7 +97,7 @@ public class BusiRoleController extends BaseController {
     @ResponseBody
     public Result saveBusiRoleUser(String busiRoleId, List<String> userIdList) {
     	busiRoleService.saveBusiRoleUser(busiRoleId, userIdList);
-    	QueryResult<SysSecBusiRoleUser> result = new QueryResult<SysSecBusiRoleUser>();
+    	QueryResult<SysSecBusiRoleUser> result = new QueryResult<>();
     	result.setCode(Global.RESULT_STAUTS_SUCCESS);
         return result;
     }
@@ -106,10 +106,8 @@ public class BusiRoleController extends BaseController {
     @ResponseBody
     public Result deleteBusiRoleUser(String busiRoleId, String userId) {
     	busiRoleService.deleteBusiRoleUser(busiRoleId, userId);
-    	QueryResult<SysSecBusiRoleUser> result = new QueryResult<SysSecBusiRoleUser>();
+    	QueryResult<SysSecBusiRoleUser> result = new QueryResult<>();
     	result.setCode(Global.RESULT_STAUTS_SUCCESS);
         return result;
     }
-    
-    
 }

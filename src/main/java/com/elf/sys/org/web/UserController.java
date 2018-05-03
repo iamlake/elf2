@@ -140,14 +140,15 @@ public class UserController extends BaseController {
     @ResponseBody
     public Result addNewUser(User user) {
         JSONResult result = new JSONResult();
-        User newUser = userService.saveUser(user);
-        if (newUser != null) {
+        try {
+            User newUser = userService.saveUser(user);
             result.setCode(Global.RESULT_STAUTS_SUCCESS);
             result.setMsg("添加成功！");
-            result.getParameters().put("", "");
-        } else {
+            result.getParameters().put("object", newUser);
+        }catch (Exception ex){
             result.setCode(Global.RESULT_STAUTS_FAILED);
             result.setMsg("添加失败！");
+            result.getErrors().put("exception", ex);
         }
         return result;
     }
@@ -163,14 +164,39 @@ public class UserController extends BaseController {
     @ResponseBody
     public Result modifyUser(User user) {
         JSONResult result = new JSONResult();
-        User newUser = userService.updateUser(user);
-        if (newUser != null) {
+        try {
+            User newUser = userService.updateUser(user);
             result.setCode(Global.RESULT_STAUTS_SUCCESS);
             result.setMsg("修改成功！");
-            result.getParameters().put("", "");
-        } else {
+            result.getParameters().put("object", newUser);
+        }catch (Exception ex){
             result.setCode(Global.RESULT_STAUTS_FAILED);
             result.setMsg("修改失败！");
+            result.getErrors().put("exception", ex);
+        }
+        return result;
+    }
+
+    /**
+     * @Description: 修改用户密码
+     * @Param: [user]
+     * @return: com.elf.core.persistence.result.Result
+     * @Author: Liyiming
+     * @Date: 2018/4/2
+     */
+    @PutMapping("/user/password")
+    @ResponseBody
+    public Result modifyUserPassword(User user) {
+        JSONResult result = new JSONResult();
+        try {
+            User newUser = userService.updateUserPassword(user);
+            result.setCode(Global.RESULT_STAUTS_SUCCESS);
+            result.setMsg("修改成功！");
+            result.getParameters().put("object", newUser);
+        }catch (Exception ex){
+            result.setCode(Global.RESULT_STAUTS_FAILED);
+            result.setMsg("修改失败！");
+            result.getErrors().put("exception", ex);
         }
         return result;
     }

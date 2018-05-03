@@ -2,9 +2,8 @@ package com.elf.sys.org.entity;
 
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
-import com.elf.core.common.utils.StringUtils;
 import com.elf.core.persistence.DataEntity;
-import lombok.Data;
+import lombok.*;
 
 import java.util.Date;
 
@@ -14,7 +13,9 @@ import java.util.Date;
  * @Author:李一鸣(liyiming.neu@neusoft.com)
  * @Date:2017年12月6日
  */
-@Data
+@Setter
+@Getter
+@ToString
 @TableName("SYS_ORG_USER")
 public class User extends DataEntity {
 
@@ -57,17 +58,6 @@ public class User extends DataEntity {
     public User(String userAccount, String userPwd) {
         this.account = userAccount;
         this.password = userPwd;
-    }
-
-    @Override
-    public void preInsert() {
-        this.setUserId(StringUtils.getUUID());
-        this.setCreationTime(new Date());
-    }
-
-    @Override
-    public void preUpdate() {
-        this.setModificationTime(new Date());
     }
 
     /**

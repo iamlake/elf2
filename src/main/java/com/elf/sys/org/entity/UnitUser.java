@@ -3,9 +3,13 @@ package com.elf.sys.org.entity;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.elf.core.persistence.DataEntity;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
-@Data
+@Setter
+@Getter
+@ToString
 @TableName("sys_org_unit_user")
 public class UnitUser extends DataEntity {
 
@@ -20,13 +24,10 @@ public class UnitUser extends DataEntity {
 
     private String description;
 
-    @Override
-    public void preInsert() {
-
-    }
-
-    @Override
-    public void preUpdate() {
-
-    }
+    /**
+     * @Description: serialVersionUID
+     * @Author: Liyiming
+     * @Date: 2018/3/30
+     */
+    private static final long serialVersionUID = 1L;
 }

@@ -2,11 +2,10 @@ package com.elf.techcomp.codelist.entity;
 
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
-import com.elf.core.common.utils.StringUtils;
 import com.elf.core.persistence.DataEntity;
-import lombok.Data;
-
-import java.util.Date;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
 /**
  * @Title Codelist
@@ -14,7 +13,9 @@ import java.util.Date;
  * @Author Liyiming
  * @Date 2018/3/30 22:51
  */
-@Data
+@Setter
+@Getter
+@ToString
 @TableName("SYS_CODELIST")
 public class Codelist extends DataEntity {
     @TableId
@@ -35,17 +36,6 @@ public class Codelist extends DataEntity {
     private String filter;
 
     private String language;
-
-    @Override
-    public void preInsert() {
-        this.setCodeId(StringUtils.getUUID());
-        this.setCreationTime(new Date());
-    }
-
-    @Override
-    public void preUpdate() {
-        this.setModificationTime(new Date());
-    }
 
     /**
      * @Description: serialVersionUID

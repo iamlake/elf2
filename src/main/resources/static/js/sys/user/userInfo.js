@@ -28,7 +28,8 @@ layui.use(['form', 'layer', 'laydate', 'table', 'laytpl', 'elf'], function () {
     //修改密码
     form.on("submit(changePwd)", function (data) {
         $('#pwd').val($("#newPwd").val());
-        var formData = elf.getBinding($('.layui-form'), '');
+        var ext = '_method:put';
+        var formData = elf.getBinding($('.layui-form'), ext);
         // 弹出loading
         var index = top.layer.msg('数据提交中，请稍候…', {
             icon: 16,
@@ -36,13 +37,13 @@ layui.use(['form', 'layer', 'laydate', 'table', 'laytpl', 'elf'], function () {
             shade: 0.8
         }, function () {
             $.post({
-                url: basePath + '/user/password?_method=PUT',
+                url: basePath + '/user/password',
                 data: formData,
                 success: function (result) {
                     top.layer.close(index);
                     top.layer.msg(result.msg, {
                         icon: 1,
-                        time: 800
+                        time: 500
                         // 0.5秒关闭（如果不配置，默认是3秒）
                     }, function () {
                         layer.closeAll("iframe");

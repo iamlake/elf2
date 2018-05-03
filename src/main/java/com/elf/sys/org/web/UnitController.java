@@ -159,7 +159,6 @@ public class UnitController extends BaseController {
         return result;
     }
 
-    //    @PostMapping("/saveUnitUsers")
     @PostMapping("/unitUsers")
     public Result saveUnitUsers(String userIds, String unitId) {
         List<String> userIdsList = null;
@@ -180,7 +179,6 @@ public class UnitController extends BaseController {
         return result;
     }
 
-    //    @DeleteMapping("/deleteUnitUsers")
     @DeleteMapping("/unitUsers")
     public Result deleteUnitUsers(String userIds, String unitId) {
         List<String> userIdsList = null;
@@ -202,7 +200,6 @@ public class UnitController extends BaseController {
         return result;
     }
 
-    //    @PostMapping("/saveUnitUser")
     @PostMapping("/unitUser")
     public Result saveUnitUser(String userId, String unitId) {
         JSONResult result = new JSONResult();
@@ -219,7 +216,6 @@ public class UnitController extends BaseController {
         return result;
     }
 
-    //    @DeleteMapping("/deleteUnitUser")
     @DeleteMapping("/unitUser")
     public Result deleteUnitUser(String userId, String unitId) {
         JSONResult result = new JSONResult();
