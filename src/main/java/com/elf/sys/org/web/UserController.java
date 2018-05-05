@@ -58,7 +58,8 @@ public class UserController extends BaseController {
             try {
                 subject.login(token);
                 final User loginUser = userService.getUserByAccount(user.getAccount());
-                session.setAttribute(Global.USER_SESSION, loginUser);            
+                session.setAttribute(Global.USER_SESSION, loginUser);
+                logger.info("BasePath:[" + request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "]");
                 Context context = new ContextImpl();
                 context.setCurrentUser(loginUser);
                 session.setAttribute("com.elf.core.context.Context", context);

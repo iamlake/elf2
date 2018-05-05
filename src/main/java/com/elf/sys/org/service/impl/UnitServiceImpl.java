@@ -177,7 +177,7 @@ public class UnitServiceImpl extends BaseServiceImpl<UnitMapper, Unit> implement
 		}*/
 
         EntityWrapper<DimensionUnit> dimensionUnitWrapper = new EntityWrapper<>();
-        dimensionUnitWrapper.like("unit_path", dimensionUnit.getUnitPath() + "%");
+        dimensionUnitWrapper.eq("parent_dimension_unit_id", dimensionUnit.getDimensionUnitId());
 
         if (dimensionUnitMapper.selectCount(dimensionUnitWrapper) > 0) {
             //当前单元有子节点

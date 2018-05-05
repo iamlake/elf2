@@ -127,7 +127,7 @@
                             top.layer.close(index);
                             top.layer.msg(result.msg, {
                                 icon: 1,
-                                time: 500
+                                time: 1000
                             }, function () {
                                 var _index = parent.layer.getFrameIndex(window.name);
                                 parent.layer.close(_index);
@@ -137,7 +137,11 @@
                     });
                 });
             } else {
-                layer.msg("请选择需要添加的用户");
+                layer.msg("请选择需要添加的用户", {
+                    time: 2000,
+                    icon: 5,
+                    anim: 6
+                });
             }
         })
     })

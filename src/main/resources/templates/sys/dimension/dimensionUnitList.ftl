@@ -27,7 +27,7 @@
                 </form>
             </div>
         </fieldset>
-        <div id="treeDemo" class="ztree"></div>
+        <div id="tree_dimensionUnit" class="ztree"></div>
     </div>
     <div class="layui-col-lg10 layui-col-md9 layui-col-xs12">
         <blockquote class="layui-elem-quote quoteBox">
@@ -75,19 +75,51 @@
                 codelist = layui.codelist,
                 zTree = layui.zTree;
 
-        var newCount = 1;
-
         function addHoverDom(treeId, treeNode) {
             var sObj = $("#" + treeNode.tId + "_span");
             if (treeNode.editNameFlag || $("#addBtn_" + treeNode.tId).length > 0) return;
             var addStr = "<span class='button add' id='addBtn_" + treeNode.tId
-                    + "' title='add node' onfocus='this.blur();'></span>";
+                    + "' title='添加' onfocus='this.blur();'></span>";
             sObj.after(addStr);
             var btn = $("#addBtn_" + treeNode.tId);
+
             if (btn) btn.bind("click", function () {
-                var zTreeObj = zTree.getZTreeObj("treeDemo");
-                zTreeObj.addNodes(treeNode, {id: (100 + newCount), pId: treeNode.id, name: "new node" + (newCount++)});
-                return false;
+                layer.prompt({title: '组织维度代码', formType: 0}, function (text, index) {
+                    layer.close(index);
+
+                    $.ajax({
+                        type: "POST",
+                        async: false,
+                        url: basePath + "/unitAndDimensionUnit",
+                        data: {
+                            name: text,
+                            code: text,
+                            isEnabled: 't',
+                            parentDimensionUnitId: treeNode.dimensionUnitId,
+                            dimensionId: 'city'
+                        },
+                        success: function (result) {
+                            if (result.code == 0) {
+                                var newNode = result.parameters.object;
+                                var zTreeObj = zTree.getZTreeObj("tree_dimensionUnit");
+                                zTreeObj.addNodes(treeNode, {
+                                    dimensionUnitId: newNode.dimensionUnitId,
+                                    parentDimensionUnitId: newNode.parentDimensionUnitId,
+                                    aliasName: newNode.aliasName,
+                                    unitId: newNode.unitId
+                                });
+                                return false;
+                            } else {
+                                top.layer.msg("添加失败，请刷新页面后重试！", {
+                                    time: 1000,
+                                    icon: 5,
+                                    anim: 6
+                                });
+                            }
+                        }
+                    });
+                    return false;
+                });
             });
         };
 
@@ -121,48 +153,137 @@
             },
             callback: {
                 beforeClick: beforeTreeNodeClick,
-                onClick: onTreeNodeClick
+                onClick: onTreeNodeClick,
+                beforeEditName: beforeTreeNodeEditName, // 用于捕获节点编辑按钮的 click 事件，并且根据返回值确定是否允许进入名称编辑状态
+                beforeRename: beforeTreeNodeRename,     // 用于捕获节点编辑名称结束（Input 失去焦点 或 按下 Enter 键）之后，更新节点名称数据之前的事件回调函数，并且根据返回值确定是否允许更改名称的操作
+                beforeRemove: beforeTreeNodeRemove,     // 用于捕获节点被删除之前的事件回调函数，并且根据返回值确定是否允许删除操作
+                onRename: onTreeNodeRename,
+                onRemove: onTreeNodeRemove
             },
             edit: {
                 drag: {
                     isCopy: false,
                     isMove: false
                 },
-                enable: true
+                enable: true,
+                editNameSelectAll: true,   // 节点编辑名称 input 初次显示时,设置 txt 内容是否为全选状态。
+                removeTitle: "删除",       // 删除按钮的 Title 辅助信息
+                renameTitle: "重命名"      // 编辑名称按钮的 Title 辅助信息。
             }
         };
 
         function createDimUnitTree() {
-            // $.get(basePath + "/static/assets/json/dimensionUnits.json", function (result) {
             $.get(basePath + "/dimensionUnit/allChild", {
                 parentDimensionUnitId: 'dimension_ln',
                 dimensionId: 'city'
             }, function (result) {
-                console.log(result.data);
-                zTree.init($("#treeDemo"), setting, result.data);
+                zTree.init($("#tree_dimensionUnit"), setting, result.data);
             })
         }
 
         function beforeTreeNodeClick(treeId, treeNode, clickFlag) {
-            // console.log("===beforeTreeNodeClick===");
-            // console.log("treeId===" + treeId);
-            // console.log("treeNode===" + JSON.stringify(treeNode));
-            // console.log("clickFlag===" + clickFlag);
+            $(".queryForm")[0].reset();
         }
 
         function onTreeNodeClick(event, treeId, treeNode, clickFlag) {
-            $(".queryForm")[0].reset();
             cUnitId = treeNode.unitId;
             doQuery();
+        }
+
+        function beforeTreeNodeEditName(treeId, treeNode) {
+            // var zTreeObj = zTree.getZTreeObj("tree_dimensionUnit");
+            // zTreeObj.selectNode(treeNode);
+        }
+
+        /**
+         * @Description: 重命名操作
+         * @Param:
+         * @return:
+         * @Author: Liyiming
+         * @Date: 2018/5/3
+         */
+        function beforeTreeNodeRename(treeId, treeNode, newName, isCancel) {
+            var zTreeObj = zTree.getZTreeObj("tree_dimensionUnit");
+            if (newName.length == 0) {
+                setTimeout(function () {
+                    zTreeObj.cancelEditName();
+                }, 0);
+                top.layer.msg("节点名称不能为空！", {
+                    time: 2000,
+                    icon: 5,
+                    anim: 6
+                });
+                return false;
+            }
+            nonedit = newName === treeNode.aliasName;
+            return true;
+        }
+
+        var nonedit;
+
+        function onTreeNodeRename(e, treeId, treeNode, isCancel) {
+            if (!isCancel && !nonedit) {
+                $.ajax({
+                    type: "POST",
+                    async: false,
+                    url: basePath + "/unitAndDimensionUnit",
+                    data: {
+                        id: treeNode.unitId,
+                        name: treeNode.aliasName,
+                        _method: 'PUT'
+                    },
+                    success: function (result) {
+                        if (result.code == 0) {
+                            top.layer.msg(result.msg, {
+                                icon: 1,
+                                time: 1000
+                            })
+                        } else {
+                            top.layer.msg(result.msg, {
+                                time: 2000,
+                                icon: 5,
+                                anim: 6
+                            });
+                        }
+                    }
+                });
+            }
+            return false;
+        }
+
+        function beforeTreeNodeRemove(treeId, treeNode) {
+            return confirm('确定要删除 [ ' + treeNode.aliasName + ' ] 吗？');
+        }
+
+        function onTreeNodeRemove(e, treeId, treeNode) {
+            $.post({
+                url: basePath + '/unitAndDimensionUnit',
+                data: {
+                    'dimensionUnitId': treeNode.dimensionUnitId,
+                    '_method': 'delete'
+                },
+                success: function (result) {
+                    if (result.code == 0) {
+                        top.layer.msg(result.msg, {
+                            icon: 1,
+                            time: 1000
+                        })
+                        return true;
+                    } else {
+                        top.layer.msg(result.msg, {
+                            time: 2000,
+                            icon: 5,
+                            anim: 6
+                        });
+                        return false;
+                    }
+                }
+            });
         }
 
         //用户列表
         var tableIns = table.render({
             elem: '#table_user',
-            // url: basePath + '/user/unitUser',
-            // where: {
-            //     unitId: cUnitId
-            // },
             cellMinWidth: 95,
             page: true,
             height: "full-125",
@@ -173,15 +294,18 @@
                 {type: "checkbox", fixed: "left", width: 50},
                 {field: 'account', title: '账号', minWidth: 100, align: "center"},
                 {field: 'fullname', title: '姓名', minWidth: 100, align: "center"},
-                {field: 'email', title: '邮箱', minWidth: 200, align: 'center', templet: function (d) {
+                {
+                    field: 'email', title: '邮箱', minWidth: 200, align: 'center', templet: function (d) {
                         return '<a class="layui-blue" href="mailto:' + d.email + '">' + d.email + '</a>';
                     }
                 },
-                {field: 'sex', title: '性别', align: 'center', templet: function (d) {
+                {
+                    field: 'sex', title: '性别', align: 'center', templet: function (d) {
                         return codelist.getValueName("sex", d.sex);
                     }
                 },
-                {field: 'activeFlag', title: '用户状态', align: 'center', templet: function (d) {
+                {
+                    field: 'activeFlag', title: '用户状态', align: 'center', templet: function (d) {
                         return codelist.getValueName("activeFlag", d.activeFlag);
                     }
                 },
@@ -211,25 +335,33 @@
         }
 
         $(".btn_add").click(function () {
-            var index = layui.layer.open({
-                title: "添加用户",
-                type: 2,
-                maxmin: true,
-                area: ['1280px', '768px'],
-                content: basePath + "/page/sys_dimension_unitUserAdd",
-                success: function (layero, index) {
-                    // setTimeout(function () {
-                    //     layui.layer.tips('点击此处返回用户列表', '.layui-layer-setwin .layui-layer-close', {
-                    //         tips: 3
-                    //     });
-                    // }, 500)
-                }
-            })
-            // layui.layer.full(index);
-            // window.sessionStorage.setItem("index", index);
-            // $(window).on("resize", function () {
-            //     layui.layer.full(window.sessionStorage.getItem("index"));
-            // })
+            if (cUnitId != null) {
+                var index = layui.layer.open({
+                    title: "添加用户",
+                    type: 2,
+                    maxmin: true,
+                    area: ['1280px', '768px'],
+                    content: basePath + "/page/sys_dimension_unitUserAdd",
+                    success: function (layero, index) {
+                        // setTimeout(function () {
+                        //     layui.layer.tips('点击此处返回用户列表', '.layui-layer-setwin .layui-layer-close', {
+                        //         tips: 3
+                        //     });
+                        // }, 500)
+                    }
+                })
+                // layui.layer.full(index);
+                // window.sessionStorage.setItem("index", index);
+                // $(window).on("resize", function () {
+                //     layui.layer.full(window.sessionStorage.getItem("index"));
+                // })
+            }else{
+                top.layer.msg("请先选择一个组织单元！", {
+                    time: 2000,
+                    icon: 5,
+                    anim: 6
+                });
+            }
         })
 
         // 批量删除
@@ -252,18 +384,29 @@
                         },
                         success: function (result) {
                             top.layer.close(index);
-                            top.layer.msg(result.msg, {
-                                icon: 1,
-                                time: 500
-                            }, function () {
-                                doQuery();
-                                layer.close(index);
-                            });
+                            if (result.code == 0) {
+                                top.layer.msg(result.msg, {
+                                    icon: 1,
+                                    time: 1000
+                                }, function () {
+                                    doQuery();
+                                });
+                            } else {
+                                top.layer.msg(result.msg, {
+                                    time: 2000,
+                                    icon: 5,
+                                    anim: 6
+                                });
+                            }
                         }
                     });
                 })
             } else {
-                layer.msg("请选择需要删除的用户");
+                layer.msg("请选择需要删除的用户", {
+                    time: 2000,
+                    icon: 5,
+                    anim: 6
+                });
             }
         })
 
@@ -272,7 +415,7 @@
             var layEvent = obj.event,
                     data = obj.data;
             if (layEvent === 'doDetail') {//查看
-                layer.msg('姓名：' + data.fullname + ' 的查看操作');
+                layer.msg('姓名： [ ' + data.fullname + ' ] 的查看操作');
             } else if (layEvent === 'doDel') { //删除
                 layer.confirm('确定删除此用户？', {icon: 3, title: '提示信息'}, function (index) {
                     $.post({
@@ -284,13 +427,20 @@
                         },
                         success: function (result) {
                             top.layer.close(index);
-                            top.layer.msg(result.msg, {
-                                icon: 1,
-                                time: 500
-                            }, function () {
-                                doQuery();
-                                layer.close(index);
-                            });
+                            if (result.code == 0) {
+                                top.layer.msg(result.msg, {
+                                    icon: 1,
+                                    time: 1000
+                                }, function () {
+                                    doQuery();
+                                });
+                            } else {
+                                top.layer.msg(result.msg, {
+                                    time: 2000,
+                                    icon: 5,
+                                    anim: 6
+                                });
+                            }
                         }
                     });
                 });
