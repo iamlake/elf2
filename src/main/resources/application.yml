@@ -1,6 +1,7 @@
 server:
   port: 8088
   context-path: /elf
+#  servlet-path: /rest/*
 security:
   basic:
     enabled: false
@@ -84,3 +85,10 @@ mybatis-plus:
   configuration:
     map-underscore-to-camel-case: true
     cache-enabled: false
+
+cxf:
+  path: /services
+  servlet.init:
+    service-list-path: /info
+#  jaxrs:
+#    component-scan: true

@@ -34,7 +34,6 @@ public class ShiroConfig {
      */
     @Bean(name = "shiroFilter")
     public ShiroFilterFactoryBean shiroFilterFactoryBean(SecurityManager securityManager) {
-
         logger.info("注入Shiro的Web过滤器-->shiroFilter", ShiroFilterFactoryBean.class);
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
 
@@ -64,6 +63,7 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/page/login", "anon");
         // 外部API允许访问
         filterChainDefinitionMap.put("/api/**", "anon");
+        filterChainDefinitionMap.put("/services/**", "anon");
         filterChainDefinitionMap.put("/login", "anon");
         filterChainDefinitionMap.put("/**", "authc");
 
