@@ -1,19 +1,12 @@
 package com.elf;
 
-import com.elf.core.filter.ContextIntegrationFilter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerCustomizer;
 import org.springframework.boot.web.servlet.ErrorPage;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.web.filter.HiddenHttpMethodFilter;
-import org.springframework.web.filter.HttpPutFormContentFilter;
-import org.springframework.web.filter.RequestContextFilter;
-
-import javax.servlet.Filter;
 
 /**
  * @Description: ElfApplication
@@ -37,41 +30,5 @@ public class ElfApplication {
 
 			container.addErrorPages(error401Page, error404Page, error500Page);
 		});
-	}
-
-	@Bean
-	public FilterRegistrationBean hiddenHttpMethodFilterRegistrationBean() {
-		FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
-		filterRegistrationBean.setFilter(new HiddenHttpMethodFilter());
-		filterRegistrationBean.setOrder(1);
-		return filterRegistrationBean;
-	}
-
-	@Bean
-	public FilterRegistrationBean httpPutFormContentFilterRegistrationBean() {
-		FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
-		filterRegistrationBean.setFilter(new HttpPutFormContentFilter());
-		filterRegistrationBean.setOrder(2);
-		return filterRegistrationBean;
-	}
-	@Bean
-	public FilterRegistrationBean requestContextFilterRegistrationBean() {
-		FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
-		filterRegistrationBean.setFilter(new RequestContextFilter());
-		filterRegistrationBean.setOrder(3);
-		return filterRegistrationBean;
-	}
-
-	@Bean
-	public FilterRegistrationBean contextIntegrationFilterRegistration() {
-		FilterRegistrationBean registration = new FilterRegistrationBean();
-		registration.setFilter(contextIntegrationFilter());
-		registration.setOrder(4);
-		return registration;
-	}
-
-	@Bean
-	public Filter contextIntegrationFilter() {
-		return new ContextIntegrationFilter();
 	}
 }
