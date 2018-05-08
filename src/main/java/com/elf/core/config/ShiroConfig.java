@@ -63,7 +63,7 @@ public class ShiroConfig {
         filterChainDefinitionMap.put("/page/login", "anon");
         // 外部API允许访问
         filterChainDefinitionMap.put("/api/**", "anon");
-        filterChainDefinitionMap.put("/services/**", "anon");
+        filterChainDefinitionMap.put("/ws/**", "anon");
         filterChainDefinitionMap.put("/login", "anon");
         filterChainDefinitionMap.put("/**", "authc");
 

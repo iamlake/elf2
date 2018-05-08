@@ -28,7 +28,7 @@
         <shiro.version>1.3.2</shiro.version>
         <shiro-spring.version>1.4.0</shiro-spring.version>
         <shiro-ehcache.version>1.4.0</shiro-ehcache.version>
-        <cxf-jaxrs.version>3.2.1</cxf-jaxrs.version>
+        <cxf-jaxrs.version>3.1.11</cxf-jaxrs.version>
         <!-- jdbc driver setting -->
         <!-- tools version setting -->
         <jackson-jaxrs.version>2.9.5</jackson-jaxrs.version>
@@ -131,6 +131,21 @@
             <version>${kaptcha.version}</version>
         </dependency>
         <dependency>
+            <groupId>org.webjars</groupId>
+            <artifactId>swagger-ui</artifactId>
+            <version>3.13.6</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-rs-service-description-openapi-v3</artifactId>
+            <version>3.2.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.cxf</groupId>
+            <artifactId>cxf-rt-rs-service-description-swagger</artifactId>
+            <version>3.1.11</version>
+        </dependency>
+        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
@@ -139,7 +154,6 @@
             <groupId>com.jayway.jsonpath</groupId>
             <artifactId>json-path</artifactId>
         </dependency>
-
     </dependencies>
 
     <build>

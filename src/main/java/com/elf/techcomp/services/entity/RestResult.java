@@ -9,12 +9,12 @@ import java.util.Map;
 
 /**
  * @program: elf
- * @description: DataResult [Demo for CXF]
+ * @description: RestResult [Demo for CXF]
  * @author: Liyiming
  * @create: 2018-05-05 19:21
  **/
-@XmlRootElement(name = "dataResult")
-public class DataResult implements Serializable {
+@XmlRootElement(name = "restResult")
+public class RestResult implements Serializable {
     private List<User> list;
 
     private User[] array;
