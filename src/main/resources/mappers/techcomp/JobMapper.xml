@@ -2,11 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.elf.techcomp.scheduler.mapper.JobAndTriggerMapper">
 
-    <select id="getJobAndTriggerDetails" resultType="com.elf.techcomp.scheduler.entity.JobAndTrigger">
+    <select id="getJobAndTriggerDetails" parameterType="java.lang.String"
+            resultType="com.elf.techcomp.scheduler.entity.JobAndTrigger">
         SELECT
         qrtz_job_details.JOB_NAME as jobName,
         qrtz_job_details.JOB_GROUP as jobGroup,
         qrtz_job_details.JOB_CLASS_NAME as jobClassName,
+        qrtz_job_details.DESCRIPTION as description,
         qrtz_triggers.TRIGGER_NAME as triggerName,
         qrtz_triggers.TRIGGER_GROUP as triggerGroup,
         qrtz_cron_triggers.CRON_EXPRESSION as cronExpression,
@@ -17,6 +19,13 @@
         JOIN qrtz_cron_triggers ON qrtz_job_details.JOB_NAME = qrtz_triggers.JOB_NAME
         AND qrtz_triggers.TRIGGER_NAME = qrtz_cron_triggers.TRIGGER_NAME
         AND qrtz_triggers.TRIGGER_GROUP = qrtz_cron_triggers.TRIGGER_GROUP
+        WHERE 1=1
+        <if test="jobClassName != null and jobClassName != ''">
+            AND qrtz_job_details.JOB_CLASS_NAME = #{jobClassName,jdbcType=VARCHAR}
+        </if>
+        <if test="description != null and description != ''">
+            AND qrtz_job_details.DESCRIPTION like #{description,jdbcType=VARCHAR}
+        </if>
     </select>
 
 </mapper>

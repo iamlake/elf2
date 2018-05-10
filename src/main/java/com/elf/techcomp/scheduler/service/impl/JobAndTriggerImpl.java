@@ -23,8 +23,8 @@ public class JobAndTriggerImpl extends BaseServiceImpl<JobAndTriggerMapper, JobA
     private JobAndTriggerMapper jobAndTriggerMapper;
 
     @Override
-    public Page<JobAndTrigger> getJobAndTriggerDetails(Page<JobAndTrigger> page) {
-        List<JobAndTrigger> jobAndTriggerList = jobAndTriggerMapper.getJobAndTriggerDetails(page);
+    public Page<JobAndTrigger> getJobAndTriggerDetails(JobAndTrigger jobAndTrigger, Page<JobAndTrigger> page) {
+        List<JobAndTrigger> jobAndTriggerList = jobAndTriggerMapper.getJobAndTriggerDetails(jobAndTrigger.getJobClassName(), jobAndTrigger.getDescription() + "%", page);
         page = page.setRecords(jobAndTriggerList);
         return page;
     }

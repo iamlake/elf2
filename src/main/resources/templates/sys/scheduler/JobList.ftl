@@ -16,15 +16,15 @@
     <blockquote class="layui-elem-quote quoteBox">
         <form class="layui-form">
             <div class="layui-inline">
-                账号：
+                任务名称：
                 <div class="layui-input-inline">
-                    <input type="text" name="account" class="layui-input search_accont" placeholder="请输入账号"/>
+                    <input type="text" name="jobClassName" class="layui-input search_name" placeholder="请输入名称"/>
                 </div>
             </div>
             <div class="layui-inline">
-                姓名：
+                任务描述：
                 <div class="layui-input-inline">
-                    <input type="text" name="fullname" class="layui-input search_fullname" placeholder="请输入姓名"/>
+                    <input type="text" name="description" class="layui-input search_description" placeholder="请输入描述"/>
                 </div>
             </div>
             <div class="layui-inline">
@@ -41,12 +41,12 @@
     <script type="text/html" id="jobListBar">
         <a class="layui-btn layui-btn-xs" lay-event="doPause">暂停</a>
         <a class="layui-btn layui-btn-xs layui-btn-warm" lay-event="doResume">恢复</a>
+        <a class="layui-btn layui-btn-xs" lay-event="doEdit"><i class="layui-icon">&#xe642;</i>编辑</a>
         <a class="layui-btn layui-btn-xs layui-btn-danger" lay-event="doDel"><i class="layui-icon">&#xe640;</i>删除</a>
-        <a class="layui-btn layui-btn-xs" lay-event="doEdit"><i class="iconfont icon-edit"></i>编辑</a>
     </script>
 </form>
 <script type="text/javascript">
-    var oData, isNew, doQuery;
+    var oData, isNew;
     layui.use(['form', 'layer', 'table'], function () {
         var $ = layui.jquery,
                 layer = parent.layer === undefined ? layui.layer : top.layer,
@@ -55,7 +55,7 @@
         //用户列表
         var tableIns = table.render({
             elem: '#table_job',
-            url: basePath + '/job/query',
+            // url: basePath + '/job/query',
             cellMinWidth: 95,
             page: true,
             height: "full-125",
@@ -67,12 +67,17 @@
                 {field: 'jobName', title: '任务名称', minWidth: 100, align: "center"},
                 {field: 'jobGroup', title: '任务所在组', minWidth: 100, align: "center"},
                 {field: 'jobClassName', title: '任务类名', minWidth: 100, align: "center"},
-                {field: 'triggerName', title: '触发器名称', minWidth: 100, align: "center"},
-                {field: 'triggerGroup', title: '触发器所在组', minWidth: 100, align: "center"},
-                {field: 'cronExpression', title: '表达式', minWidth: 100, align: "center"},
-                {field: 'timeZoneId', title: '时区', minWidth: 100, align: "center"},
+                // {field: 'triggerName', title: '触发器名称', minWidth: 100, align: "center"},
+                // {field: 'triggerGroup', title: '触发器所在组', minWidth: 100, align: "center"},
+                {field: 'cronExpression', title: '表达式', minWidth: 150, align: "center"},
+                // {field: 'timeZoneId', title: '时区', minWidth: 100, align: "center"},
+                {field: 'description', title: '描述', minWidth: 150, align: "center"},
                 {title: '操作', minWidth: 225, templet: '#jobListBar', fixed: "right", align: "center"}
             ]]
+        });
+
+        $(function () {
+            doQuery();
         });
 
         //搜索
@@ -80,12 +85,12 @@
             doQuery();
         });
 
-        doQuery = function () {
+        function doQuery() {
             tableIns.reload({
                 url: basePath + '/job/query',
                 where: {
-                    // account: $(".search_accont").val(),
-                    // fullname: $(".search_fullname").val()
+                    jobClassName: $(".search_name").val(),
+                    description: $(".search_description").val()
                 }, page: {
                     curr: 1 //重新从第 1 页开始
                 }

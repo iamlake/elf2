@@ -12,37 +12,40 @@
     <meta name="format-detection" content="telephone=no">
 </head>
 <body class="childrenBody">
-<form class="layui-form layui-row jobForm">
-<#--<div class="layui-input-block layui-red pwdTips">&nbsp;</div>-->
-    <div class="layui-col-xs12 layui-col-sm6 layui-col-md6">
-        <div class="layui-form-item">
-            <label class="layui-form-label">任务名称</label>
+    <form class="layui-form" style="width:80%;">
+        <div class="layui-form-item layui-row layui-col-xs12">
+            <label class="layui-form-label">任务类名</label>
             <div class="layui-input-block">
-                <input type="text" class="layui-input" name="jobClassName">
+                <input type="text" class="layui-input jobClassName" placeholder="请输入任务类名" name="jobClassName">
             </div>
         </div>
-        <div class="layui-form-item">
+        <div class="layui-form-item layui-row layui-col-xs12">
             <label class="layui-form-label">任务分组</label>
             <div class="layui-input-block">
-                <input type="text" class="layui-input" name="jobGroup">
+                <input type="text" class="layui-input jobGroup" placeholder="请输入任务分组" name="jobGroup">
             </div>
         </div>
-        <div class="layui-form-item">
+        <div class="layui-form-item layui-row layui-col-xs12">
             <label class="layui-form-label">表达式</label>
             <div class="layui-input-block">
-                <input type="text" class="layui-input" name="cronExpression">
+                <input type="text" class="layui-input" placeholder="请输入表达式" name="cronExpression">
             </div>
         </div>
-        <div class="layui-form-item">
+        <div class="layui-form-item layui-row layui-col-xs12">
+            <label class="layui-form-label">描述</label>
             <div class="layui-input-block">
-                <button class="layui-btn" lay-submit="" lay-filter="save">确认修改</button>
-                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+                <textarea class="layui-textarea description" placeholder="请输入描述信息" name="description"></textarea>
             </div>
         </div>
-    </div>
-</form>
+        <div class="layui-form-item layui-row layui-col-xs12">
+            <div class="layui-input-block">
+                <button class="layui-btn layui-btn-sm" lay-submit="" lay-filter="save">保存</button>
+                <button type="reset" class="layui-btn layui-btn-sm layui-btn-primary">取消</button>
+            </div>
+        </div>
+    </form>
 <script type="text/javascript">
-    layui.use(['form', 'layer', 'laydate', 'table', 'laytpl', 'elf'], function () {
+    layui.use(['form', 'layer', 'table', 'elf'], function () {
         var form = layui.form,
                 layer = parent.layer === undefined ? layui.layer : top.layer,
                 $ = layui.jquery, elf = layui.elf;
@@ -51,6 +54,9 @@
         $(function () {
             if (!isNew) {
                 elf.setData($(".layui-form"), oData);
+                $('.jobClassName').attr("readonly", "readonly");
+                $('.jobGroup').attr("readonly", "readonly");
+                $('.description').attr("readonly", "readonly");
                 form.render();
             }
         });
@@ -81,8 +87,8 @@
                             // 0.5秒关闭（如果不配置，默认是3秒）
                         }, function () {
                             layer.closeAll("iframe");
-                            // 刷新父页面
-                            //parent.location.reload();
+                            //刷新父页面
+                            parent.location.reload();
                         });
                     }
                 });

@@ -25,4 +25,5 @@ public class JobAndTrigger {
     private BigInteger TIMES_TRIGGERED;
     private String cronExpression;
     private String timeZoneId;
+    private String description;
 }

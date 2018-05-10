@@ -11,5 +11,5 @@ import com.elf.techcomp.scheduler.entity.JobAndTrigger;
  * @create: 2018-05-08 21:10
  **/
 public interface JobAndTriggerService extends BaseService<JobAndTrigger> {
-    Page<JobAndTrigger> getJobAndTriggerDetails(Page<JobAndTrigger> page);
+    Page<JobAndTrigger> getJobAndTriggerDetails(JobAndTrigger jobAndTrigger, Page<JobAndTrigger> page);
 }

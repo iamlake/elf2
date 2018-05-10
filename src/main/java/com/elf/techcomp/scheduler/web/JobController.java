@@ -40,7 +40,7 @@ public class JobController extends BaseController {
     public Result createJob(JobAndTrigger jobAndTrigger) {
         JSONResult result = new JSONResult();
         try {
-            doJobAdd(jobAndTrigger.getJobClassName(), jobAndTrigger.getJobGroup(), jobAndTrigger.getCronExpression());
+            doJobAdd(jobAndTrigger.getJobClassName(), jobAndTrigger.getJobGroup(), jobAndTrigger.getCronExpression(), jobAndTrigger.getDescription());
             result.setCode(Global.RESULT_STAUTS_SUCCESS);
             result.setMsg("创建定时任务成功！");
         } catch (Exception ex) {
@@ -51,11 +51,14 @@ public class JobController extends BaseController {
         return result;
     }
 
-    public void doJobAdd(String jobClassName, String jobGroupName, String cronExpression) throws Exception {
+    public void doJobAdd(String jobClassName,
+                         String jobGroupName,
+                         String cronExpression,
+                         String jobDescription) throws Exception {
         // 启动调度器
         scheduler.start();
         // 构建job信息
-        JobDetail jobDetail = JobBuilder.newJob(getClass(jobClassName).getClass()).withIdentity(jobClassName, jobGroupName).build();
+        JobDetail jobDetail = JobBuilder.newJob(getClass(jobClassName).getClass()).withIdentity(jobClassName, jobGroupName).withDescription(jobDescription).build();
         // 表达式调度构建器(即任务执行的时间)
         CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(cronExpression);
         // 按新的cronExpression表达式构建一个新的trigger
@@ -129,12 +132,9 @@ public class JobController extends BaseController {
             TriggerKey triggerKey = TriggerKey.triggerKey(jobClassName, jobGroupName);
             // 表达式调度构建器
             CronScheduleBuilder scheduleBuilder = CronScheduleBuilder.cronSchedule(cronExpression);
-
             CronTrigger trigger = (CronTrigger) scheduler.getTrigger(triggerKey);
-
             // 按新的cronExpression表达式重新构建trigger
             trigger = trigger.getTriggerBuilder().withIdentity(triggerKey).withSchedule(scheduleBuilder).build();
-
             // 按新的trigger重新设置job执行
             scheduler.rescheduleJob(triggerKey, trigger);
         } catch (SchedulerException e) {
@@ -166,13 +166,13 @@ public class JobController extends BaseController {
     }
 
     @GetMapping("/query")
-    public Result queryJob(@RequestParam(value = "page") Integer pageNum, @RequestParam(value = "limit") Integer pageSize) {
+    public Result queryJob(JobAndTrigger jobAndTrigger, @RequestParam(value = "page") Integer pageNum, @RequestParam(value = "limit") Integer pageSize) {
         Page page = new Page(pageNum, pageSize);
-        Page<JobAndTrigger> jobAndTrigger = jobAndTriggerService.getJobAndTriggerDetails(page);
+        Page<JobAndTrigger> jobAndTriggerData = jobAndTriggerService.getJobAndTriggerDetails(jobAndTrigger, page);
         QueryResult<JobAndTrigger> result = new QueryResult<>();
         result.setCode(Global.RESULT_STAUTS_SUCCESS);
-        result.setData(jobAndTrigger.getRecords());
-        result.setCount(jobAndTrigger.getTotal());
+        result.setData(jobAndTriggerData.getRecords());
+        result.setCount(jobAndTriggerData.getTotal());
         return result;
     }
 
