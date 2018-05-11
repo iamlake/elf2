@@ -7,7 +7,6 @@ import com.elf.core.persistence.result.Result;
 import com.elf.core.web.BaseController;
 import com.elf.sys.ria.entity.App;
 import com.elf.sys.ria.service.AppService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -36,7 +35,9 @@ public class AppController extends BaseController {
      */
     @GetMapping("/app")
     public Result findAppList(App app) {
-        List<App> list = appService.selectList(new EntityWrapper<>(app));
+        EntityWrapper<App> entityWrapper = new EntityWrapper<>(app);
+        entityWrapper.orderBy("app_order", true);
+        List<App> list = appService.selectList(entityWrapper);
         return new QueryResult<>(Global.RESULT_STAUTS_SUCCESS, "", list, list.size());
     }
 

@@ -52,7 +52,6 @@
                 layer = parent.layer === undefined ? layui.layer : top.layer,
                 table = layui.table;
 
-        //用户列表
         var tableIns = table.render({
             elem: '#table_job',
             // url: basePath + '/job/query',

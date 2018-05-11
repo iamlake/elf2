@@ -29,10 +29,11 @@ public class CryptoUtils {
         String stmp = "";
         for (int n = 0; n < b.length; n++) {
             stmp = (Integer.toHexString(b[n] & 0XFF));
-            if (stmp.length() == 1)
+            if (stmp.length() == 1) {
                 hs = hs + "0" + stmp;
-            else
+            }else {
                 hs = hs + stmp;
+            }
         }
         return hs.toUpperCase();
     }
@@ -41,12 +42,14 @@ public class CryptoUtils {
      * <br>Description: hex2byte
      * <br>Author:李一鸣(li-yiming@neusoft.com)
      * <br>Date:2013-6-18
+     *
      * @param b
      * @return
      */
     public static byte[] hex2byte(byte[] b) {
-        if ((b.length % 2) != 0)
+        if ((b.length % 2) != 0) {
             throw new IllegalArgumentException("长度不是偶数！");
+        }
         byte[] b2 = new byte[b.length / 2];
         for (int n = 0; n < b.length; n += 2) {
             String item = new String(b, n, 2);
