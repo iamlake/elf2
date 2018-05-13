@@ -81,8 +81,6 @@
                 where: {
                     codeType: $(".search_codeType").val(),
                     codeTypeName: $(".search_codeTypeName").val()
-                }, page: {
-                    curr: 1 //重新从第 1 页开始
                 }
             })
         }

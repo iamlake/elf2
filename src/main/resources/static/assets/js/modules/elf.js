@@ -166,14 +166,28 @@ layui.define(['jquery', 'linq'], function (exports) {
          * @Author: Liyiming
          * @Date: 2018/4/19
          */
-        checkUrl: function CheckUrl(url) {
+        checkUrl: function (url) {
             var reg = /^([hH][tT]{2}[pP]:\/\/|[hH][tT]{2}[pP][sS]:\/\/)(([A-Za-z0-9-~]+)\.)+([A-Za-z0-9-~\/])+$/;
-            if (!reg.test(url)) {
+            if (!reg.test(url))
                 return false;
-            }
-            else {
+            else
                 return true;
+        },
+        /**
+         * @Description: 判断数组中是否存在重复值
+         * @Param: {arr}
+         * @return: boolean
+         * @Author: Liyiming
+         * @Date: 2018/5/13
+         */
+        checkArrRepeated: function (arr) {
+            var hash = {};
+            for (var i in arr) {
+                if (hash[arr[i]])
+                    return true;
+                hash[arr[i]] = true;
             }
+            return false;
         }
     }
 

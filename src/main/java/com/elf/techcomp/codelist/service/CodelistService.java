@@ -17,4 +17,6 @@ public interface CodelistService extends BaseService<Codelist> {
     List<Codelist> getCodeTypeList(Codelist codelist);
 
     int deleteCodeTypeList(String codeType);
+
+    List<Codelist> saveCodelist(List<Codelist> codelists);
 }

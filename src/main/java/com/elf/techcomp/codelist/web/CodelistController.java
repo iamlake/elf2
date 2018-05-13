@@ -8,9 +8,7 @@ import com.elf.core.web.BaseController;
 import com.elf.techcomp.codelist.entity.Codelist;
 import com.elf.techcomp.codelist.service.CodelistService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -74,6 +72,26 @@ public class CodelistController extends BaseController {
         } catch (Exception ex) {
             result.setCode(Global.RESULT_STAUTS_FAILED);
             result.setMsg("删除失败！");
+            result.getErrors().put("exception", ex);
+        }
+        return result;
+    }
+
+    @PostMapping("/codelist/type")
+    public Result saveCodelist(@RequestBody List<Codelist> codelists) {
+        JSONResult result = new JSONResult();
+        try {
+            List<Codelist> newCodelists = codelistService.saveCodelist(codelists);
+            result.setCode(Global.RESULT_STAUTS_SUCCESS);
+            if (newCodelists.size() > 0) {
+                result.setMsg("保存成功！");
+            } else {
+                result.setMsg("没有数据被保存！");
+            }
+            result.getParameters().put("object", newCodelists);
+        } catch (Exception ex) {
+            result.setCode(Global.RESULT_STAUTS_FAILED);
+            result.setMsg("保存失败！");
             result.getErrors().put("exception", ex);
         }
         return result;
