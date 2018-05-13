@@ -57,9 +57,9 @@ public class BusiRoleServiceImpl implements BusiRoleService {
 		busiRole.setId(id);
 		busiRole.setActiveFlag("T");
 		busiRole.setCreatedBy(account);
-		busiRole.setCreationDate(time);
-		busiRole.setLastUpdatedBy(account);
-		busiRole.setLastUpdateDate(time);
+		busiRole.setCreationTime(time);
+		busiRole.setModifiedBy(account);
+		busiRole.setModificationTime(time);
 		busiRoleMapper.insertSelective(busiRole);
 		
 		return busiRole;    	
@@ -76,8 +76,8 @@ public class BusiRoleServiceImpl implements BusiRoleService {
     	User user = ContextHolder.getContext().getCurrentUser();
     	String account = user.getAccount();
 		Timestamp time = new Timestamp(new Date().getTime());
-		busiRole.setLastUpdatedBy(account);
-		busiRole.setLastUpdateDate(time);
+		busiRole.setModifiedBy(account);
+		busiRole.setModificationTime(time);
 		busiRoleMapper.updateByPrimaryKeySelective(busiRole);
 		
 		return busiRole;    	
@@ -127,9 +127,9 @@ public class BusiRoleServiceImpl implements BusiRoleService {
 			busiRoleUser.setUserId(userId);
 			busiRoleUser.setActiveFlag("T");
 			busiRoleUser.setCreatedBy(account);
-			busiRoleUser.setCreationDate(time);
-			busiRoleUser.setLastUpdatedBy(account);
-			busiRoleUser.setLastUpdateDate(time);
+			busiRoleUser.setCreationTime(time);
+			busiRoleUser.setModifiedBy(account);
+			busiRoleUser.setModificationTime(time);
 			busiRoleUserMapper.insertSelective(busiRoleUser);
 		}
 		  	
