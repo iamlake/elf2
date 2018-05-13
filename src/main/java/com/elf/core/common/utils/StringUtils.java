@@ -284,10 +284,11 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
      * @return
      */
     public static String trimToEmpty(Object o) {
-        if (o != null)
+        if (o != null) {
             return trimToEmpty(o.toString());
-        else
+        }else {
             return "";
+        }
     }
 
     /**

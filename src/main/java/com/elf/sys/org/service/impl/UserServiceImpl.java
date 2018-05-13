@@ -72,7 +72,7 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
 
     @Override
     public List<User> getUsers(User user, List<String> withoutIds) {
-        EntityWrapper entityWrapper = new EntityWrapper();
+        EntityWrapper<User> entityWrapper = new EntityWrapper<>();
         if (StringUtils.isNotBlank(user.getAccount())) {
             entityWrapper.eq("account", user.getAccount());
         }
