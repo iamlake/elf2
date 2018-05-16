@@ -10,7 +10,7 @@ logging:
 
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/elfdb?useUnicode=true&characterEncoding=UTF-8
+    url: jdbc:mysql://localhost:3306/elf?useUnicode=true&characterEncoding=UTF-8
     username: root
     password: 102526
     # 使用druid数据源

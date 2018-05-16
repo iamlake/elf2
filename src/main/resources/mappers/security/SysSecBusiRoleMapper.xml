@@ -5,13 +5,17 @@
     <id column="id" jdbcType="VARCHAR" property="id" />
     <result column="name" jdbcType="VARCHAR" property="name" />
     <result column="description" jdbcType="VARCHAR" property="description" />
-    <result column="active_flag" jdbcType="VARCHAR" property="activeFlag" />
     <result column="time_begin" jdbcType="TIMESTAMP" property="timeBegin" />
     <result column="time_end" jdbcType="TIMESTAMP" property="timeEnd" />
-    <result column="created_by" jdbcType="VARCHAR" property="createdBy" />
-    <result column="creation_date" jdbcType="TIMESTAMP" property="creationDate" />
-    <result column="last_updated_by" jdbcType="VARCHAR" property="lastUpdatedBy" />
-    <result column="last_update_date" jdbcType="TIMESTAMP" property="lastUpdateDate" />
+    <result column="REMARK" jdbcType="VARCHAR" property="remark" />
+    <result column="ACTIVE_FLAG" jdbcType="VARCHAR" property="activeFlag" />
+    <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy" />
+    <result column="CREATION_TIME" jdbcType="TIMESTAMP" property="creationTime" />
+    <result column="MODIFIED_BY" jdbcType="VARCHAR" property="modifiedBy" />
+    <result column="MODIFICATION_TIME" jdbcType="TIMESTAMP" property="modificationTime" />
+    <result column="EXT1" jdbcType="VARCHAR" property="ext1" />
+    <result column="EXT2" jdbcType="VARCHAR" property="ext2" />
+    <result column="EXT3" jdbcType="VARCHAR" property="ext3" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -72,8 +76,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, name, description, active_flag, time_begin, time_end, created_by, creation_date, 
-    last_updated_by, last_update_date
+    id, name, description, time_begin, time_end, REMARK, ACTIVE_FLAG, CREATED_BY, CREATION_TIME,
+    MODIFIED_BY, MODIFICATION_TIME, EXT1, EXT2, EXT3
   </sql>
   <select id="selectByExample" parameterType="com.elf.sys.security.entity.SysSecBusiRoleExample" resultMap="BaseResultMap">
     select
@@ -90,7 +94,7 @@
     </if>
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select 
+    select
     <include refid="Base_Column_List" />
     from sys_sec_busi_role
     where id = #{id,jdbcType=VARCHAR}
@@ -106,14 +110,16 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.elf.sys.security.entity.SysSecBusiRole">
-    insert into sys_sec_busi_role (id, name, description, 
-      active_flag, time_begin, time_end, 
-      created_by, creation_date, last_updated_by, 
-      last_update_date)
-    values (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, 
-      #{activeFlag,jdbcType=VARCHAR}, #{timeBegin,jdbcType=TIMESTAMP}, #{timeEnd,jdbcType=TIMESTAMP}, 
-      #{createdBy,jdbcType=VARCHAR}, #{creationDate,jdbcType=TIMESTAMP}, #{lastUpdatedBy,jdbcType=VARCHAR}, 
-      #{lastUpdateDate,jdbcType=TIMESTAMP})
+    insert into sys_sec_busi_role (id, name, description,
+    time_begin, time_end, REMARK,
+    ACTIVE_FLAG, CREATED_BY, CREATION_TIME,
+    MODIFIED_BY, MODIFICATION_TIME, EXT1,
+    EXT2, EXT3)
+    values (#{id,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR},
+    #{timeBegin,jdbcType=TIMESTAMP}, #{timeEnd,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR},
+    #{activeFlag,jdbcType=VARCHAR}, #{createdBy,jdbcType=VARCHAR}, #{creationTime,jdbcType=TIMESTAMP},
+    #{modifiedBy,jdbcType=VARCHAR}, #{modificationTime,jdbcType=TIMESTAMP}, #{ext1,jdbcType=VARCHAR},
+    #{ext2,jdbcType=VARCHAR}, #{ext3,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.elf.sys.security.entity.SysSecBusiRole">
     insert into sys_sec_busi_role
@@ -127,26 +133,38 @@
       <if test="description != null">
         description,
       </if>
-      <if test="activeFlag != null">
-        active_flag,
-      </if>
       <if test="timeBegin != null">
         time_begin,
       </if>
       <if test="timeEnd != null">
         time_end,
       </if>
+      <if test="remark != null">
+        REMARK,
+      </if>
+      <if test="activeFlag != null">
+        ACTIVE_FLAG,
+      </if>
       <if test="createdBy != null">
-        created_by,
+        CREATED_BY,
       </if>
-      <if test="creationDate != null">
-        creation_date,
+      <if test="creationTime != null">
+        CREATION_TIME,
       </if>
-      <if test="lastUpdatedBy != null">
-        last_updated_by,
+      <if test="modifiedBy != null">
+        MODIFIED_BY,
       </if>
-      <if test="lastUpdateDate != null">
-        last_update_date,
+      <if test="modificationTime != null">
+        MODIFICATION_TIME,
+      </if>
+      <if test="ext1 != null">
+        EXT1,
+      </if>
+      <if test="ext2 != null">
+        EXT2,
+      </if>
+      <if test="ext3 != null">
+        EXT3,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -159,26 +177,38 @@
       <if test="description != null">
         #{description,jdbcType=VARCHAR},
       </if>
-      <if test="activeFlag != null">
-        #{activeFlag,jdbcType=VARCHAR},
-      </if>
       <if test="timeBegin != null">
         #{timeBegin,jdbcType=TIMESTAMP},
       </if>
       <if test="timeEnd != null">
         #{timeEnd,jdbcType=TIMESTAMP},
       </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="activeFlag != null">
+        #{activeFlag,jdbcType=VARCHAR},
+      </if>
       <if test="createdBy != null">
         #{createdBy,jdbcType=VARCHAR},
       </if>
-      <if test="creationDate != null">
-        #{creationDate,jdbcType=TIMESTAMP},
+      <if test="creationTime != null">
+        #{creationTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="lastUpdatedBy != null">
-        #{lastUpdatedBy,jdbcType=VARCHAR},
+      <if test="modifiedBy != null">
+        #{modifiedBy,jdbcType=VARCHAR},
       </if>
-      <if test="lastUpdateDate != null">
-        #{lastUpdateDate,jdbcType=TIMESTAMP},
+      <if test="modificationTime != null">
+        #{modificationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ext1 != null">
+        #{ext1,jdbcType=VARCHAR},
+      </if>
+      <if test="ext2 != null">
+        #{ext2,jdbcType=VARCHAR},
+      </if>
+      <if test="ext3 != null">
+        #{ext3,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -200,26 +230,38 @@
       <if test="record.description != null">
         description = #{record.description,jdbcType=VARCHAR},
       </if>
-      <if test="record.activeFlag != null">
-        active_flag = #{record.activeFlag,jdbcType=VARCHAR},
-      </if>
       <if test="record.timeBegin != null">
         time_begin = #{record.timeBegin,jdbcType=TIMESTAMP},
       </if>
       <if test="record.timeEnd != null">
         time_end = #{record.timeEnd,jdbcType=TIMESTAMP},
       </if>
+      <if test="record.remark != null">
+        REMARK = #{record.remark,jdbcType=VARCHAR},
+      </if>
+      <if test="record.activeFlag != null">
+        ACTIVE_FLAG = #{record.activeFlag,jdbcType=VARCHAR},
+      </if>
       <if test="record.createdBy != null">
-        created_by = #{record.createdBy,jdbcType=VARCHAR},
+        CREATED_BY = #{record.createdBy,jdbcType=VARCHAR},
       </if>
-      <if test="record.creationDate != null">
-        creation_date = #{record.creationDate,jdbcType=TIMESTAMP},
+      <if test="record.creationTime != null">
+        CREATION_TIME = #{record.creationTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.lastUpdatedBy != null">
-        last_updated_by = #{record.lastUpdatedBy,jdbcType=VARCHAR},
+      <if test="record.modifiedBy != null">
+        MODIFIED_BY = #{record.modifiedBy,jdbcType=VARCHAR},
       </if>
-      <if test="record.lastUpdateDate != null">
-        last_update_date = #{record.lastUpdateDate,jdbcType=TIMESTAMP},
+      <if test="record.modificationTime != null">
+        MODIFICATION_TIME = #{record.modificationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.ext1 != null">
+        EXT1 = #{record.ext1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ext2 != null">
+        EXT2 = #{record.ext2,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ext3 != null">
+        EXT3 = #{record.ext3,jdbcType=VARCHAR},
       </if>
     </set>
     <if test="_parameter != null">
@@ -229,15 +271,19 @@
   <update id="updateByExample" parameterType="map">
     update sys_sec_busi_role
     set id = #{record.id,jdbcType=VARCHAR},
-      name = #{record.name,jdbcType=VARCHAR},
-      description = #{record.description,jdbcType=VARCHAR},
-      active_flag = #{record.activeFlag,jdbcType=VARCHAR},
-      time_begin = #{record.timeBegin,jdbcType=TIMESTAMP},
-      time_end = #{record.timeEnd,jdbcType=TIMESTAMP},
-      created_by = #{record.createdBy,jdbcType=VARCHAR},
-      creation_date = #{record.creationDate,jdbcType=TIMESTAMP},
-      last_updated_by = #{record.lastUpdatedBy,jdbcType=VARCHAR},
-      last_update_date = #{record.lastUpdateDate,jdbcType=TIMESTAMP}
+    name = #{record.name,jdbcType=VARCHAR},
+    description = #{record.description,jdbcType=VARCHAR},
+    time_begin = #{record.timeBegin,jdbcType=TIMESTAMP},
+    time_end = #{record.timeEnd,jdbcType=TIMESTAMP},
+    REMARK = #{record.remark,jdbcType=VARCHAR},
+    ACTIVE_FLAG = #{record.activeFlag,jdbcType=VARCHAR},
+    CREATED_BY = #{record.createdBy,jdbcType=VARCHAR},
+    CREATION_TIME = #{record.creationTime,jdbcType=TIMESTAMP},
+    MODIFIED_BY = #{record.modifiedBy,jdbcType=VARCHAR},
+    MODIFICATION_TIME = #{record.modificationTime,jdbcType=TIMESTAMP},
+    EXT1 = #{record.ext1,jdbcType=VARCHAR},
+    EXT2 = #{record.ext2,jdbcType=VARCHAR},
+    EXT3 = #{record.ext3,jdbcType=VARCHAR}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -251,26 +297,38 @@
       <if test="description != null">
         description = #{description,jdbcType=VARCHAR},
       </if>
-      <if test="activeFlag != null">
-        active_flag = #{activeFlag,jdbcType=VARCHAR},
-      </if>
       <if test="timeBegin != null">
         time_begin = #{timeBegin,jdbcType=TIMESTAMP},
       </if>
       <if test="timeEnd != null">
         time_end = #{timeEnd,jdbcType=TIMESTAMP},
       </if>
+      <if test="remark != null">
+        REMARK = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="activeFlag != null">
+        ACTIVE_FLAG = #{activeFlag,jdbcType=VARCHAR},
+      </if>
       <if test="createdBy != null">
-        created_by = #{createdBy,jdbcType=VARCHAR},
+        CREATED_BY = #{createdBy,jdbcType=VARCHAR},
       </if>
-      <if test="creationDate != null">
-        creation_date = #{creationDate,jdbcType=TIMESTAMP},
+      <if test="creationTime != null">
+        CREATION_TIME = #{creationTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="lastUpdatedBy != null">
-        last_updated_by = #{lastUpdatedBy,jdbcType=VARCHAR},
+      <if test="modifiedBy != null">
+        MODIFIED_BY = #{modifiedBy,jdbcType=VARCHAR},
       </if>
-      <if test="lastUpdateDate != null">
-        last_update_date = #{lastUpdateDate,jdbcType=TIMESTAMP},
+      <if test="modificationTime != null">
+        MODIFICATION_TIME = #{modificationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="ext1 != null">
+        EXT1 = #{ext1,jdbcType=VARCHAR},
+      </if>
+      <if test="ext2 != null">
+        EXT2 = #{ext2,jdbcType=VARCHAR},
+      </if>
+      <if test="ext3 != null">
+        EXT3 = #{ext3,jdbcType=VARCHAR},
       </if>
     </set>
     where id = #{id,jdbcType=VARCHAR}
@@ -279,13 +337,17 @@
     update sys_sec_busi_role
     set name = #{name,jdbcType=VARCHAR},
       description = #{description,jdbcType=VARCHAR},
-      active_flag = #{activeFlag,jdbcType=VARCHAR},
       time_begin = #{timeBegin,jdbcType=TIMESTAMP},
       time_end = #{timeEnd,jdbcType=TIMESTAMP},
-      created_by = #{createdBy,jdbcType=VARCHAR},
-      creation_date = #{creationDate,jdbcType=TIMESTAMP},
-      last_updated_by = #{lastUpdatedBy,jdbcType=VARCHAR},
-      last_update_date = #{lastUpdateDate,jdbcType=TIMESTAMP}
+      REMARK = #{remark,jdbcType=VARCHAR},
+      ACTIVE_FLAG = #{activeFlag,jdbcType=VARCHAR},
+      CREATED_BY = #{createdBy,jdbcType=VARCHAR},
+      CREATION_TIME = #{creationTime,jdbcType=TIMESTAMP},
+      MODIFIED_BY = #{modifiedBy,jdbcType=VARCHAR},
+      MODIFICATION_TIME = #{modificationTime,jdbcType=TIMESTAMP},
+      EXT1 = #{ext1,jdbcType=VARCHAR},
+      EXT2 = #{ext2,jdbcType=VARCHAR},
+      EXT3 = #{ext3,jdbcType=VARCHAR}
     where id = #{id,jdbcType=VARCHAR}
   </update>
   <select id="getBusiRolesByUserId" parameterType="java.lang.String" resultMap="BaseResultMap">

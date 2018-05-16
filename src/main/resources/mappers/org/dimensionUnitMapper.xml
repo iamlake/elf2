@@ -2,18 +2,17 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.elf.sys.org.mapper.DimensionUnitMapper">
     <resultMap id="BaseResultMap" type="com.elf.sys.org.entity.DimensionUnit">
-        <id column="dimension_unit_id" jdbcType="VARCHAR" property="dimensionUnitId"/>
-        <result column="dimension_id" jdbcType="VARCHAR" property="dimensionId"/>
-        <result column="unit_id" jdbcType="VARCHAR" property="unitId"/>
-        <result column="parent_dimension_unit_id" jdbcType="VARCHAR" property="parentDimensionUnitId"/>
-        <result column="alias_name" jdbcType="VARCHAR" property="aliasName"/>
-        <result column="unit_path" jdbcType="VARCHAR" property="unitPath"/>
-        <result column="depth" jdbcType="DECIMAL" property="depth"/>
-        <result column="sort" jdbcType="DECIMAL" property="sort"/>
-        <result column="time_begin" jdbcType="TIMESTAMP" property="timeBegin"/>
-        <result column="time_end" jdbcType="TIMESTAMP" property="timeEnd"/>
-        <result column="description" jdbcType="VARCHAR" property="description"/>
-        <result column="is_enabled" jdbcType="CHAR" property="isEnabled"/>
+        <id column="DIMENSION_UNIT_ID" jdbcType="VARCHAR" property="dimensionUnitId"/>
+        <result column="DIMENSION_ID" jdbcType="VARCHAR" property="dimensionId"/>
+        <result column="UNIT_ID" jdbcType="VARCHAR" property="unitId"/>
+        <result column="PARENT_DIMENSION_UNIT_ID" jdbcType="VARCHAR" property="parentDimensionUnitId"/>
+        <result column="ALIAS_NAME" jdbcType="VARCHAR" property="aliasName"/>
+        <result column="UNIT_PATH" jdbcType="VARCHAR" property="unitPath"/>
+        <result column="DIMENSION_UNIT_LEVEL" jdbcType="VARCHAR" property="dimensionUnitLevel"/>
+        <result column="DIMENSION_UNIT_ORDER" jdbcType="DECIMAL" property="dimensionUnitOrder"/>
+        <result column="TIME_BEGIN" jdbcType="VARCHAR" property="timeBegin"/>
+        <result column="TIME_END" jdbcType="VARCHAR" property="timeEnd"/>
+        <result column="IS_ENABLED" jdbcType="CHAR" property="isEnabled"/>
         <result column="REMARK" jdbcType="VARCHAR" property="remark"/>
         <result column="ACTIVE_FLAG" jdbcType="VARCHAR" property="activeFlag"/>
         <result column="CREATED_BY" jdbcType="VARCHAR" property="createdBy"/>
@@ -24,15 +23,12 @@
         <result column="EXT2" jdbcType="VARCHAR" property="ext2"/>
         <result column="EXT3" jdbcType="VARCHAR" property="ext3"/>
         <association property="dimension" javaType="com.elf.sys.org.entity.Dimension">
-            <id column="dimension$id" jdbcType="VARCHAR" property="id"/>
-            <result column="dimension$name" jdbcType="VARCHAR" property="name"/>
-            <result column="dimension$type" jdbcType="CHAR" property="type"/>
-            <result column="dimension$description" jdbcType="VARCHAR" property="description"/>
-            <result column="dimension$is_default" jdbcType="CHAR" property="isDefault"/>
-            <result column="dimension$sort" jdbcType="DECIMAL" property="sort"/>
-            <result column="dimension$time_begin" jdbcType="TIMESTAMP" property="timeBegin"/>
-            <result column="dimension$time_end" jdbcType="TIMESTAMP" property="timeEnd"/>
-            <result column="dimension$is_enabled" jdbcType="CHAR" property="isEnabled"/>
+            <id column="dimension$DIMENSION_ID" jdbcType="VARCHAR" property="dimensionId"/>
+            <result column="dimension$DIMENSION_NAME" jdbcType="VARCHAR" property="dimensionName"/>
+            <result column="dimension$DIMENSION_TYPE" jdbcType="CHAR" property="dimensionType"/>
+            <result column="dimension$DESCRIPTION" jdbcType="VARCHAR" property="description"/>
+            <result column="dimension$IS_DEFAULT" jdbcType="CHAR" property="isDefault"/>
+            <result column="dimension$DIMENSION_ORDER" jdbcType="DECIMAL" property="dimensionOrder"/>
             <result column="dimension$REMARK" jdbcType="VARCHAR" property="remark"/>
             <result column="dimension$ACTIVE_FLAG" jdbcType="VARCHAR" property="activeFlag"/>
             <result column="dimension$CREATED_BY" jdbcType="VARCHAR" property="createdBy"/>
@@ -44,14 +40,13 @@
             <result column="dimension$EXT3" jdbcType="VARCHAR" property="ext3"/>
         </association>
         <association property="unit" javaType="com.elf.sys.org.entity.Unit">
-            <id column="unit$id" jdbcType="VARCHAR" property="id"/>
-            <result column="unit$name" jdbcType="VARCHAR" property="name"/>
-            <result column="unit$description" jdbcType="VARCHAR" property="description"/>
-            <result column="unit$code" jdbcType="VARCHAR" property="code"/>
-            <result column="unit$type_id" jdbcType="VARCHAR" property="typeId"/>
-            <result column="unit$time_begin" jdbcType="TIMESTAMP" property="timeBegin"/>
-            <result column="unit$time_end" jdbcType="TIMESTAMP" property="timeEnd"/>
-            <result column="unit$is_enabled" jdbcType="CHAR" property="isEnabled"/>
+            <id column="unit$UNIT_ID" jdbcType="VARCHAR" property="unitId"/>
+            <result column="unit$UNIT_NAME" jdbcType="VARCHAR" property="unitName"/>
+            <result column="unit$UNIT_CODE" jdbcType="VARCHAR" property="unitCode"/>
+            <result column="unit$UNIT_TYPE" jdbcType="VARCHAR" property="unitType"/>
+            <result column="unit$TIME_BEGIN" jdbcType="VARCHAR" property="timeBegin"/>
+            <result column="unit$TIME_END" jdbcType="VARCHAR" property="timeEnd"/>
+            <result column="unit$IS_ENABLED" jdbcType="VARCHAR" property="isEnabled"/>
             <result column="unit$REMARK" jdbcType="VARCHAR" property="remark"/>
             <result column="unit$ACTIVE_FLAG" jdbcType="VARCHAR" property="activeFlag"/>
             <result column="unit$CREATED_BY" jdbcType="VARCHAR" property="createdBy"/>
@@ -76,22 +71,22 @@
       where du.dimension_id = #{dimensionId,jdbcType=VARCHAR}
       and du.parent_dimension_unit_id = '-1'
     </select> -->
-    <select id="getChildDimensionUnitList" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select 
-    du.*, d.id as dimension$id, d.name as dimension$name, u.id as unit$id, u.code as unit$code 
-    from sys_org_dimension_unit du, sys_org_dimension d, sys_org_unit u
-    where du.dimension_id = d.id
-    and du.unit_id = u.id
-    and du.parent_dimension_unit_id = #{parentDimensionUnitId,jdbcType=VARCHAR}
-    and d.id = #{dimensionId,jdbcType=VARCHAR}
-  </select>
-    <select id="getDimensionUnitsByUnitPath" parameterType="java.lang.String" resultMap="BaseResultMap">
-    select 
-    du.*, d.id as dimension$id, d.name as dimension$name, u.id as unit$id, u.name as unit$name, u.code as unit$code 
-    from sys_org_dimension_unit du, sys_org_dimension d, sys_org_unit u
-    where du.dimension_id = d.id
-    and du.unit_id = u.id
-    and du.unit_path like #{unitPath,jdbcType=VARCHAR}
-    and d.id = #{dimensionId,jdbcType=VARCHAR}
-  </select>
+    <select id="selectChildDimensionUnitList" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        du.*, d.DIMENSION_ID as dimension$DIMENSION_ID, d.DIMENSION_NAME as dimension$DIMENSION_NAME, u.UNIT_ID as unit$UNIT_ID, u.UNIT_CODE as unit$UNIT_CODE
+        from sys_org_dimension_unit du, sys_org_dimension d, sys_org_unit u
+        where du.DIMENSION_ID = d.DIMENSION_ID
+        and du.UNIT_ID = u.UNIT_ID
+        and du.PARENT_DIMENSION_UNIT_ID = #{parentDimensionUnitId,jdbcType=VARCHAR}
+        and d.DIMENSION_ID = #{dimensionId,jdbcType=VARCHAR}
+    </select>
+    <select id="selectDimensionUnitsByUnitPath" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        du.*, d.DIMENSION_ID as dimension$DIMENSION_ID, d.DIMENSION_NAME as dimension$DIMENSION_NAME, u.UNIT_ID as unit$UNIT_ID, u.UNIT_NAME as unit$UNIT_NAME, u.UNIT_CODE as unit$UNIT_CODE
+        from sys_org_dimension_unit du, sys_org_dimension d, sys_org_unit u
+        where du.DIMENSION_ID = d.DIMENSION_ID
+        and du.UNIT_ID = u.UNIT_ID
+        and du.UNIT_PATH like #{unitPath,jdbcType=VARCHAR}
+        and d.DIMENSION_ID = #{dimensionId,jdbcType=VARCHAR}
+    </select>
 </mapper>

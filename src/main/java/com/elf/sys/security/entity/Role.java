@@ -1,4 +1,4 @@
-package com.elf.sys.org.entity;
+package com.elf.sys.security.entity;
 
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
@@ -10,30 +10,24 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
-@TableName("sys_org_unit")
-public class Unit extends DataEntity {
-
+@TableName("SYS_SEC_ROLE")
+public class Role extends DataEntity {
     @TableId
-    private String unitId;
+    private String roleId;
 
-    private String unitName;
+    private String roleName;
 
-    private String description;
+    private String roleType;
 
-    private String unitCode;
+    private String parentRoleId;
 
-    private String unitType;
+    private String rolePath;
+
+    private String roleLevel;
 
     private String timeBegin;
 
     private String timeEnd;
 
-    private String isEnabled;
-
-    /**
-     * @Description: serialVersionUID
-     * @Author: Liyiming
-     * @Date: 2018/3/30
-     */
     private static final long serialVersionUID = 1L;
 }

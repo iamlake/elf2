@@ -30,15 +30,13 @@ public class DimensionUnit extends DataEntity{
 
     private String unitPath;
 
-    private BigDecimal depth;
+    private BigDecimal dimensionUnitLevel;
 
-    private BigDecimal sort;
+    private BigDecimal dimensionUnitOrder;
 
     private Date timeBegin;
 
     private Date timeEnd;
-
-    private String description;
 
     private String isEnabled;
 

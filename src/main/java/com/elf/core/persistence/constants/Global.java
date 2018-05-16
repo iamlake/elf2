@@ -23,6 +23,13 @@ public class Global {
      */
     public static final int RESULT_STAUTS_FAILED = -1;
 
+    /**
+     * @Description: 是否可用 - 默认1 可用
+     * @Author: Liyiming
+     * @Date: 2018/5/16
+     */
+    public static final String ACTIVE_FLAG_ENABLED = "1";
+
     public static final String SEX_MALE = "1";
     public static final String SEX_FEMALE = "2";
     public static final String SEX_UNKNOWN = "3";

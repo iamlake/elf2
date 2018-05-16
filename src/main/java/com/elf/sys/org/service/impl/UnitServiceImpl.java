@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.elf.core.common.utils.StringUtils;
 import com.elf.core.context.context.ContextHolder;
 import com.elf.core.exception.BusinessException;
+import com.elf.core.persistence.constants.Global;
 import com.elf.core.service.impl.BaseServiceImpl;
 import com.elf.sys.org.entity.*;
 import com.elf.sys.org.mapper.DimensionMapper;
@@ -40,12 +41,19 @@ public class UnitServiceImpl extends BaseServiceImpl<UnitMapper, Unit> implement
         return dimensionList;
     }
 
+    /**
+     * @Description: 新增维度
+     * @Param: [dimension]
+     * @return: com.elf.sys.org.entity.Dimension
+     * @Author: Liyiming
+     * @Date: 2018/5/16
+     */
     @Override
     public Dimension saveDimension(Dimension dimension) {
         User currentUser = ContextHolder.getContext().getCurrentUser();
         String account = currentUser.getAccount();
         Timestamp currentTime = new Timestamp(System.currentTimeMillis());
-        dimension.setId(StringUtils.getUUID());
+        dimension.setDimensionId(StringUtils.getUUID());
         dimension.setCreatedBy(account);
         dimension.setCreationTime(currentTime);
         dimension.setModifiedBy(account);
@@ -54,6 +62,13 @@ public class UnitServiceImpl extends BaseServiceImpl<UnitMapper, Unit> implement
         return dimension;
     }
 
+    /**
+     * @Description: 根据ID删除维度
+     * @Param: [dimensionId]
+     * @return: int
+     * @Author: Liyiming
+     * @Date: 2018/5/16
+     */
     @Override
     public int deleteDimension(String dimensionId) {
         EntityWrapper<DimensionUnit> entityWrapper = new EntityWrapper<>();
@@ -68,28 +83,40 @@ public class UnitServiceImpl extends BaseServiceImpl<UnitMapper, Unit> implement
 
     @Override
     public List<DimensionUnit> getChildDimensionUnitList(String parentDimensionUnitId, String dimensionId) {
-        List<DimensionUnit> dimensionUnitList = dimensionUnitMapper.getChildDimensionUnitList(parentDimensionUnitId, dimensionId);
+        List<DimensionUnit> dimensionUnitList = dimensionUnitMapper.selectChildDimensionUnitList(parentDimensionUnitId, dimensionId);
         return dimensionUnitList;
     }
 
+    /**
+     * @Description: 通过父ID和维度ID查询所有组织维度数据
+     * @Param: [parentDimensionUnitId, dimensionId]
+     * @return: java.util.List<com.elf.sys.org.entity.DimensionUnit>
+     * @Author: Liyiming
+     * @Date: 2018/5/16
+     */
     @Override
     public List<DimensionUnit> getAllChildDimensionUnitList(String parentDimensionUnitId, String dimensionId) {
-        DimensionUnit dimensionUnit = dimensionUnitMapper.selectById(parentDimensionUnitId);
-        List<DimensionUnit> dimensionUnitList = dimensionUnitMapper.getDimensionUnitsByUnitPath(dimensionUnit.getUnitPath() + dimensionUnit.getDimensionUnitId() + "/" + "%", dimensionId);
+        String defaultPId = "-1";
+        String unitPath = "/";
+        if (!defaultPId.equals(parentDimensionUnitId)) {
+            DimensionUnit dimensionUnit = dimensionUnitMapper.selectById(parentDimensionUnitId);
+            unitPath = dimensionUnit.getUnitPath() + dimensionUnit.getDimensionUnitId() + "/";
+        }
+        List<DimensionUnit> dimensionUnitList = dimensionUnitMapper.selectDimensionUnitsByUnitPath(unitPath + "%", dimensionId);
         return dimensionUnitList;
     }
 
     @Override
-    public Unit getUnitById(String id) {
-        Unit unit = unitMapper.getUnitById(id);
+    public Unit getUnitById(String unitId) {
+        Unit unit = unitMapper.selectById(unitId);
         return unit;
     }
 
     @Override
     public DimensionUnit getRootDimensionUnit(String dimensionId) {
         EntityWrapper<DimensionUnit> entityWrapper = new EntityWrapper<>();
-        entityWrapper.eq("dimension_id", dimensionId);
-        entityWrapper.eq("parent_dimension_unit_id", "-1");
+        entityWrapper.eq("DIMENSION_ID", dimensionId);
+        entityWrapper.eq("PARENT_DIMENSION_UNIT_ID", "-1");
         List<DimensionUnit> dimensionUnitList = dimensionUnitMapper.selectList(entityWrapper);
         if (dimensionUnitList.size() < 1) {
             return null;
@@ -104,12 +131,12 @@ public class UnitServiceImpl extends BaseServiceImpl<UnitMapper, Unit> implement
         User currentUser = ContextHolder.getContext().getCurrentUser();
         String account = currentUser.getAccount();
         Timestamp currentTime = new Timestamp(System.currentTimeMillis());
-        paramUnit.setId(StringUtils.getUUID());
+        paramUnit.setUnitId(StringUtils.getUUID());
         paramUnit.setCreatedBy(account);
         paramUnit.setCreationTime(currentTime);
         paramUnit.setModifiedBy(account);
         paramUnit.setModificationTime(currentTime);
-        paramUnit.setActiveFlag("1");
+        paramUnit.setActiveFlag(Global.ACTIVE_FLAG_ENABLED);
         unitMapper.insert(paramUnit);
 
         DimensionUnit dimensionUnit = new DimensionUnit();
@@ -118,18 +145,18 @@ public class UnitServiceImpl extends BaseServiceImpl<UnitMapper, Unit> implement
         dimensionUnit.setCreatedBy(account);
         dimensionUnit.setModifiedBy(account);
         dimensionUnit.setModificationTime(currentTime);
-        dimensionUnit.setUnitId(paramUnit.getId());
+        dimensionUnit.setUnitId(paramUnit.getUnitId());
         dimensionUnit.setDimensionId(dimensionId);
         dimensionUnit.setParentDimensionUnitId(parentDimensionUnitId);
-        dimensionUnit.setAliasName(paramUnit.getName());
-        dimensionUnit.setActiveFlag("1");
+        dimensionUnit.setAliasName(paramUnit.getUnitName());
+        dimensionUnit.setActiveFlag(Global.ACTIVE_FLAG_ENABLED);
 
         DimensionUnit parentDimensionUnit = dimensionUnitMapper.selectById(parentDimensionUnitId);
         if (parentDimensionUnit != null) {
-            dimensionUnit.setDepth(new BigDecimal((parentDimensionUnit).getDepth().intValue() + 1));
+            dimensionUnit.setDimensionUnitLevel(new BigDecimal((parentDimensionUnit).getDimensionUnitLevel().intValue() + 1));
             dimensionUnit.setUnitPath(parentDimensionUnit.getUnitPath() + parentDimensionUnitId + "/");
         } else {
-            dimensionUnit.setDepth(new BigDecimal(1));
+            dimensionUnit.setDimensionUnitLevel(new BigDecimal(1));
             dimensionUnit.setUnitPath("/");
         }
         dimensionUnitMapper.insert(dimensionUnit);
@@ -148,13 +175,13 @@ public class UnitServiceImpl extends BaseServiceImpl<UnitMapper, Unit> implement
         unitMapper.updateById(paramUnit);
 
         EntityWrapper<DimensionUnit> entityWrapper = new EntityWrapper<>();
-        entityWrapper.eq("unit_id", paramUnit.getId());
+        entityWrapper.eq("unit_id", paramUnit.getUnitId());
         List<DimensionUnit> dimensionUnitList = dimensionUnitMapper.selectList(entityWrapper);
         DimensionUnit dimensionUnit = dimensionUnitList.get(0);
         dimensionUnit.setModifiedBy(account);
         dimensionUnit.setModificationTime(currentTime);
-        dimensionUnit.setAliasName(paramUnit.getName());
-        dimensionUnit.setActiveFlag("1");
+        dimensionUnit.setAliasName(paramUnit.getUnitName());
+        dimensionUnit.setActiveFlag(Global.ACTIVE_FLAG_ENABLED);
         dimensionUnitMapper.updateById(dimensionUnit);
 
         return dimensionUnit;
@@ -195,7 +222,7 @@ public class UnitServiceImpl extends BaseServiceImpl<UnitMapper, Unit> implement
         Timestamp currentTime = new Timestamp(System.currentTimeMillis());
 
         UnitUser unitUser = new UnitUser();
-        unitUser.setId(StringUtils.getUUID());
+        unitUser.setUnitUserId(StringUtils.getUUID());
         unitUser.setUserId(userId);
         unitUser.setUnitId(unitId);
         unitUser.setCreatedBy(currentAccount);
@@ -215,7 +242,7 @@ public class UnitServiceImpl extends BaseServiceImpl<UnitMapper, Unit> implement
         UnitUser unitUser = null;
         for (String userId : userIdsList) {
             unitUser = new UnitUser();
-            unitUser.setId(StringUtils.getUUID());
+            unitUser.setUnitUserId(StringUtils.getUUID());
             unitUser.setUserId(userId);
             unitUser.setUnitId(unitId);
             unitUser.setCreatedBy(currentAccount);
@@ -229,9 +256,6 @@ public class UnitServiceImpl extends BaseServiceImpl<UnitMapper, Unit> implement
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void deleteUnitUsers(List<String> userIdsList, String unitId) {
-//        User currentUser = ContextHolder.getContext().getCurrentUser();
-//        String currentAccount = currentUser.getAccount();
-//        Timestamp currentTime = new Timestamp(System.currentTimeMillis());
         EntityWrapper<UnitUser> entityWrapper = null;
         for (String userId : userIdsList) {
             entityWrapper = new EntityWrapper<>();

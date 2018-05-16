@@ -8,32 +8,24 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.math.BigDecimal;
-import java.util.Date;
 
 @Setter
 @Getter
 @ToString
 @TableName("sys_org_dimension")
 public class Dimension extends DataEntity {
-
     @TableId
-    private String id;
+    private String dimensionId;
 
-    private String name;
+    private String dimensionName;
 
-    private String type;
+    private String dimensionType;
 
     private String description;
 
     private String isDefault;
 
-    private BigDecimal sort;
-
-    private Date timeBegin;
-
-    private Date timeEnd;
-
-    private String isEnabled;
+    private BigDecimal dimensionOrder;
 
     /**
      * @Description: serialVersionUID

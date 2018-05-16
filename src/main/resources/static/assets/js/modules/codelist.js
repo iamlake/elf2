@@ -10,7 +10,7 @@ layui.define(['jquery', 'linq'], function (exports) {
          */
         getAll: function (re) {
             var codelist = window.sessionStorage.getItem("cache_codelist");
-            if (codelist == null || codelist == undefined || re) {
+            if (codelist == null || codelist == '[]' || re) {
                 $.ajax({
                     url: basePath + '/codelist',
                     type: 'GET',

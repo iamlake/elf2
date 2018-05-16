@@ -26,4 +26,6 @@ public interface UserMapper extends BaseMapper<User> {
      * @Date: 2018/5/1
      */
     List<User> selectUnitUsers(@Param("unitId") String unitId, @Param("account") String account, @Param("fullname") String fullname);
+
+    List<User> getUserWithUnitsByRoleId(@Param("busiRoleId") String busiRoleId);
 }

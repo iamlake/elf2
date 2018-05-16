@@ -31,7 +31,7 @@ public class Codelist extends DataEntity {
 
     private String codeParent;
 
-    private String codeOrder;
+    private Integer codeOrder;
 
     private String filter;
 

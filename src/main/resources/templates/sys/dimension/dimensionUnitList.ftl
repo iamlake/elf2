@@ -92,8 +92,8 @@
                         async: false,
                         url: basePath + "/unitAndDimensionUnit",
                         data: {
-                            name: text,
-                            code: text,
+                            unitName: text,
+                            unitCode: text,
                             isEnabled: 't',
                             parentDimensionUnitId: treeNode.dimensionUnitId,
                             dimensionId: 'city'
@@ -148,7 +148,7 @@
                     enable: true,
                     idKey: "dimensionUnitId",
                     pIdKey: "parentDimensionUnitId",
-                    rootPId: 'dimension_ln'
+                    rootPId: '-1'
                 }
             },
             callback: {
@@ -174,7 +174,7 @@
 
         function createDimUnitTree() {
             $.get(basePath + "/dimensionUnit/allChild", {
-                parentDimensionUnitId: 'dimension_ln',
+                parentDimensionUnitId: '-1',
                 dimensionId: 'city'
             }, function (result) {
                 zTree.init($("#tree_dimensionUnit"), setting, result.data);
@@ -228,8 +228,8 @@
                     async: false,
                     url: basePath + "/unitAndDimensionUnit",
                     data: {
-                        id: treeNode.unitId,
-                        name: treeNode.aliasName,
+                        unitId: treeNode.unitId,
+                        unitName: treeNode.aliasName,
                         _method: 'PUT'
                     },
                     success: function (result) {

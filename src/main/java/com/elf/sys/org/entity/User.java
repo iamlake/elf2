@@ -1,11 +1,13 @@
 package com.elf.sys.org.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.elf.core.persistence.DataEntity;
 import lombok.*;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @Title: User
@@ -51,6 +53,9 @@ public class User extends DataEntity {
     private String credentialsNumber;
 
     private String homeAddress;
+
+    @TableField(exist = false)
+    private List<Unit> unitList;
 
     public User() {
     }

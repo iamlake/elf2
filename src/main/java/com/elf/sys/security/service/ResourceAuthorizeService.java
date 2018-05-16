@@ -1,8 +1,8 @@
 package com.elf.sys.security.service;
 
-import java.util.List;
-
 import com.elf.sys.security.entity.SysSecResourceAuthority;
+
+import java.util.List;
 
 public interface ResourceAuthorizeService {
 
@@ -20,6 +20,10 @@ public interface ResourceAuthorizeService {
 
 	List<SysSecResourceAuthority> getBusiMenuAuthorityByRoleId(String roleId);
 
-	
+	List<SysSecResourceAuthority> getBusiMenuAuthorityForbiddenByRoleId(String roleId);
+
+//	List<SysSecResourceAuthority> updateBusiMenuAuthority(String busiRoleId, List<String> menuIdList);
+//
+//	List<SysSecResourceAuthority> updateBusiMenuAuthorityForbidden(String busiRoleId, List<String> menuIdList);
 
 }

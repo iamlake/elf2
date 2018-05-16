@@ -122,21 +122,5 @@ public abstract class AbstractUserRealm extends AuthorizingRealm {
             this.userRoles = userRoles;
             this.userPermissions = userPermissions;
         }
-
-		public Set<String> getUserRoles() {
-			return userRoles;
-		}
-
-		public void setUserRoles(Set<String> userRoles) {
-			this.userRoles = userRoles;
-		}
-
-		public Set<String> getUserPermissions() {
-			return userPermissions;
-		}
-
-		public void setUserPermissions(Set<String> userPermissions) {
-			this.userPermissions = userPermissions;
-		}
     }
 }
