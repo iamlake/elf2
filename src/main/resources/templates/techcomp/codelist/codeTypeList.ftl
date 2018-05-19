@@ -92,7 +92,7 @@
             var index = layui.layer.open({
                 title: type ? "新建代码表" : "编辑代码表",
                 type: 2,
-                content: basePath + "/page/sys_codelist_codelistEdit",
+                content: basePath + "/page/techcomp_codelist_codelistEdit",
                 success: function (layero, index) {
                     setTimeout(function () {
                         layui.layer.tips('点击此处返回列表', '.layui-layer-setwin .layui-layer-close', {

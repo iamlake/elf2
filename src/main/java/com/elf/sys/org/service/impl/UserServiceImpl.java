@@ -91,4 +91,10 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
         List<User> userList = userMapper.selectUnitUsers(unitId, user.getAccount(), user.getFullname());
         return userList;
     }
+
+    @Override
+    public List<User> getUnitUsersByRoleId(String roleId, User user) {
+        List<User> userList = userMapper.selectUnitUsersByRoleId(roleId, user.getAccount(), user.getFullname());
+        return userList;
+    }
 }

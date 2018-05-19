@@ -67,7 +67,7 @@
 </div>
 
 <script type="text/javascript">
-    var cUnitId = null, tData, doQuery;
+    var cDimensionId = 'city', cUnitId = null, tData, doQuery;
     layui.use(['form', 'layer', 'table', 'codelist', 'zTree'], function () {
         var $ = layui.jquery,
                 layer = parent.layer === undefined ? layui.layer : top.layer,
@@ -96,7 +96,7 @@
                             unitCode: text,
                             isEnabled: 't',
                             parentDimensionUnitId: treeNode.dimensionUnitId,
-                            dimensionId: 'city'
+                            dimensionId: cDimensionId
                         },
                         success: function (result) {
                             if (result.code == 0) {
@@ -175,7 +175,7 @@
         function createDimUnitTree() {
             $.get(basePath + "/dimensionUnit/allChild", {
                 parentDimensionUnitId: '-1',
-                dimensionId: 'city'
+                dimensionId: cDimensionId
             }, function (result) {
                 zTree.init($("#tree_dimensionUnit"), setting, result.data);
             })
@@ -319,19 +319,27 @@
         });
 
         doQuery = function () {
-            tableIns.reload({
-                url: basePath + '/user/unitUser',
-                where: {
-                    unitId: cUnitId,
-                    account: $(".search_accont").val(),
-                    fullname: $(".search_fullname").val()
-                }, page: {
-                    curr: 1 //重新从第 1 页开始
-                },
-                done: function () {
-                    tData = table.cache.tableJson;
-                }
-            })
+            if (cUnitId != null) {
+                tableIns.reload({
+                    url: basePath + '/user/unitUser',
+                    where: {
+                        unitId: cUnitId,
+                        account: $(".search_accont").val(),
+                        fullname: $(".search_fullname").val()
+                    }, page: {
+                        curr: 1 //重新从第 1 页开始
+                    },
+                    done: function () {
+                        tData = table.cache.tableJson;
+                    }
+                })
+            }else{
+                top.layer.msg("请先选择一个组织单元！", {
+                    time: 2000,
+                    icon: 5,
+                    anim: 6
+                });
+            }
         }
 
         $(".btn_add").click(function () {

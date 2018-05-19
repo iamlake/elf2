@@ -103,7 +103,7 @@
             var index = layui.layer.open({
                 title: type ? "新建任务" : "编辑任务",
                 type: 2,
-                content: basePath + "/page/sys_scheduler_jobEdit",
+                content: basePath + "/page/techcomp_scheduler_jobEdit",
                 success: function (layero, index) {
                     setTimeout(function () {
                         layui.layer.tips('点击此处返回任务列表', '.layui-layer-setwin .layui-layer-close', {

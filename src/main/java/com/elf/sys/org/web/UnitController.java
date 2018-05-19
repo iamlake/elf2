@@ -28,7 +28,7 @@ public class UnitController extends BaseController {
 
     @GetMapping("/dimension")
     @RequiresPermissions("org:unit:getDimensionList")
-    public Result getDimensionList() {
+    public Result findDimensionList() {
         List<Dimension> dimensionList = unitService.getDimensionList();
         QueryResult<Dimension> result = new QueryResult<>();
         result.setCode(Global.RESULT_STAUTS_SUCCESS);
@@ -38,7 +38,7 @@ public class UnitController extends BaseController {
     }
 
     @PostMapping("/dimension")
-    public Result saveDimension(Dimension dimension) {
+    public Result addDimension(Dimension dimension) {
         JSONResult result = new JSONResult();
         Dimension newDimension = unitService.saveDimension(dimension);
         if (newDimension != null) {
@@ -53,7 +53,7 @@ public class UnitController extends BaseController {
     }
 
     @DeleteMapping("/dimension")
-    public Result deleteDimension(String dimensionId) {
+    public Result removeDimension(String dimensionId) {
         JSONResult result = new JSONResult();
         try {
             unitService.deleteDimension(dimensionId);
@@ -113,7 +113,7 @@ public class UnitController extends BaseController {
     }
 
     @PostMapping("/unitAndDimensionUnit")
-    public Result saveUnitAndDimensionUnit(Unit paramUnit, String parentDimensionUnitId, String dimensionId) {
+    public Result addUnitAndDimensionUnit(Unit paramUnit, String parentDimensionUnitId, String dimensionId) {
         JSONResult result = new JSONResult();
         try {
             DimensionUnit dimensionUnit = unitService.saveUnitAndDimensionUnit(paramUnit, parentDimensionUnitId, dimensionId);
@@ -129,7 +129,7 @@ public class UnitController extends BaseController {
     }
 
     @PutMapping("/unitAndDimensionUnit")
-    public Result updateUnitAndDimensionUnit(Unit paramUnit) {
+    public Result modifyUnitAndDimensionUnit(Unit paramUnit) {
         JSONResult result = new JSONResult();
         try {
             DimensionUnit dimensionUnit = unitService.updateUnitAndDimensionUnit(paramUnit);
@@ -145,7 +145,7 @@ public class UnitController extends BaseController {
     }
 
     @DeleteMapping("/unitAndDimensionUnit")
-    public Result deleteUnitAndDimensionUnit(String dimensionUnitId) {
+    public Result removeUnitAndDimensionUnit(String dimensionUnitId) {
         JSONResult result = new JSONResult();
         try {
             unitService.deleteUnitAndDimensionUnit(dimensionUnitId);
@@ -160,7 +160,7 @@ public class UnitController extends BaseController {
     }
 
     @PostMapping("/unitUsers")
-    public Result saveUnitUsers(String userIds, String unitId) {
+    public Result addUnitUsers(String userIds, String unitId) {
         List<String> userIdsList = null;
         if (StringUtils.isNotBlank(userIds)) {
             userIdsList = new ArrayList<>();
@@ -180,7 +180,7 @@ public class UnitController extends BaseController {
     }
 
     @DeleteMapping("/unitUsers")
-    public Result deleteUnitUsers(String userIds, String unitId) {
+    public Result removeUnitUsers(String userIds, String unitId) {
         List<String> userIdsList = null;
         if (StringUtils.isNotBlank(userIds)) {
             userIdsList = new ArrayList<>();
@@ -201,7 +201,7 @@ public class UnitController extends BaseController {
     }
 
     @PostMapping("/unitUser")
-    public Result saveUnitUser(String userId, String unitId) {
+    public Result addUnitUser(String userId, String unitId) {
         JSONResult result = new JSONResult();
         try {
             UnitUser newUnitUser = unitService.saveUnitUser(userId, unitId);
@@ -217,7 +217,7 @@ public class UnitController extends BaseController {
     }
 
     @DeleteMapping("/unitUser")
-    public Result deleteUnitUser(String userId, String unitId) {
+    public Result removeUnitUser(String userId, String unitId) {
         JSONResult result = new JSONResult();
         try {
             unitService.deleteUnitUser(userId, unitId);

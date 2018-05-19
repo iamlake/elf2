@@ -27,5 +27,12 @@ public interface UserMapper extends BaseMapper<User> {
      */
     List<User> selectUnitUsers(@Param("unitId") String unitId, @Param("account") String account, @Param("fullname") String fullname);
 
-    List<User> getUserWithUnitsByRoleId(@Param("busiRoleId") String busiRoleId);
+    /**
+     * @Description: 根据角色查询组织单元用户
+     * @Param: [roleId, account, fullname]
+     * @return: java.util.List<com.elf.sys.org.entity.User>
+     * @Author: Liyiming
+     * @Date: 2018/5/19
+     */
+    List<User> selectUnitUsersByRoleId(@Param("roleId") String roleId, @Param("account") String account, @Param("fullname") String fullname);
 }

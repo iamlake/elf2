@@ -19,4 +19,6 @@ public interface UserService extends BaseService<User> {
 
     List<User> getUnitUsers(String unitId, User user);
 
+    List<User> getUnitUsersByRoleId(String roleId, User user);
+
 }

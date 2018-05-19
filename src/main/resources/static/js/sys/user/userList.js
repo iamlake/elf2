@@ -16,7 +16,7 @@ layui.use(['form', 'layer', 'table', 'codelist'], function () {
         limit: 10,
         id: "tableJson",
         cols: [[
-            {type: "checkbox", fixed: "left", width: 50},
+            {type: 'checkbox', fixed: 'left', width: 50},
             {field: 'account', title: '账号', minWidth: 100, align: "center"},
             {field: 'fullname', title: '姓名', minWidth: 100, align: "center"},
             {field: 'email', title: '邮箱', minWidth: 200, align: 'center', templet: function (d) {

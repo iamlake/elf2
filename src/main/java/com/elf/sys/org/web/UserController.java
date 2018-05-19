@@ -215,4 +215,15 @@ public class UserController extends BaseController {
         List<User> list = userService.getUnitUsers(unitId, user);
         return new QueryResult<>(Global.RESULT_STAUTS_SUCCESS, "", list, list.size());
     }
+
+    @GetMapping("/user/roleUnitUser")
+    @ResponseBody
+    public Result findUnitUsersByRoleId(String roleId, User user) {
+        List<User> UserList = userService.getUnitUsersByRoleId(roleId, user);
+        QueryResult<User> result = new QueryResult<>();
+        result.setCode(Global.RESULT_STAUTS_SUCCESS);
+        result.setData(UserList);
+        result.setCount(UserList.size());
+        return result;
+    }
 }

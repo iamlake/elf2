@@ -3,7 +3,7 @@
 <html class="loginHtml">
     <head>
         <meta charset="utf-8">
-        <title>登录--layui后台管理模板 2.0</title>
+        <title>登录--ELF后台管理</title>
         <meta name="renderer" content="webkit">
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
@@ -39,6 +39,5 @@
             </div>
         </form>
         <script type="text/javascript" src="${basePath}/static/page/login/login.js"></script>
-        <#--<script type="text/javascript" src="${basePath}/static/js/cache.js"></script>-->
     </body>
 </html>

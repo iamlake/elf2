@@ -239,7 +239,7 @@ public class UnitServiceImpl extends BaseServiceImpl<UnitMapper, Unit> implement
         User currentUser = ContextHolder.getContext().getCurrentUser();
         String currentAccount = currentUser.getAccount();
         Timestamp currentTime = new Timestamp(System.currentTimeMillis());
-        UnitUser unitUser = null;
+        UnitUser unitUser;
         for (String userId : userIdsList) {
             unitUser = new UnitUser();
             unitUser.setUnitUserId(StringUtils.getUUID());
@@ -256,7 +256,7 @@ public class UnitServiceImpl extends BaseServiceImpl<UnitMapper, Unit> implement
     @Transactional(rollbackFor = Exception.class)
     @Override
     public void deleteUnitUsers(List<String> userIdsList, String unitId) {
-        EntityWrapper<UnitUser> entityWrapper = null;
+        EntityWrapper<UnitUser> entityWrapper;
         for (String userId : userIdsList) {
             entityWrapper = new EntityWrapper<>();
             entityWrapper.eq("user_id", userId).eq("unit_id", unitId);

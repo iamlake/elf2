@@ -60,19 +60,24 @@
             and u.fullname like #{fullname}
         </if>
     </select>
-    <select id="getUserWithUnitsByRoleId" parameterType="java.lang.String" resultMap="BaseResultMap">
-        SELECT _user.*, unit.UNIT_CODE as unit$UNIT_CODE, unit.UNIT_NAME as unit$UNIT_NAME
-        FROM
-        ( SELECT _user.* FROM sys_org_user _user, sys_sec_busi_role_user roleUser
-        WHERE _user.USER_ID = roleUser.user_id AND roleUser.role_id = #{busiRoleId,jdbcType=VARCHAR} ) _user
-        LEFT JOIN sys_org_unit unit ON (
-        SELECT 1 FROM
-        sys_org_unit_user unitUser
-        WHERE
-        _user.USER_ID =
-        unitUser.user_id
-        AND unitUser.unit_id =
-        unit.UNIT_ID
-        )
+    <select id="selectUnitUsersByRoleId" parameterType="java.lang.String" resultMap="BaseResultMap">
+        SELECT _user.*, unit.UNIT_CODE AS unit$UNIT_CODE, unit.UNIT_NAME AS unit$UNIT_NAME
+        FROM (SELECT _user.*
+            FROM sys_org_user _user, sys_sec_user_role userRole
+            WHERE _user.USER_ID = userRole.user_id
+                AND userRole.role_id = #{roleId,jdbcType=VARCHAR}
+                <if test="account != null and account != ''">
+                    AND _user.account = #{account}
+                </if>
+                <if test="fullname != null and fullname != ''">
+                    AND _user.fullname like #{fullname}
+                </if>
+            ) _user
+            LEFT JOIN sys_org_unit unit ON (
+                    SELECT 1
+                    FROM sys_org_unit_user unitUser
+                    WHERE _user.USER_ID = unitUser.user_id
+                        AND unitUser.unit_id = unit.UNIT_ID
+                    )
   </select>
 </mapper>
