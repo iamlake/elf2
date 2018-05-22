@@ -74,7 +74,7 @@ public class ResourceAuthorityServiceImpl extends BaseServiceImpl<ResourceAuthor
     @Transactional(rollbackFor = Exception.class)
     @Override
     public List<ResourceAuthority> saveMenuAuthorityForbidden(String roleId, List<String> menuIdList) {
-        String authorityType = ResourceAuthorizeServiceImpl.AuthorityTypeEnum.forbidden.toString();
+        String authorityType = AuthorityTypeEnum.forbidden.toString();
         return this.saveMenuAuthority(roleId, menuIdList, authorityType);
     }
 

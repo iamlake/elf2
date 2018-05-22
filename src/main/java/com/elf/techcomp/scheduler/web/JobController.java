@@ -167,7 +167,7 @@ public class JobController extends BaseController {
 
     @GetMapping("/query")
     public Result queryJob(JobAndTrigger jobAndTrigger, @RequestParam(value = "page") Integer pageNum, @RequestParam(value = "limit") Integer pageSize) {
-        Page page = new Page(pageNum, pageSize);
+        Page<JobAndTrigger> page = new Page<>(pageNum, pageSize);
         Page<JobAndTrigger> jobAndTriggerData = jobAndTriggerService.getJobAndTriggerDetails(jobAndTrigger, page);
         QueryResult<JobAndTrigger> result = new QueryResult<>();
         result.setCode(ResultStatusEnum.SUCCESS.getValue());

@@ -23,6 +23,8 @@ import java.util.List;
 @Service
 public class UnitServiceImpl extends BaseServiceImpl<UnitMapper, Unit> implements UnitService {
 
+    private static final String defaultPId = "-1";
+
     @Autowired
     private DimensionMapper dimensionMapper;
 
@@ -96,7 +98,6 @@ public class UnitServiceImpl extends BaseServiceImpl<UnitMapper, Unit> implement
      */
     @Override
     public List<DimensionUnit> getAllChildDimensionUnitList(String parentDimensionUnitId, String dimensionId) {
-        String defaultPId = "-1";
         String unitPath = "/";
         if (!defaultPId.equals(parentDimensionUnitId)) {
             DimensionUnit dimensionUnit = dimensionUnitMapper.selectById(parentDimensionUnitId);

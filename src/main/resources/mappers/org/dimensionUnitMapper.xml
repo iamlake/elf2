@@ -58,19 +58,6 @@
             <result column="unit$EXT3" jdbcType="VARCHAR" property="ext3"/>
         </association>
     </resultMap>
-    <!-- <select id="getDimensionUnitByUnitId" parameterType="java.lang.String" resultMap="BaseResultMap">
-      select
-      <include refid="Base_Column_List" />
-      from sys_org_dimension_unit
-      where unit_id = #{unitId,jdbcType=VARCHAR}
-    </select>
-    <select id="getRootDimensionUnit" parameterType="java.lang.String" resultMap="BaseResultMap">
-      select
-      <include refid="Base_Column_List" />
-      from sys_org_dimension_unit du
-      where du.dimension_id = #{dimensionId,jdbcType=VARCHAR}
-      and du.parent_dimension_unit_id = '-1'
-    </select> -->
     <select id="selectChildDimensionUnitList" parameterType="java.lang.String" resultMap="BaseResultMap">
         select
         du.*, d.DIMENSION_ID as dimension$DIMENSION_ID, d.DIMENSION_NAME as dimension$DIMENSION_NAME, u.UNIT_ID as unit$UNIT_ID, u.UNIT_CODE as unit$UNIT_CODE
