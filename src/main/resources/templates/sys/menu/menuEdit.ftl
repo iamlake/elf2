@@ -40,7 +40,7 @@
     <div class="layui-form-item">
         <label class="layui-form-label">菜单图标</label>
         <div class="layui-input-block">
-            <input type="hidden" class="layui-input" name="icon" id="iconValue" placeholder="请选择菜单图标">
+            <input type="hidden" class="layui-input" name="iconfont" id="iconValue" placeholder="请选择菜单图标">
             <div class="layui-input-inline" style="width: 60px;" id="realIcon">
             </div>
             <div class="layui-input-inline" style="width: 100px;">

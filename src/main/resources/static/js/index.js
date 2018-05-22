@@ -167,11 +167,11 @@ layui.use(['bodyTab', 'form', 'element', 'layer', 'jquery', 'linq', 'elf'], func
             var openTitle = '';
             for (var i = 0; i < menu.length; i++) {
                 openTitle = '';
-                if (menu[i].icon) {
-                    if (menu[i].icon.split("-")[0] == 'icon') {
-                        openTitle += '<i class="seraph ' + menu[i].icon + '"></i>';
+                if (menu[i].iconfont) {
+                    if (menu[i].iconfont.split("-")[0] == 'icon') {
+                        openTitle += '<i class="seraph ' + menu[i].iconfont + '"></i>';
                     } else {
-                        openTitle += '<i class="layui-icon">' + menu[i].icon + '</i>';
+                        openTitle += '<i class="layui-icon">' + menu[i].iconfont + '</i>';
                     }
                 }
                 openTitle += '<cite>' + menu[i].title + '</cite>';

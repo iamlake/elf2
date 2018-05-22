@@ -10,10 +10,10 @@ import lombok.ToString;
 @Setter
 @Getter
 @ToString
-@TableName("SYS_SEC_ROLE_USER")
+@TableName("SYS_SEC_USER_ROLE")
 public class UserRole extends DataEntity {
     @TableId
-    private String roleUserId;
+    private String userRoleId;
 
     private String userId;
 

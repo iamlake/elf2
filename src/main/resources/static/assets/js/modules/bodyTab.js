@@ -35,11 +35,11 @@ layui.define(["element", "jquery", "elf"], function (exports) {
             }
             if (data[i].children != undefined && data[i].children.length > 0) {
                 ulHtml += '<a>';
-                if (data[i].icon != undefined && data[i].icon != '') {
-                    if (data[i].icon.indexOf("icon-") != -1) {
-                        ulHtml += '<i class="seraph ' + data[i].icon + '" data-icon="' + data[i].icon + '"></i>';
+                if (data[i].iconfont != undefined && data[i].iconfont != '') {
+                    if (data[i].iconfont.indexOf("icon-") != -1) {
+                        ulHtml += '<i class="seraph ' + data[i].iconfont + '" data-icon="' + data[i].iconfont + '"></i>';
                     } else {
-                        ulHtml += '<i class="layui-icon" data-icon="' + data[i].icon + '">' + data[i].icon + '</i>';
+                        ulHtml += '<i class="layui-icon" data-icon="' + data[i].iconfont + '">' + data[i].iconfont + '</i>';
                     }
                 }
                 ulHtml += '<cite>' + data[i].title + '</cite>';
@@ -53,11 +53,11 @@ layui.define(["element", "jquery", "elf"], function (exports) {
                     } else {
                         ulHtml += '<dd><a data-url="' + _href + '">';
                     }
-                    if (data[i].children[j].icon != undefined && data[i].children[j].icon != '') {
-                        if (data[i].children[j].icon.indexOf("icon-") != -1) {
-                            ulHtml += '<i class="seraph ' + data[i].children[j].icon + '" data-icon="' + data[i].children[j].icon + '"></i>';
+                    if (data[i].children[j].iconfont != undefined && data[i].children[j].iconfont != '') {
+                        if (data[i].children[j].iconfont.indexOf("icon-") != -1) {
+                            ulHtml += '<i class="seraph ' + data[i].children[j].iconfont + '" data-icon="' + data[i].children[j].iconfont + '"></i>';
                         } else {
-                            ulHtml += '<i class="layui-icon" data-icon="' + data[i].children[j].icon + '">' + data[i].children[j].icon + '</i>';
+                            ulHtml += '<i class="layui-icon" data-icon="' + data[i].children[j].iconfont + '">' + data[i].children[j].iconfont + '</i>';
                         }
                     }
                     ulHtml += '<cite>' + data[i].children[j].title + '</cite></a></dd>';
@@ -70,11 +70,11 @@ layui.define(["element", "jquery", "elf"], function (exports) {
                 } else {
                     ulHtml += '<a data-url="' + _href + '">';
                 }
-                if (data[i].icon != undefined && data[i].icon != '') {
-                    if (data[i].icon.indexOf("icon-") != -1) {
-                        ulHtml += '<i class="seraph ' + data[i].icon + '" data-icon="' + data[i].icon + '"></i>';
+                if (data[i].iconfont != undefined && data[i].iconfont != '') {
+                    if (data[i].iconfont.indexOf("icon-") != -1) {
+                        ulHtml += '<i class="seraph ' + data[i].iconfont + '" data-icon="' + data[i].iconfont + '"></i>';
                     } else {
-                        ulHtml += '<i class="layui-icon" data-icon="' + data[i].icon + '">' + data[i].icon + '</i>';
+                        ulHtml += '<i class="layui-icon" data-icon="' + data[i].iconfont + '">' + data[i].iconfont + '</i>';
                     }
                 }
                 ulHtml += '<cite>' + data[i].title + '</cite></a>';
@@ -164,7 +164,7 @@ layui.define(["element", "jquery", "elf"], function (exports) {
                 })
                 //当前窗口内容
                 var curmenu = {
-                    "icon": _this.find("i.seraph").attr("data-icon") != undefined ? _this.find("i.seraph").attr("data-icon") : _this.find("i.layui-icon").attr("data-icon"),
+                    "iconfont": _this.find("i.seraph").attr("data-icon") != undefined ? _this.find("i.seraph").attr("data-icon") : _this.find("i.layui-icon").attr("data-icon"),
                     "title": _this.find("cite").text(),
                     "href": _this.attr("data-url"),
                     "layId": new Date().getTime()
@@ -177,7 +177,7 @@ layui.define(["element", "jquery", "elf"], function (exports) {
             } else {
                 //当前窗口内容
                 var curmenu = {
-                    "icon": _this.find("i.seraph").attr("data-icon") != undefined ? _this.find("i.seraph").attr("data-icon") : _this.find("i.layui-icon").attr("data-icon"),
+                    "iconfont": _this.find("i.seraph").attr("data-icon") != undefined ? _this.find("i.seraph").attr("data-icon") : _this.find("i.layui-icon").attr("data-icon"),
                     "title": _this.find("cite").text(),
                     "href": _this.attr("data-url")
                 }

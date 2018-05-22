@@ -39,13 +39,6 @@ public class BusiRoleServiceImpl implements BusiRoleService {
     */
 
 	@Override
-	public List<User> getUserWithUnitsByRoleId(String busiRoleId) {
-		List<User> userList= userMapper.getUserWithUnitsByRoleId(busiRoleId);
-
-		return userList;
-	}
-
-	@Override
 	public List<SysSecBusiRole> getAllBusiRoles() {
 		List<SysSecBusiRole> busiRoleList= busiRoleMapper.selectByExample(new SysSecBusiRoleExample());
 

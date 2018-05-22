@@ -18,12 +18,12 @@ layui.use(['layer', 'treeGrid'], function () {
                 {type: 'numbers'},
                 {field: 'title', minWidth: '150', title: '菜单名称'},
                 {field: 'href', minWidth: '200', title: '路径'},
-                {field: 'icon', minWidth: '50', title: '图标', align: 'center', templet: function (d) {
-                        if (d.icon != undefined && d.icon != '') {
-                            if (d.icon.indexOf("icon-") != -1) {
-                                return '<i class="seraph ' + d.icon + '" data-icon="' + d.icon + ' " style="font-size: 25px !important;"></i>';
+                {field: 'iconfont', minWidth: '50', title: '图标', align: 'center', templet: function (d) {
+                        if (d.iconfont != undefined && d.iconfont != '') {
+                            if (d.iconfont.indexOf("icon-") != -1) {
+                                return '<i class="seraph ' + d.iconfont + '" data-icon="' + d.icon + ' " style="font-size: 25px !important;"></i>';
                             } else {
-                                return '<i class="layui-icon" data-icon="' + d.icon + '" style="font-size: 25px !important;">' + d.icon + '</i>';
+                                return '<i class="layui-icon" data-icon="' + d.iconfont + '" style="font-size: 25px !important;">' + d.iconfont + '</i>';
                             }
                         } else {
                             return "无";

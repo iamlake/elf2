@@ -1,5 +1,5 @@
 package com.elf.sys.security.web;
-
+/**
 import com.elf.core.persistence.constants.Global;
 import com.elf.core.persistence.result.QueryResult;
 import com.elf.core.persistence.result.Result;
@@ -63,3 +63,4 @@ public class ResourceAuthorizeController extends BaseController {
 		return result;
 	}
 }
+**/

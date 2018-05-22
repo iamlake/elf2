@@ -1,6 +1,5 @@
 package com.elf.sys.security.service;
 
-import com.elf.sys.org.entity.User;
 import com.elf.sys.security.entity.SysSecBusiRole;
 
 import java.util.List;
@@ -24,6 +23,4 @@ public interface BusiRoleService {
 	List<SysSecBusiRole> getBusiRolesByUserId(String userId);
 
 	List<SysSecBusiRole> getAllBusiRoles();
-
-	List<User> getUserWithUnitsByRoleId(String busiRoleId);
 }

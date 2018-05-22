@@ -16,7 +16,7 @@
 <div class="layui-row layui-col-space3">
     <div class="layui-col-lg2 layui-col-md3 layui-col-xs12">
         <fieldset class="layui-elem-field">
-            <legend style="font-size: 7px">Search</legend>
+            <legend>Search</legend>
             <div class="layui-field-box">
                 <form class="layui-form">
                     <select name="search" id="search" lay-search lay-filter="searchDim">
@@ -187,7 +187,7 @@
 
         function onTreeNodeClick(event, treeId, treeNode, clickFlag) {
             cUnitId = treeNode.unitId;
-            doQuery();
+            doQuery(true);
         }
 
         function beforeTreeNodeEditName(treeId, treeNode) {
@@ -318,7 +318,7 @@
             doQuery();
         });
 
-        doQuery = function () {
+        doQuery = function (b) {
             if (cUnitId != null) {
                 tableIns.reload({
                     url: basePath + '/user/unitUser',
@@ -330,7 +330,9 @@
                         curr: 1 //重新从第 1 页开始
                     },
                     done: function () {
-                        tData = table.cache.tableJson;
+                        if (b) {
+                            tData = table.cache.tableJson;
+                        }
                     }
                 })
             }else{
