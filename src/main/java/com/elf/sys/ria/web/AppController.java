@@ -1,7 +1,7 @@
 package com.elf.sys.ria.web;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.elf.core.persistence.constants.Global;
+import com.elf.core.persistence.constants.ResultStatusEnum;
 import com.elf.core.persistence.result.QueryResult;
 import com.elf.core.persistence.result.Result;
 import com.elf.core.web.BaseController;
@@ -38,7 +38,7 @@ public class AppController extends BaseController {
         EntityWrapper<App> entityWrapper = new EntityWrapper<>(app);
         entityWrapper.orderBy("app_order", true);
         List<App> list = appService.selectList(entityWrapper);
-        return new QueryResult<>(Global.RESULT_STAUTS_SUCCESS, "", list, list.size());
+        return new QueryResult<>(ResultStatusEnum.SUCCESS.getValue(), "", list, list.size());
     }
 
 }

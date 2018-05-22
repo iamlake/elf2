@@ -1,6 +1,6 @@
 package com.elf.techcomp.codelist.web;
 
-import com.elf.core.persistence.constants.Global;
+import com.elf.core.persistence.constants.ResultStatusEnum;
 import com.elf.core.persistence.result.JSONResult;
 import com.elf.core.persistence.result.QueryResult;
 import com.elf.core.persistence.result.Result;
@@ -34,7 +34,7 @@ public class CodelistController extends BaseController {
     @GetMapping("/codelist")
     public Result findCodelist(Codelist codelist) {
         List<Codelist> list = codelistService.getCodeList(codelist);
-        return new QueryResult<>(Global.RESULT_STAUTS_SUCCESS, "", list, list.size());
+        return new QueryResult<>(ResultStatusEnum.SUCCESS.getValue(), "", list, list.size());
     }
 
     /**
@@ -47,7 +47,7 @@ public class CodelistController extends BaseController {
     @GetMapping("/codelist/type")
     public Result findCodeTypeList(Codelist codelist) {
         List<Codelist> list = codelistService.getCodeTypeList(codelist);
-        return new QueryResult<>(Global.RESULT_STAUTS_SUCCESS, "", list, list.size());
+        return new QueryResult<>(ResultStatusEnum.SUCCESS.getValue(), "", list, list.size());
     }
 
     /**
@@ -62,7 +62,7 @@ public class CodelistController extends BaseController {
         JSONResult result = new JSONResult();
         try {
             int ret = codelistService.deleteCodeTypeList(codelist.getCodeType());
-            result.setCode(Global.RESULT_STAUTS_SUCCESS);
+            result.setCode(ResultStatusEnum.SUCCESS.getValue());
             if (ret > 0) {
                 result.setMsg("删除成功！");
             } else {
@@ -70,7 +70,7 @@ public class CodelistController extends BaseController {
             }
             result.getParameters().put("", "");
         } catch (Exception ex) {
-            result.setCode(Global.RESULT_STAUTS_FAILED);
+            result.setCode(ResultStatusEnum.ERROR.getValue());
             result.setMsg("删除失败！");
             result.getErrors().put("exception", ex);
         }
@@ -82,7 +82,7 @@ public class CodelistController extends BaseController {
         JSONResult result = new JSONResult();
         try {
             List<Codelist> newCodelists = codelistService.saveCodelist(codelists);
-            result.setCode(Global.RESULT_STAUTS_SUCCESS);
+            result.setCode(ResultStatusEnum.SUCCESS.getValue());
             if (newCodelists.size() > 0) {
                 result.setMsg("保存成功！");
             } else {
@@ -90,7 +90,7 @@ public class CodelistController extends BaseController {
             }
             result.getParameters().put("object", newCodelists);
         } catch (Exception ex) {
-            result.setCode(Global.RESULT_STAUTS_FAILED);
+            result.setCode(ResultStatusEnum.ERROR.getValue());
             result.setMsg("保存失败！");
             result.getErrors().put("exception", ex);
         }

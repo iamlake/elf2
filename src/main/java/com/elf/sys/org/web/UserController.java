@@ -5,6 +5,7 @@ import com.elf.core.context.context.Context;
 import com.elf.core.context.context.ContextHolder;
 import com.elf.core.context.context.impl.ContextImpl;
 import com.elf.core.persistence.constants.Global;
+import com.elf.core.persistence.constants.ResultStatusEnum;
 import com.elf.core.persistence.result.JSONResult;
 import com.elf.core.persistence.result.QueryResult;
 import com.elf.core.persistence.result.Result;
@@ -46,11 +47,11 @@ public class UserController extends BaseController {
         JSONResult result = new JSONResult();
         Subject subject = SecurityUtils.getSubject();
         if (subject.isAuthenticated()) {
-            result.setCode(Global.RESULT_STAUTS_SUCCESS);
+            result.setCode(ResultStatusEnum.SUCCESS.getValue());
         } else if (user.getAccount() == null || user.getPassword() == null) {
-            result.setCode(Global.RESULT_STAUTS_FAILED);
+            result.setCode(ResultStatusEnum.FAILED.getValue());
         } else if (!kaptcha.equals(request.getSession().getAttribute(Constants.KAPTCHA_SESSION_KEY))) {
-            result.setCode(Global.RESULT_STAUTS_FAILED);
+            result.setCode(ResultStatusEnum.FAILED.getValue());
             result.setMsg("验证码不正确！");
         } else {
             UsernamePasswordToken token = new UsernamePasswordToken(user.getAccount(), user.getPassword());
@@ -64,16 +65,16 @@ public class UserController extends BaseController {
                 context.setCurrentUser(loginUser);
                 session.setAttribute("com.elf.core.context.Context", context);
                 ContextHolder.setContext(context); 
-                result.setCode(Global.RESULT_STAUTS_SUCCESS);
+                result.setCode(ResultStatusEnum.SUCCESS.getValue());
                 result.setMsg("登录成功！");
             } catch (IncorrectCredentialsException e) {
-                result.setCode(Global.RESULT_STAUTS_FAILED);
+                result.setCode(ResultStatusEnum.FAILED.getValue());
                 result.setMsg("用户名或密码不正确！");
             } catch (LockedAccountException e) {
-                result.setCode(Global.RESULT_STAUTS_FAILED);
+                result.setCode(ResultStatusEnum.FAILED.getValue());
                 result.setMsg("账户已被冻结！");
             } catch (AuthenticationException e) {
-                result.setCode(Global.RESULT_STAUTS_FAILED);
+                result.setCode(ResultStatusEnum.ERROR.getValue());
                 result.setMsg("登录失败！");
             }
         }
@@ -107,7 +108,7 @@ public class UserController extends BaseController {
         List<User> list = new ArrayList<>();
         User user = userService.getUserByAccount(account);
         list.add(user);
-        return new QueryResult<>(Global.RESULT_STAUTS_SUCCESS, "", list, list.size());
+        return new QueryResult<>(ResultStatusEnum.SUCCESS.getValue(), "", list, list.size());
     }
 
     /**
@@ -127,7 +128,7 @@ public class UserController extends BaseController {
             Collections.addAll(withoutIdsList, withoutIds.split(","));
         }
         List<User> list = userService.getUsers(user, withoutIdsList);
-        return new QueryResult<>(Global.RESULT_STAUTS_SUCCESS, "", list, list.size());
+        return new QueryResult<>(ResultStatusEnum.SUCCESS.getValue(), "", list, list.size());
     }
 
     /**
@@ -143,11 +144,11 @@ public class UserController extends BaseController {
         JSONResult result = new JSONResult();
         try {
             User newUser = userService.saveUser(user);
-            result.setCode(Global.RESULT_STAUTS_SUCCESS);
+            result.setCode(ResultStatusEnum.SUCCESS.getValue());
             result.setMsg("添加成功！");
             result.getParameters().put("object", newUser);
         }catch (Exception ex){
-            result.setCode(Global.RESULT_STAUTS_FAILED);
+            result.setCode(ResultStatusEnum.ERROR.getValue());
             result.setMsg("添加失败！");
             result.getErrors().put("exception", ex);
         }
@@ -167,11 +168,11 @@ public class UserController extends BaseController {
         JSONResult result = new JSONResult();
         try {
             User newUser = userService.updateUser(user);
-            result.setCode(Global.RESULT_STAUTS_SUCCESS);
+            result.setCode(ResultStatusEnum.SUCCESS.getValue());
             result.setMsg("修改成功！");
             result.getParameters().put("object", newUser);
         }catch (Exception ex){
-            result.setCode(Global.RESULT_STAUTS_FAILED);
+            result.setCode(ResultStatusEnum.ERROR.getValue());
             result.setMsg("修改失败！");
             result.getErrors().put("exception", ex);
         }
@@ -191,11 +192,11 @@ public class UserController extends BaseController {
         JSONResult result = new JSONResult();
         try {
             User newUser = userService.updateUserPassword(user);
-            result.setCode(Global.RESULT_STAUTS_SUCCESS);
+            result.setCode(ResultStatusEnum.SUCCESS.getValue());
             result.setMsg("修改成功！");
             result.getParameters().put("object", newUser);
         }catch (Exception ex){
-            result.setCode(Global.RESULT_STAUTS_FAILED);
+            result.setCode(ResultStatusEnum.ERROR.getValue());
             result.setMsg("修改失败！");
             result.getErrors().put("exception", ex);
         }
@@ -213,7 +214,7 @@ public class UserController extends BaseController {
     @ResponseBody
     public Result findUnitUsers(String unitId, User user) {
         List<User> list = userService.getUnitUsers(unitId, user);
-        return new QueryResult<>(Global.RESULT_STAUTS_SUCCESS, "", list, list.size());
+        return new QueryResult<>(ResultStatusEnum.SUCCESS.getValue(), "", list, list.size());
     }
 
     @GetMapping("/user/roleUnitUser")
@@ -221,7 +222,7 @@ public class UserController extends BaseController {
     public Result findUnitUsersByRoleId(String roleId, User user) {
         List<User> UserList = userService.getUnitUsersByRoleId(roleId, user);
         QueryResult<User> result = new QueryResult<>();
-        result.setCode(Global.RESULT_STAUTS_SUCCESS);
+        result.setCode(ResultStatusEnum.SUCCESS.getValue());
         result.setData(UserList);
         result.setCount(UserList.size());
         return result;

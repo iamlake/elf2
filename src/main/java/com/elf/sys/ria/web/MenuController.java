@@ -1,7 +1,7 @@
 package com.elf.sys.ria.web;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import com.elf.core.persistence.constants.Global;
+import com.elf.core.persistence.constants.ResultStatusEnum;
 import com.elf.core.persistence.result.JSONResult;
 import com.elf.core.persistence.result.QueryResult;
 import com.elf.core.persistence.result.Result;
@@ -36,7 +36,7 @@ public class MenuController extends BaseController {
     @GetMapping("/menu")
     public Result findMenuList(Menu menu) {
         List<Menu> list = menuService.selectList(new EntityWrapper<>(menu));
-        return new QueryResult<>(Global.RESULT_STAUTS_SUCCESS, "", list, list.size());
+        return new QueryResult<>(ResultStatusEnum.SUCCESS.getValue(), "", list, list.size());
     }
 
     /**
@@ -48,10 +48,8 @@ public class MenuController extends BaseController {
      */
     @GetMapping("/menu/{appId}")
     public Result findMenuListByAppId(@PathVariable("appId") String appId) {
-        Menu menu = new Menu();
-        menu.setAppId(appId);
-        List<Menu> list = menuService.selectList(new EntityWrapper<>(menu));
-        return new QueryResult<>(Global.RESULT_STAUTS_SUCCESS, "", list, list.size());
+        List<Menu> list = menuService.getMenuListByAppId(appId);
+        return new QueryResult<>(ResultStatusEnum.SUCCESS.getValue(), "", list, list.size());
     }
 
     /**
@@ -69,11 +67,11 @@ public class MenuController extends BaseController {
         menu.setCreationTime(new Date());
         boolean bRet = menuService.insert(menu);
         if (bRet) {
-            result.setCode(Global.RESULT_STAUTS_SUCCESS);
+            result.setCode(ResultStatusEnum.SUCCESS.getValue());
             result.setMsg("添加成功！");
             result.getParameters().put("", "");
         } else {
-            result.setCode(Global.RESULT_STAUTS_FAILED);
+            result.setCode(ResultStatusEnum.FAILED.getValue());
             result.setMsg("添加失败！");
         }
         return result;
@@ -92,11 +90,11 @@ public class MenuController extends BaseController {
         menu.setModifiedBy(getSessionUser().getAccount());
         boolean bRet = menuService.updateById(menu);
         if (bRet) {
-            result.setCode(Global.RESULT_STAUTS_SUCCESS);
+            result.setCode(ResultStatusEnum.SUCCESS.getValue());
             result.setMsg("修改成功！");
             result.getParameters().put("", "");
         } else {
-            result.setCode(Global.RESULT_STAUTS_FAILED);
+            result.setCode(ResultStatusEnum.FAILED.getValue());
             result.setMsg("修改失败！");
         }
         return result;
@@ -114,11 +112,11 @@ public class MenuController extends BaseController {
         JSONResult result = new JSONResult();
         boolean bRet = menuService.deleteById(menuId);
         if (bRet) {
-            result.setCode(Global.RESULT_STAUTS_SUCCESS);
+            result.setCode(ResultStatusEnum.SUCCESS.getValue());
             result.setMsg("删除成功！");
             result.getParameters().put("", "");
         } else {
-            result.setCode(Global.RESULT_STAUTS_FAILED);
+            result.setCode(ResultStatusEnum.FAILED.getValue());
             result.setMsg("删除失败！");
         }
         return result;

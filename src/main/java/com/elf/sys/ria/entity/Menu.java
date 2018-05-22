@@ -24,6 +24,8 @@ public class Menu extends DataEntity {
 
     private String icon;
 
+    private String iconfont;
+
     private String spread;
 
     private String menuOrder;

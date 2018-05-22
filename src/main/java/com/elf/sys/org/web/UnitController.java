@@ -1,7 +1,7 @@
 package com.elf.sys.org.web;
 
 import com.elf.core.common.utils.StringUtils;
-import com.elf.core.persistence.constants.Global;
+import com.elf.core.persistence.constants.ResultStatusEnum;
 import com.elf.core.persistence.result.JSONResult;
 import com.elf.core.persistence.result.QueryResult;
 import com.elf.core.persistence.result.Result;
@@ -31,7 +31,7 @@ public class UnitController extends BaseController {
     public Result findDimensionList() {
         List<Dimension> dimensionList = unitService.getDimensionList();
         QueryResult<Dimension> result = new QueryResult<>();
-        result.setCode(Global.RESULT_STAUTS_SUCCESS);
+        result.setCode(ResultStatusEnum.SUCCESS.getValue());
         result.setData(dimensionList);
         result.setCount(dimensionList.size());
         return result;
@@ -42,11 +42,11 @@ public class UnitController extends BaseController {
         JSONResult result = new JSONResult();
         Dimension newDimension = unitService.saveDimension(dimension);
         if (newDimension != null) {
-            result.setCode(Global.RESULT_STAUTS_SUCCESS);
+            result.setCode(ResultStatusEnum.SUCCESS.getValue());
             result.setMsg("添加成功！");
             result.getParameters().put("object", newDimension);
         } else {
-            result.setCode(Global.RESULT_STAUTS_FAILED);
+            result.setCode(ResultStatusEnum.FAILED.getValue());
             result.setMsg("添加失败！");
         }
         return result;
@@ -57,11 +57,11 @@ public class UnitController extends BaseController {
         JSONResult result = new JSONResult();
         try {
             unitService.deleteDimension(dimensionId);
-            result.setCode(Global.RESULT_STAUTS_SUCCESS);
+            result.setCode(ResultStatusEnum.SUCCESS.getValue());
             result.setMsg("删除成功！");
             result.getParameters().put("", "");
         } catch (Exception ex) {
-            result.setCode(Global.RESULT_STAUTS_FAILED);
+            result.setCode(ResultStatusEnum.ERROR.getValue());
             result.setMsg("删除失败！");
             result.getErrors().put("exception", ex);
         }
@@ -74,7 +74,7 @@ public class UnitController extends BaseController {
         QueryResult<DimensionUnit> result = new QueryResult<>();
         ArrayList<DimensionUnit> dimensionUnitList = new ArrayList<>();
         dimensionUnitList.add(dimensionUnit);
-        result.setCode(Global.RESULT_STAUTS_SUCCESS);
+        result.setCode(ResultStatusEnum.SUCCESS.getValue());
         result.setData(dimensionUnitList);
         result.setCount(dimensionUnitList.size());
         return result;
@@ -84,7 +84,7 @@ public class UnitController extends BaseController {
     public Result findChildDimensionUnitList(String parentDimensionUnitId, String dimensionId) {
         List<DimensionUnit> dimensionUnitList = unitService.getChildDimensionUnitList(parentDimensionUnitId, dimensionId);
         QueryResult<DimensionUnit> result = new QueryResult<>();
-        result.setCode(Global.RESULT_STAUTS_SUCCESS);
+        result.setCode(ResultStatusEnum.SUCCESS.getValue());
         result.setData(dimensionUnitList);
         result.setCount(dimensionUnitList.size());
         return result;
@@ -94,7 +94,7 @@ public class UnitController extends BaseController {
     public Result findAllChildDimensionUnitList(String parentDimensionUnitId, String dimensionId) {
         List<DimensionUnit> dimensionUnitList = unitService.getAllChildDimensionUnitList(parentDimensionUnitId, dimensionId);
         QueryResult<DimensionUnit> result = new QueryResult<>();
-        result.setCode(Global.RESULT_STAUTS_SUCCESS);
+        result.setCode(ResultStatusEnum.SUCCESS.getValue());
         result.setData(dimensionUnitList);
         result.setCount(dimensionUnitList.size());
         return result;
@@ -106,7 +106,7 @@ public class UnitController extends BaseController {
         QueryResult<Unit> result = new QueryResult<>();
         ArrayList<Unit> unitList = new ArrayList<>();
         unitList.add(unit);
-        result.setCode(Global.RESULT_STAUTS_SUCCESS);
+        result.setCode(ResultStatusEnum.SUCCESS.getValue());
         result.setData(unitList);
         result.setCount(unitList.size());
         return result;
@@ -117,11 +117,11 @@ public class UnitController extends BaseController {
         JSONResult result = new JSONResult();
         try {
             DimensionUnit dimensionUnit = unitService.saveUnitAndDimensionUnit(paramUnit, parentDimensionUnitId, dimensionId);
-            result.setCode(Global.RESULT_STAUTS_SUCCESS);
+            result.setCode(ResultStatusEnum.SUCCESS.getValue());
             result.setMsg("添加成功！");
             result.getParameters().put("object", dimensionUnit);
         } catch (Exception ex) {
-            result.setCode(Global.RESULT_STAUTS_FAILED);
+            result.setCode(ResultStatusEnum.ERROR.getValue());
             result.getErrors().put("exception", ex);
             result.setMsg("添加失败！");
         }
@@ -133,11 +133,11 @@ public class UnitController extends BaseController {
         JSONResult result = new JSONResult();
         try {
             DimensionUnit dimensionUnit = unitService.updateUnitAndDimensionUnit(paramUnit);
-            result.setCode(Global.RESULT_STAUTS_SUCCESS);
+            result.setCode(ResultStatusEnum.SUCCESS.getValue());
             result.setMsg("修改成功！");
             result.getParameters().put("object", dimensionUnit);
         } catch (Exception ex) {
-            result.setCode(Global.RESULT_STAUTS_FAILED);
+            result.setCode(ResultStatusEnum.ERROR.getValue());
             result.getErrors().put("exception", ex);
             result.setMsg("修改失败！");
         }
@@ -149,10 +149,10 @@ public class UnitController extends BaseController {
         JSONResult result = new JSONResult();
         try {
             unitService.deleteUnitAndDimensionUnit(dimensionUnitId);
-            result.setCode(Global.RESULT_STAUTS_SUCCESS);
+            result.setCode(ResultStatusEnum.SUCCESS.getValue());
             result.setMsg("删除成功！");
         } catch (Exception ex) {
-            result.setCode(Global.RESULT_STAUTS_FAILED);
+            result.setCode(ResultStatusEnum.ERROR.getValue());
             result.getErrors().put("exception", ex);
             result.setMsg("删除失败！");
         }
@@ -169,11 +169,11 @@ public class UnitController extends BaseController {
         JSONResult result = new JSONResult();
         try {
             unitService.saveUnitUsers(userIdsList, unitId);
-            result.setCode(Global.RESULT_STAUTS_SUCCESS);
+            result.setCode(ResultStatusEnum.SUCCESS.getValue());
             result.setMsg("添加成功！");
             result.getParameters().put("", "");
         } catch (Exception ex) {
-            result.setCode(Global.RESULT_STAUTS_FAILED);
+            result.setCode(ResultStatusEnum.ERROR.getValue());
             result.setMsg("添加失败！");
         }
         return result;
@@ -189,11 +189,11 @@ public class UnitController extends BaseController {
         JSONResult result = new JSONResult();
         try {
             unitService.deleteUnitUsers(userIdsList, unitId);
-            result.setCode(Global.RESULT_STAUTS_SUCCESS);
+            result.setCode(ResultStatusEnum.SUCCESS.getValue());
             result.setMsg("删除成功！");
             result.getParameters().put("", "");
         } catch (Exception ex) {
-            result.setCode(Global.RESULT_STAUTS_FAILED);
+            result.setCode(ResultStatusEnum.ERROR.getValue());
             result.getErrors().put("exception", ex);
             result.setMsg("删除失败！");
         }
@@ -205,11 +205,11 @@ public class UnitController extends BaseController {
         JSONResult result = new JSONResult();
         try {
             UnitUser newUnitUser = unitService.saveUnitUser(userId, unitId);
-            result.setCode(Global.RESULT_STAUTS_SUCCESS);
+            result.setCode(ResultStatusEnum.SUCCESS.getValue());
             result.setMsg("添加成功！");
             result.getParameters().put("object", newUnitUser);
         } catch (Exception ex) {
-            result.setCode(Global.RESULT_STAUTS_FAILED);
+            result.setCode(ResultStatusEnum.ERROR.getValue());
             result.setMsg("添加失败！");
             result.getErrors().put("exception", ex);
         }
@@ -221,11 +221,11 @@ public class UnitController extends BaseController {
         JSONResult result = new JSONResult();
         try {
             unitService.deleteUnitUser(userId, unitId);
-            result.setCode(Global.RESULT_STAUTS_SUCCESS);
+            result.setCode(ResultStatusEnum.SUCCESS.getValue());
             result.setMsg("删除成功！");
             result.getParameters().put("", "");
         } catch (Exception ex) {
-            result.setCode(Global.RESULT_STAUTS_FAILED);
+            result.setCode(ResultStatusEnum.ERROR.getValue());
             result.setMsg("删除失败！");
             result.getErrors().put("exception", ex);
         }

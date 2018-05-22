@@ -1,7 +1,7 @@
 package com.elf.techcomp.scheduler.web;
 
 import com.baomidou.mybatisplus.plugins.Page;
-import com.elf.core.persistence.constants.Global;
+import com.elf.core.persistence.constants.ResultStatusEnum;
 import com.elf.core.persistence.result.JSONResult;
 import com.elf.core.persistence.result.QueryResult;
 import com.elf.core.persistence.result.Result;
@@ -41,10 +41,10 @@ public class JobController extends BaseController {
         JSONResult result = new JSONResult();
         try {
             doJobAdd(jobAndTrigger.getJobClassName(), jobAndTrigger.getJobGroup(), jobAndTrigger.getCronExpression(), jobAndTrigger.getDescription());
-            result.setCode(Global.RESULT_STAUTS_SUCCESS);
+            result.setCode(ResultStatusEnum.SUCCESS.getValue());
             result.setMsg("创建定时任务成功！");
         } catch (Exception ex) {
-            result.setCode(Global.RESULT_STAUTS_FAILED);
+            result.setCode(ResultStatusEnum.ERROR.getValue());
             result.getErrors().put("exception", ex);
             result.setMsg("创建定时任务失败！");
         }
@@ -78,10 +78,10 @@ public class JobController extends BaseController {
         JSONResult result = new JSONResult();
         try {
             doJobPause(jobClassName, jobGroupName);
-            result.setCode(Global.RESULT_STAUTS_SUCCESS);
+            result.setCode(ResultStatusEnum.SUCCESS.getValue());
             result.setMsg("停止定时任务成功！");
         } catch (Exception ex) {
-            result.setCode(Global.RESULT_STAUTS_FAILED);
+            result.setCode(ResultStatusEnum.ERROR.getValue());
             result.getErrors().put("exception", ex);
             result.setMsg("停止定时任务失败！");
         }
@@ -98,10 +98,10 @@ public class JobController extends BaseController {
         JSONResult result = new JSONResult();
         try {
             doJobResume(jobClassName, jobGroupName);
-            result.setCode(Global.RESULT_STAUTS_SUCCESS);
+            result.setCode(ResultStatusEnum.SUCCESS.getValue());
             result.setMsg("重启定时任务成功！");
         } catch (Exception ex) {
-            result.setCode(Global.RESULT_STAUTS_FAILED);
+            result.setCode(ResultStatusEnum.ERROR.getValue());
             result.getErrors().put("exception", ex);
             result.setMsg("重启定时任务失败！");
         }
@@ -117,10 +117,10 @@ public class JobController extends BaseController {
         JSONResult result = new JSONResult();
         try {
             doJobReschedule(jobAndTrigger.getJobClassName(), jobAndTrigger.getJobGroup(), jobAndTrigger.getCronExpression());
-            result.setCode(Global.RESULT_STAUTS_SUCCESS);
+            result.setCode(ResultStatusEnum.SUCCESS.getValue());
             result.setMsg("更新定时任务成功！");
         } catch (Exception ex) {
-            result.setCode(Global.RESULT_STAUTS_FAILED);
+            result.setCode(ResultStatusEnum.ERROR.getValue());
             result.getErrors().put("exception", ex);
             result.setMsg("更新定时任务失败！");
         }
@@ -149,10 +149,10 @@ public class JobController extends BaseController {
         JSONResult result = new JSONResult();
         try {
             doJobDelete(jobClassName, jobGroupName);
-            result.setCode(Global.RESULT_STAUTS_SUCCESS);
+            result.setCode(ResultStatusEnum.SUCCESS.getValue());
             result.setMsg("删除定时任务成功！");
         } catch (Exception ex) {
-            result.setCode(Global.RESULT_STAUTS_FAILED);
+            result.setCode(ResultStatusEnum.ERROR.getValue());
             result.getErrors().put("exception", ex);
             result.setMsg("删除定时任务失败！");
         }
@@ -170,7 +170,7 @@ public class JobController extends BaseController {
         Page page = new Page(pageNum, pageSize);
         Page<JobAndTrigger> jobAndTriggerData = jobAndTriggerService.getJobAndTriggerDetails(jobAndTrigger, page);
         QueryResult<JobAndTrigger> result = new QueryResult<>();
-        result.setCode(Global.RESULT_STAUTS_SUCCESS);
+        result.setCode(ResultStatusEnum.SUCCESS.getValue());
         result.setData(jobAndTriggerData.getRecords());
         result.setCount(jobAndTriggerData.getTotal());
         return result;

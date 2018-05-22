@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.enums.SqlLike;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.elf.core.common.utils.StringUtils;
 import com.elf.core.context.context.ContextHolder;
-import com.elf.core.persistence.constants.Global;
+import com.elf.core.persistence.constants.SexEnum;
 import com.elf.core.service.impl.BaseServiceImpl;
 import com.elf.sys.org.entity.User;
 import com.elf.sys.org.mapper.UserMapper;
@@ -37,9 +37,9 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
         user.setUserId(StringUtils.getUUID());
         user.setPassword("1");
         if (StringUtils.isBlank(user.getUserHead())) {
-            if (Global.SEX_MALE.equals(user.getSex())) {
+            if (SexEnum.MALE.getValue().equals(user.getSex())) {
                 user.setUserHead("/static/assets/images/userhead/default_male.jpg");
-            } else if (Global.SEX_FEMALE.equals(user.getSex())) {
+            } else if (SexEnum.FEMALE.getValue().equals(user.getSex())) {
                 user.setUserHead("/static/assets/images/userhead/default_female.jpg");
             } else {
                 user.setUserHead("/static/assets/images/userhead/default_none.jpg");
@@ -88,13 +88,13 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
 
     @Override
     public List<User> getUnitUsers(String unitId, User user) {
-        List<User> userList = userMapper.selectUnitUsers(unitId, user.getAccount(), user.getFullname());
+        List<User> userList = userMapper.selectUnitUsers(unitId, user.getAccount(), "%" + user.getFullname() + "%");
         return userList;
     }
 
     @Override
     public List<User> getUnitUsersByRoleId(String roleId, User user) {
-        List<User> userList = userMapper.selectUnitUsersByRoleId(roleId, user.getAccount(), user.getFullname());
+        List<User> userList = userMapper.selectUnitUsersByRoleId(roleId, user.getAccount(), "%" + user.getFullname() + "%");
         return userList;
     }
 }
