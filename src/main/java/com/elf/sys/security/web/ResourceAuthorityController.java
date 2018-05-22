@@ -60,6 +60,39 @@ public class ResourceAuthorityController extends BaseController {
         return result;
     }
 
+    @GetMapping("/appAuthority")
+    public Result findAppAuthorityByRoleId(String roleId) {
+        List<ResourceAuthority> appAuthorityList = resourceAuthorityService.getAppAuthorityByRoleId(roleId);
+        QueryResult<ResourceAuthority> result = new QueryResult<>();
+        result.setCode(ResultStatusEnum.SUCCESS.getValue());
+        result.setData(appAuthorityList);
+        result.setCount(appAuthorityList.size());
+        return result;
+    }
+
+    @PostMapping("/appAuthority")
+    public Result saveAppAuthority(String roleId, String appIds) {
+        List<String> appIdList = null;
+        if (StringUtils.isNotBlank(appIds)) {
+            appIdList = new ArrayList<>();
+            for (String appId : appIds.split(",")) {
+                appIdList.add(appId);
+            }
+        }
+        JSONResult result = new JSONResult();
+        try {
+            List<ResourceAuthority> authorityList = resourceAuthorityService.saveAppAuthority(roleId, appIdList);
+            result.setCode(ResultStatusEnum.SUCCESS.getValue());
+            result.setMsg("保存成功！");
+            result.getParameters().put("object", authorityList);
+        } catch (Exception ex) {
+            result.setCode(ResultStatusEnum.ERROR.getValue());
+            result.getErrors().put("exception", ex);
+            result.setMsg("保存失败！");
+        }
+        return result;
+    }
+
     @PostMapping("/permissionAuthority")
     public Result savePermissionAuthority(String roleId, String permissions) {
         List<String> permissionList = new ArrayList<>();

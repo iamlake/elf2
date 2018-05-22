@@ -16,6 +16,18 @@ public interface ResourceAuthorityService extends BaseService<ResourceAuthority>
 
     List<ResourceAuthority> savePermissionAuthorityForbidden(String roleId, List<String> permissionList) throws Exception;
 
+    List<ResourceAuthority> saveAppAuthority(String roleId, List<String> appIdList) throws Exception;
+
+    List<ResourceAuthority> saveAppAuthorityForbidden(String roleId, List<String> appIdList) throws Exception;
+
+    List<ResourceAuthority> getAppAuthorityByRoleId(String roleId);
+
+    List<ResourceAuthority> getAppAuthority();
+
+    List<ResourceAuthority> getAppAuthorityForbidden();
+
+    List<ResourceAuthority> getAppAuthorityForbiddenByRoleId(String roleId);
+
     List<ResourceAuthority> saveMenuAuthority(String roleId, List<String> menuIdList) throws Exception;
 
     List<ResourceAuthority> saveMenuAuthorityForbidden(String roleId, List<String> menuIdList) throws Exception;

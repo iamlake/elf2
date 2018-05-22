@@ -199,6 +199,7 @@
             $('.queryUserForm')[0].reset();
             cRoleId = v;
             doQueryUser(true);
+            bindAppAuthority(v);
             bindMenuAuthority(v);
         }
 
@@ -428,6 +429,23 @@
             })
         }
 
+        function bindAppAuthority(roleId) {
+            treeMenuObj.checkAllNodes(false);
+            $.get(basePath + "/appAuthority", {'roleId': roleId}, function (result) {
+                var appNodes = treeAppObj.transformToArray(treeAppObj.getNodes());
+                if (result.code == 0 && result.count > 0) {
+                    for (var i in result.data) {
+                        for (var j in appNodes) {
+                            if (result.data[i].resourceId == appNodes[j].appId) {
+                                appNodes[j].checked = true;
+                                treeAppObj.updateNode(appNodes[j], false);
+                            }
+                        }
+                    }
+                }
+            })
+        }
+
         function bindMenuAuthority(roleId) {
             treeMenuObj.checkAllNodes(false);
             $.get(basePath + "/menuAuthority", {'roleId': roleId}, function (result) {
@@ -471,7 +489,35 @@
         }
 
         saveAppAuthority = function () {
+            var checkedNodes = treeAppObj.getCheckedNodes(true);
+            var appIds = '';
+            for (var i in checkedNodes) {
+                appIds += checkedNodes[i].appId;
+                appIds += ',';
+            }
+            // 弹出loading
+            var index = top.layer.msg('数据提交中，请稍候…', {
+                icon: 16,
+                time: 500,
+                shade: 0.8
+            }, function () {
+                $.post({
+                    url: basePath + "/appAuthority",
+                    data: {
+                        appIds: appIds,
+                        roleId: cRoleId
+                    },
+                    success: function (result) {
+                        top.layer.close(index);
+                        top.layer.msg(result.msg, {
+                            icon: 1,
+                            time: 1000
+                        }, function () {
 
+                        });
+                    }
+                });
+            });
         }
 
         saveMenuAuthority = function () {

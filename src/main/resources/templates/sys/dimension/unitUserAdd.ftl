@@ -39,19 +39,18 @@
 </form>
 <script type="text/javascript">
     var withoutIds;
-    layui.use(['form', 'layer', 'table', 'codelist', 'linq'], function () {
+    layui.use(['form', 'layer', 'table', 'codelist'], function () {
         var $ = layui.jquery,
                 layer = parent.layer === undefined ? layui.layer : top.layer,
-                table = layui.table, linq = layui.linq,
+                table = layui.table,
                 codelist = layui.codelist;
 
         $(function () {
             withoutIds = '';
-            linq.from(parent.tData).toArray().forEach(function (e) {
-                // withoutIds.unshift(e.userId);
-                withoutIds += e.userId;
+            for (var i in parent.tData) {
+                withoutIds += parent.tData[i].userId;
                 withoutIds += ',';
-            });
+            }
 
             //用户列表
             table.render({

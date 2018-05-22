@@ -27,17 +27,11 @@ import java.util.List;
  **/
 @Service
 public class ResourceAuthorityServiceImpl extends BaseServiceImpl<ResourceAuthorityMapper, ResourceAuthority> implements ResourceAuthorityService {
-    enum RoleTypeEnum {
-        adminRole, bizRole, unitRole, stationRole
-    }
+    enum RoleTypeEnum {adminRole, bizRole, unitRole, stationRole}
 
-    enum ResourceTypeEnum {
-        app, menu, permision
-    }
+    enum ResourceTypeEnum {app, menu, permision}
 
-    enum AuthorityTypeEnum {
-        available, forbidden
-    }
+    enum AuthorityTypeEnum {available, forbidden}
 
     @Autowired
     private ResourceAuthorityMapper resourceAuthorityMapper;
@@ -45,6 +39,13 @@ public class ResourceAuthorityServiceImpl extends BaseServiceImpl<ResourceAuthor
     @Autowired
     private RoleMapper roleMapper;
 
+    /**
+     * @Description: 保存指定角色可使用的Permission授权信息
+     * @Param: [roleId, permissionList]
+     * @return: java.util.List<com.elf.sys.security.entity.ResourceAuthority>
+     * @Author: Liyiming
+     * @Date: 2018/5/22
+     */
     @Transactional(rollbackFor = Exception.class)
     @Override
     public List<ResourceAuthority> savePermissionAuthority(String roleId, List<String> permissionList) {
@@ -52,6 +53,13 @@ public class ResourceAuthorityServiceImpl extends BaseServiceImpl<ResourceAuthor
         return this.savePermissionAuthority(roleId, permissionList, authorityType);
     }
 
+    /**
+     * @Description: 保存指定角色被禁用的Permission授权信息
+     * @Param: [roleId, permissionList]
+     * @return: java.util.List<com.elf.sys.security.entity.ResourceAuthority>
+     * @Author: Liyiming
+     * @Date: 2018/5/22
+     */
     @Transactional(rollbackFor = Exception.class)
     @Override
     public List<ResourceAuthority> savePermissionAuthorityForbidden(String roleId, List<String> permissionList) {
@@ -59,11 +67,142 @@ public class ResourceAuthorityServiceImpl extends BaseServiceImpl<ResourceAuthor
         return this.savePermissionAuthority(roleId, permissionList, authorityType);
     }
 
+    /**
+     * @Description: 保存指定角色的Permission授权信息，参数标识可使用/被禁用
+     * @Param: [roleId, permissionList, authorityType]
+     * @return: java.util.List<com.elf.sys.security.entity.ResourceAuthority>
+     * @Author: Liyiming
+     * @Date: 2018/5/22
+     */
     private List<ResourceAuthority> savePermissionAuthority(String roleId, List<String> permissionList, String authorityType) {
         String resourceType = ResourceTypeEnum.permision.toString();
         return this.saveResourceAuthority(roleId, permissionList, resourceType, authorityType);
     }
 
+    /**
+     * @Description: 保存指定角色可使用的应用授权信息
+     * @Param: [roleId, appIdList]
+     * @return: java.util.List<com.elf.sys.security.entity.ResourceAuthority>
+     * @Author: Liyiming
+     * @Date: 2018/5/22
+     */
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public List<ResourceAuthority> saveAppAuthority(String roleId, List<String> appIdList) {
+        String authorityType = AuthorityTypeEnum.available.toString();
+        return this.saveAppAuthority(roleId, appIdList, authorityType);
+    }
+
+    /**
+     * @Description: 保存指定角色被禁用的应用授权信息
+     * @Param: [roleId, appIdList]
+     * @return: java.util.List<com.elf.sys.security.entity.ResourceAuthority>
+     * @Author: Liyiming
+     * @Date: 2018/5/22
+     */
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public List<ResourceAuthority> saveAppAuthorityForbidden(String roleId, List<String> appIdList) {
+        String authorityType = AuthorityTypeEnum.forbidden.toString();
+        return this.saveAppAuthority(roleId, appIdList, authorityType);
+    }
+
+    /**
+     * @Description: 保存指定角色的应用授权信息，参数标识可使用/被禁用
+     * @Param: [roleId, appIdList, authorityType]
+     * @return: java.util.List<com.elf.sys.security.entity.ResourceAuthority>
+     * @Author: Liyiming
+     * @Date: 2018/5/22
+     */
+    private List<ResourceAuthority> saveAppAuthority(String roleId, List<String> appIdList, String authorityType) {
+        String resourceType = ResourceTypeEnum.app.toString();
+        this.deleteResourceAuthority(roleId, resourceType, authorityType);
+        return this.saveResourceAuthority(roleId, appIdList, resourceType, authorityType);
+    }
+
+    /**
+     * @Description: 根据指定角色查询可使用的应用授权信息
+     * @Param: [roleId]
+     * @return: java.util.List<com.elf.sys.security.entity.ResourceAuthority>
+     * @Author: Liyiming
+     * @Date: 2018/5/22
+     */
+    @Override
+    public List<ResourceAuthority> getAppAuthorityByRoleId(String roleId) {
+        String authorityType = AuthorityTypeEnum.available.toString();
+        ArrayList<String> roleIdList = new ArrayList<>();
+        roleIdList.add(roleId);
+        String resourceType = ResourceTypeEnum.app.toString();
+        return this.getResourceAuthority(roleIdList, resourceType, authorityType);
+    }
+
+    /**
+     * @Description: 根据指定角色查询被禁用的应用授权信息
+     * @Param: [roleId]
+     * @return: java.util.List<com.elf.sys.security.entity.ResourceAuthority>
+     * @Author: Liyiming
+     * @Date: 2018/5/22
+     */
+    @Override
+    public List<ResourceAuthority> getAppAuthorityForbiddenByRoleId(String roleId) {
+        String authorityType = AuthorityTypeEnum.forbidden.toString();
+        ArrayList<String> roleIdList = new ArrayList<>();
+        roleIdList.add(roleId);
+        String resourceType = ResourceTypeEnum.app.toString();
+        return this.getResourceAuthority(roleIdList, resourceType, authorityType);
+    }
+
+    /**
+     * @Description: 查询当前用户可使用的应用授权信息
+     * @Param: []
+     * @return: java.util.List<com.elf.sys.security.entity.ResourceAuthority>
+     * @Author: Liyiming
+     * @Date: 2018/5/22
+     */
+    @Override
+    public List<ResourceAuthority> getAppAuthority() {
+        String authorityType = AuthorityTypeEnum.available.toString();
+        return this.getAppAuthority(authorityType);
+    }
+
+    /**
+     * @Description: 查询当前用户被禁用的应用授权信息
+     * @Param: []
+     * @return: java.util.List<com.elf.sys.security.entity.ResourceAuthority>
+     * @Author: Liyiming
+     * @Date: 2018/5/22
+     */
+    @Override
+    public List<ResourceAuthority> getAppAuthorityForbidden() {
+        String authorityType = AuthorityTypeEnum.forbidden.toString();
+        return this.getAppAuthority(authorityType);
+    }
+
+    /**
+     * @Description: 查询当前用户的应用授权信息，参数标识可使用/被禁用
+     * @Param: [authorityType]
+     * @return: java.util.List<com.elf.sys.security.entity.ResourceAuthority>
+     * @Author: Liyiming
+     * @Date: 2018/5/22
+     */
+    private List<ResourceAuthority> getAppAuthority(String authorityType) {
+        User currentUser = ContextHolder.getContext().getCurrentUser();
+        List<Role> roleList = roleMapper.selectRoleListByUserId(currentUser.getUserId());
+        ArrayList<String> roleIdList = new ArrayList<>();
+        for (Role role : roleList) {
+            roleIdList.add(role.getRoleId());
+        }
+        String resourceType = ResourceTypeEnum.app.toString();
+        return this.getResourceAuthority(roleIdList, resourceType, authorityType);
+    }
+
+    /**
+     * @Description: 保存指定角色可使用的菜单授权信息
+     * @Param: [roleId, menuIdList]
+     * @return: java.util.List<com.elf.sys.security.entity.ResourceAuthority>
+     * @Author: Liyiming
+     * @Date: 2018/5/22
+     */
     @Transactional(rollbackFor = Exception.class)
     @Override
     public List<ResourceAuthority> saveMenuAuthority(String roleId, List<String> menuIdList) {
@@ -71,6 +210,13 @@ public class ResourceAuthorityServiceImpl extends BaseServiceImpl<ResourceAuthor
         return this.saveMenuAuthority(roleId, menuIdList, authorityType);
     }
 
+    /**
+     * @Description: 保存指定角色被禁用的菜单授权信息
+     * @Param: [roleId, menuIdList]
+     * @return: java.util.List<com.elf.sys.security.entity.ResourceAuthority>
+     * @Author: Liyiming
+     * @Date: 2018/5/22
+     */
     @Transactional(rollbackFor = Exception.class)
     @Override
     public List<ResourceAuthority> saveMenuAuthorityForbidden(String roleId, List<String> menuIdList) {
@@ -78,12 +224,26 @@ public class ResourceAuthorityServiceImpl extends BaseServiceImpl<ResourceAuthor
         return this.saveMenuAuthority(roleId, menuIdList, authorityType);
     }
 
+    /**
+     * @Description: 保存指定角色的菜单授权信息，参数标识可使用/被禁用
+     * @Param: [roleId, menuIdList, authorityType]
+     * @return: java.util.List<com.elf.sys.security.entity.ResourceAuthority>
+     * @Author: Liyiming
+     * @Date: 2018/5/22
+     */
     private List<ResourceAuthority> saveMenuAuthority(String roleId, List<String> menuIdList, String authorityType) {
         String resourceType = ResourceTypeEnum.menu.toString();
         this.deleteResourceAuthority(roleId, resourceType, authorityType);
         return this.saveResourceAuthority(roleId, menuIdList, resourceType, authorityType);
     }
 
+    /**
+     * @Description: 根据指定角色查询可使用的菜单授权信息
+     * @Param: [roleId]
+     * @return: java.util.List<com.elf.sys.security.entity.ResourceAuthority>
+     * @Author: Liyiming
+     * @Date: 2018/5/22
+     */
     @Override
     public List<ResourceAuthority> getMenuAuthorityByRoleId(String roleId) {
         String authorityType = AuthorityTypeEnum.available.toString();
@@ -93,6 +253,13 @@ public class ResourceAuthorityServiceImpl extends BaseServiceImpl<ResourceAuthor
         return this.getResourceAuthority(roleIdList, resourceType, authorityType);
     }
 
+    /**
+     * @Description: 根据指定角色查询被禁用的菜单授权信息
+     * @Param: [roleId]
+     * @return: java.util.List<com.elf.sys.security.entity.ResourceAuthority>
+     * @Author: Liyiming
+     * @Date: 2018/5/22
+     */
     @Override
     public List<ResourceAuthority> getMenuAuthorityForbiddenByRoleId(String roleId) {
         String authorityType = AuthorityTypeEnum.forbidden.toString();
@@ -102,18 +269,39 @@ public class ResourceAuthorityServiceImpl extends BaseServiceImpl<ResourceAuthor
         return this.getResourceAuthority(roleIdList, resourceType, authorityType);
     }
 
+    /**
+     * @Description: 查询当前用户可使用的菜单授权信息
+     * @Param: []
+     * @return: java.util.List<com.elf.sys.security.entity.ResourceAuthority>
+     * @Author: Liyiming
+     * @Date: 2018/5/22
+     */
     @Override
     public List<ResourceAuthority> getMenuAuthority() {
         String authorityType = AuthorityTypeEnum.available.toString();
         return this.getMenuAuthority(authorityType);
     }
 
+    /**
+     * @Description: 查询当前用户被禁用的菜单授权信息
+     * @Param: []
+     * @return: java.util.List<com.elf.sys.security.entity.ResourceAuthority>
+     * @Author: Liyiming
+     * @Date: 2018/5/22
+     */
     @Override
     public List<ResourceAuthority> getMenuAuthorityForbidden() {
         String authorityType = AuthorityTypeEnum.forbidden.toString();
         return this.getMenuAuthority(authorityType);
     }
 
+    /**
+     * @Description: 查询当前用户的菜单授权信息，参数标识可使用/被禁用
+     * @Param: [authorityType]
+     * @return: java.util.List<com.elf.sys.security.entity.ResourceAuthority>
+     * @Author: Liyiming
+     * @Date: 2018/5/22
+     */
     private List<ResourceAuthority> getMenuAuthority(String authorityType) {
         User currentUser = ContextHolder.getContext().getCurrentUser();
         List<Role> roleList = roleMapper.selectRoleListByUserId(currentUser.getUserId());
@@ -125,6 +313,13 @@ public class ResourceAuthorityServiceImpl extends BaseServiceImpl<ResourceAuthor
         return this.getResourceAuthority(roleIdList, resourceType, authorityType);
     }
 
+    /**
+     * @Description: 保存资源授权信息
+     * @Param: [roleId, resourceList, resourceType, authorityType]
+     * @return: java.util.List<com.elf.sys.security.entity.ResourceAuthority>
+     * @Author: Liyiming
+     * @Date: 2018/5/22
+     */
     private List<ResourceAuthority> saveResourceAuthority(String roleId, List<String> resourceList, String resourceType, String authorityType) {
         User currentUser = ContextHolder.getContext().getCurrentUser();
         Timestamp currentTime = new Timestamp(System.currentTimeMillis());
@@ -151,17 +346,30 @@ public class ResourceAuthorityServiceImpl extends BaseServiceImpl<ResourceAuthor
         return returnList;
     }
 
+    /**
+     * @Description: 查询资源授权信息
+     * @Param: [roleIdList, resourceType, authorityType]
+     * @return: java.util.List<com.elf.sys.security.entity.ResourceAuthority>
+     * @Author: Liyiming
+     * @Date: 2018/5/22
+     */
     private List<ResourceAuthority> getResourceAuthority(List<String> roleIdList, String resourceType, String authorityType) {
         EntityWrapper<ResourceAuthority> entityWrapper = new EntityWrapper<>();
         entityWrapper.in("ROLE_ID", roleIdList);
         entityWrapper.eq("RESOURCE_TYPE", resourceType).eq("AUTHORITY_TYPE", authorityType);
-        List<ResourceAuthority> resourceAuthorityList = resourceAuthorityMapper.selectList(entityWrapper);
-        return resourceAuthorityList;
+        return resourceAuthorityMapper.selectList(entityWrapper);
     }
 
-    private void deleteResourceAuthority(String roleId, String resourceType, String authorityType) {
+    /**
+     * @Description: 删除资源授权信息
+     * @Param: [roleId, resourceType, authorityType]
+     * @return: int
+     * @Author: Liyiming
+     * @Date: 2018/5/22
+     */
+    private int deleteResourceAuthority(String roleId, String resourceType, String authorityType) {
         EntityWrapper<ResourceAuthority> entityWrapper = new EntityWrapper<>();
         entityWrapper.eq("ROLE_ID", roleId).eq("RESOURCE_TYPE", resourceType).eq("AUTHORITY_TYPE", authorityType);
-        resourceAuthorityMapper.delete(entityWrapper);
+        return resourceAuthorityMapper.delete(entityWrapper);
     }
 }
