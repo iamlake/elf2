@@ -56,60 +56,74 @@ layui.use(['bodyTab', 'form', 'element', 'layer', 'jquery', 'linq', 'elf'], func
     });
 
     function loadTopLevelMenus() {
-        $.get(basePath + "/authorityApp", function (result) {
-            var innerhtml = '';
-            var innerhtml2 = '';
-            if (result.data.length > 0) {
-                window.sessionStorage.setItem(ROLE_APP, JSON.stringify(result.data));
-                //----topLevelMenus pc
-                linq.from(result.data).forEach(function (value, index) {
-                    if (index == 0) {
-                        curapp = value.appId;
-                        innerhtml += '<li class="layui-nav-item layui-this" data-menu="' + value.appId + '">';
-                        innerhtml += '<a href="javascript:;"><i class="layui-icon" data-icon="' + value.style + '">' + value.style + '</i><cite>' + value.title + '</cite></a>';
-                        innerhtml += '</li>';
-                    } else {
-                        innerhtml += '<li class="layui-nav-item" data-menu="' + value.appId + '" pc>';
-                        innerhtml += '<a href="javascript:;"><i class="layui-icon" data-icon="' + value.style + '">' + value.style + '</i><cite>' + value.title + '</cite></a>';
-                        innerhtml += '</li>';
-                    }
-                });
-                //----mobileTopLevelMenus
-                innerhtml2 += '<li class="layui-nav-item" data-menu="' + curapp + '">';
-                innerhtml2 += '<a href="javascript:;"><i class="seraph icon-caidan"></i><cite>layuiCMS</cite></a>';
-                innerhtml2 += '<dl class="layui-nav-child">';
-                linq.from(result.data).forEach(function (value, index) {
-                    if (index == 0) {
-                        innerhtml2 += '<dd class="layui-this" data-menu="' + curapp + '">';
-                        innerhtml2 += '<a href="javascript:;"><i class="layui-icon" data-icon="' + value.style + '">' + value.style + '</i><cite>' + value.title + '</cite></a>';
-                        innerhtml2 += '</dd>';
-                    } else {
-                        innerhtml2 += '<dd data-menu="' + value.appId + '">';
-                        innerhtml2 += '<a href="javascript:;"><i class="layui-icon" data-icon="' + value.style + '">' + value.style + '</i><cite>' + value.title + '</cite></a>';
-                        innerhtml2 += '</dd>';
-                    }
-                });
-                innerhtml2 += '</dl></li>';
-            }
-            $(".topLevelMenus").html(innerhtml);
-            $(".mobileTopLevelMenus").html(innerhtml2);
-            //通过顶部菜单获取左侧菜单
-            $(".topLevelMenus li,.mobileTopLevelMenus dd").click(function () {
-                if ($(this).parents(".mobileTopLevelMenus").length != "0") {
-                    $(".topLevelMenus li").eq($(this).index()).addClass("layui-this").siblings().removeClass("layui-this");
+        if (null == window.sessionStorage.getItem(ROLE_APP)) {
+            $.get(basePath + "/authorityApp", function (result) {
+                if (result.data.length > 0) {
+                    window.sessionStorage.setItem(ROLE_APP, JSON.stringify(result.data));
+                    buildTopLevelMenusHtml(result.data);
                 } else {
-                    $(".mobileTopLevelMenus dd").eq($(this).index()).addClass("layui-this").siblings().removeClass("layui-this");
+                    layer.msg("您没有任何应用菜单权限！", {
+                        time : 1000,
+                        icon : 5,
+                        anim : 6
+                    });
                 }
-                $(".layui-layout-admin").removeClass("showMenu");
-                $("body").addClass("site-mobile");
-                curapp = $(this).data("menu");
-                getData(curapp);
-                //渲染顶部窗口
-                tab.tabMove();
             });
-            //通过顶部菜单获取左侧二三级菜单
-            getData(curapp);
+        } else {
+            buildTopLevelMenusHtml(JSON.parse(window.sessionStorage.getItem(ROLE_APP)));
+        }
+    }
+
+    function buildTopLevelMenusHtml(appData) {
+        var innerhtml = '';
+        var innerhtml2 = '';
+        //----topLevelMenus pc
+        linq.from(appData).forEach(function (value, index) {
+            if (index == 0) {
+                curapp = value.appId;
+                innerhtml += '<li class="layui-nav-item layui-this" data-menu="' + value.appId + '">';
+                innerhtml += '<a href="javascript:;"><i class="layui-icon" data-icon="' + value.style + '">' + value.style + '</i><cite>' + value.title + '</cite></a>';
+                innerhtml += '</li>';
+            } else {
+                innerhtml += '<li class="layui-nav-item" data-menu="' + value.appId + '" pc>';
+                innerhtml += '<a href="javascript:;"><i class="layui-icon" data-icon="' + value.style + '">' + value.style + '</i><cite>' + value.title + '</cite></a>';
+                innerhtml += '</li>';
+            }
         });
+        //----mobileTopLevelMenus
+        innerhtml2 += '<li class="layui-nav-item" data-menu="' + curapp + '">';
+        innerhtml2 += '<a href="javascript:;"><i class="seraph icon-caidan"></i><cite>layuiCMS</cite></a>';
+        innerhtml2 += '<dl class="layui-nav-child">';
+        linq.from(appData).forEach(function (value, index) {
+            if (index == 0) {
+                innerhtml2 += '<dd class="layui-this" data-menu="' + curapp + '">';
+                innerhtml2 += '<a href="javascript:;"><i class="layui-icon" data-icon="' + value.style + '">' + value.style + '</i><cite>' + value.title + '</cite></a>';
+                innerhtml2 += '</dd>';
+            } else {
+                innerhtml2 += '<dd data-menu="' + value.appId + '">';
+                innerhtml2 += '<a href="javascript:;"><i class="layui-icon" data-icon="' + value.style + '">' + value.style + '</i><cite>' + value.title + '</cite></a>';
+                innerhtml2 += '</dd>';
+            }
+        });
+        innerhtml2 += '</dl></li>';
+        $(".topLevelMenus").html(innerhtml);
+        $(".mobileTopLevelMenus").html(innerhtml2);
+        //通过顶部菜单获取左侧菜单
+        $(".topLevelMenus li,.mobileTopLevelMenus dd").click(function () {
+            if ($(this).parents(".mobileTopLevelMenus").length != "0") {
+                $(".topLevelMenus li").eq($(this).index()).addClass("layui-this").siblings().removeClass("layui-this");
+            } else {
+                $(".mobileTopLevelMenus dd").eq($(this).index()).addClass("layui-this").siblings().removeClass("layui-this");
+            }
+            $(".layui-layout-admin").removeClass("showMenu");
+            $("body").addClass("site-mobile");
+            curapp = $(this).data("menu");
+            getData(curapp);
+            //渲染顶部窗口
+            tab.tabMove();
+        });
+        //通过顶部菜单获取左侧二三级菜单
+        getData(curapp);
     }
 
     $(".changePwd").click(function () {
@@ -161,6 +175,13 @@ layui.use(['bodyTab', 'form', 'element', 'layer', 'jquery', 'linq', 'elf'], func
             layer.close(index);
             layer.msg("缓存清除成功！");
         }, 1000);
+    })
+
+    //用户注销
+    $(".signOut").click(function () {
+        window.sessionStorage.clear();
+        window.localStorage.clear();
+        window.location.href = basePath + "/logout";
     })
 
     //刷新后还原打开的窗口

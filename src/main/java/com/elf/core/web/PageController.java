@@ -13,7 +13,7 @@ import java.awt.image.BufferedImage;
 
 /**
  * @Title: PageController
- * @Description: 视图控制器,返回jsp视图给前端
+ * @Description: 视图控制器, 返回jsp视图给前端
  * @Author:李一鸣(liyiming.neu@neusoft.com)
  * @Date:2017年10月24日
  */
@@ -24,10 +24,11 @@ public class PageController extends BaseController {
     private Producer captchaProducer;
 
     /**
-     * <br>Description: 验证码
-     * <br>Author:李一鸣(liyiming.neu@neusoft.com)
-     * <br>Date:2018年3月11日
-     * @return
+     * @Description: 验证码
+     * @Param: []
+     * @return: void
+     * @Author: Liyiming
+     * @Date: 2018/3/11
      */
     @GetMapping("/api/kaptcha.jpg")
     public void getKaptchaImage() throws Exception {
@@ -61,13 +62,13 @@ public class PageController extends BaseController {
     }
 
     /**
-     * <br>Description: 页面跳转
-     * <br>Author:李一鸣(liyiming.neu@neusoft.com)
-     * <br>Date:2017年11月23日
-     * @param path
-     * @return
+     * @Description: 页面跳转
+     * @Param: [path]
+     * @return: java.lang.String
+     * @Author: Liyiming
+     * @Date: 2018/5/24
      */
-    @GetMapping(value = "/page/{path}")
+    @GetMapping("/page/{path}")
     public String forward(@PathVariable String path) {
         return path.replace("_", "/");
     }

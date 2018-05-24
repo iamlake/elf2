@@ -20,7 +20,6 @@ import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -28,7 +27,7 @@ import java.util.Collections;
 import java.util.List;
 
 
-@Controller
+@RestController
 public class UserController extends BaseController {
     
     @Autowired
@@ -41,8 +40,7 @@ public class UserController extends BaseController {
      * @Author: Liyiming
      * @Date: 2017/10/24
      */
-    @RequestMapping(value = "/login", method = {RequestMethod.POST, RequestMethod.GET})
-    @ResponseBody
+    @PostMapping("/login")
     public Result userLogin(User user, String kaptcha, boolean rememberMe) {
         JSONResult result = new JSONResult();
         Subject subject = SecurityUtils.getSubject();
@@ -84,20 +82,6 @@ public class UserController extends BaseController {
     }
 
     /**
-     * @Description: 用户注销
-     * @Param: []
-     * @return: java.lang.String
-     * @Author: Liyiming
-     * @Date: 2017/10/24
-     */
-    @RequestMapping(value = "/logout", method = {RequestMethod.POST, RequestMethod.GET})
-    public String userLogout() {
-        Subject subject = SecurityUtils.getSubject();
-        subject.logout();
-        return "redirect:/page/login";
-    }
-
-    /**
      * @Description: 通过账号查询用户信息
      * @Param: [account]
      * @return: com.elf.core.persistence.result.Result
@@ -105,7 +89,6 @@ public class UserController extends BaseController {
      * @Date: 2017/12/17
      */
     @GetMapping("/user/{account}")
-    @ResponseBody
     public Result findUserByAccount(@PathVariable("account") String account) {
         List<User> list = new ArrayList<>();
         User user = userService.getUserByAccount(account);
@@ -122,7 +105,6 @@ public class UserController extends BaseController {
      * @Date: 2018/5/1
      */
     @GetMapping("/user")
-    @ResponseBody
     public Result findUsers(User user, String withoutIds) {
         List<String> withoutIdsList = null;
         if (StringUtils.isNotBlank(withoutIds)) {
@@ -141,7 +123,6 @@ public class UserController extends BaseController {
      * @Date: 2018/3/25
      */
     @PostMapping("/user")
-    @ResponseBody
     public Result addNewUser(User user) {
         JSONResult result = new JSONResult();
         try {
@@ -165,7 +146,6 @@ public class UserController extends BaseController {
      * @Date: 2018/3/25
      */
     @PutMapping("/user")
-    @ResponseBody
     public Result modifyUser(User user) {
         JSONResult result = new JSONResult();
         try {
@@ -189,7 +169,6 @@ public class UserController extends BaseController {
      * @Date: 2018/4/2
      */
     @PutMapping("/user/password")
-    @ResponseBody
     public Result modifyUserPassword(User user) {
         JSONResult result = new JSONResult();
         try {
@@ -213,14 +192,12 @@ public class UserController extends BaseController {
      * @Date: 2018/5/1
      */
     @GetMapping("/user/unitUser")
-    @ResponseBody
     public Result findUnitUsers(String unitId, User user) {
         List<User> list = userService.getUnitUsers(unitId, user);
         return new QueryResult<>(ResultStatusEnum.SUCCESS.getValue(), "", list, list.size());
     }
 
     @GetMapping("/user/roleUnitUser")
-    @ResponseBody
     public Result findUnitUsersByRoleId(String roleId, User user) {
         List<User> UserList = userService.getUnitUsersByRoleId(roleId, user);
         QueryResult<User> result = new QueryResult<>();
