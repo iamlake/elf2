@@ -10,12 +10,16 @@ layui.use(['bodyTab', 'form', 'element', 'layer', 'jquery', 'linq', 'elf'], func
         url: basePath + "/authorityMenu" //获取菜单json地址
     });
 
+    var ROLE_APP = loginUser.account + "_roleApp",
+        ROLE_MENU = loginUser.account + "_roleMenu";
+
+
     //通过顶部菜单获取左侧二三级菜单
     function getData(application) {
-        if (null == window.sessionStorage.getItem("rolemenu")) {
+        if (null == window.sessionStorage.getItem(ROLE_MENU)) {
             $.getJSON(tab.tabConfig.url, function (result) {
                 if (result.data.length > 0) {
-                    window.sessionStorage.setItem("rolemenu", JSON.stringify(result.data));
+                    window.sessionStorage.setItem(ROLE_MENU, JSON.stringify(result.data));
                     var menuList = linq.from(result.data).where(function (x) {
                         return x.appId == application
                     }).toArray();
@@ -25,7 +29,7 @@ layui.use(['bodyTab', 'form', 'element', 'layer', 'jquery', 'linq', 'elf'], func
                 }
             })
         } else {
-            var menuList = linq.from(JSON.parse(window.sessionStorage.getItem("rolemenu"))).where(function (x) {
+            var menuList = linq.from(JSON.parse(window.sessionStorage.getItem(ROLE_MENU))).where(function (x) {
                 return x.appId == application
             }).toArray();
             dataStr = elf.transTreeData(menuList, 'menuId', 'parentMenuId', 'children');
@@ -56,7 +60,7 @@ layui.use(['bodyTab', 'form', 'element', 'layer', 'jquery', 'linq', 'elf'], func
             var innerhtml = '';
             var innerhtml2 = '';
             if (result.data.length > 0) {
-                window.sessionStorage.setItem("roleapp", JSON.stringify(result.data));
+                window.sessionStorage.setItem(ROLE_APP, JSON.stringify(result.data));
                 //----topLevelMenus pc
                 linq.from(result.data).forEach(function (value, index) {
                     if (index == 0) {
@@ -112,7 +116,7 @@ layui.use(['bodyTab', 'form', 'element', 'layer', 'jquery', 'linq', 'elf'], func
         layui.layer.open({
             title: "修改密码",
             type: 2,
-            area : ['770px', '395px'],
+            area: ['770px', '395px'],
             content: basePath + "/page/sys_user_changePwd",
             success: function (layero, index) {
                 $.get(basePath + "/user/" + loginUser.account,
