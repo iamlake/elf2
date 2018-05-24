@@ -8,7 +8,6 @@ import java.util.Map;
 
 public class ContextImpl implements Context {
 
-    private static final long serialVersionUID = 5499258733594920432L;
     private User currentUser;
     private Map<Object, Object> customProperties = new HashMap<>();
 
@@ -64,4 +63,5 @@ public class ContextImpl implements Context {
         this.customProperties = paramMap;
     }
 
+    private static final long serialVersionUID = 5499258733594920432L;
 }

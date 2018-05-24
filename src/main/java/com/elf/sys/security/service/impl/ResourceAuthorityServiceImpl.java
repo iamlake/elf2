@@ -7,9 +7,7 @@ import com.elf.core.persistence.constants.Global;
 import com.elf.core.service.impl.BaseServiceImpl;
 import com.elf.sys.org.entity.User;
 import com.elf.sys.security.entity.ResourceAuthority;
-import com.elf.sys.security.entity.Role;
 import com.elf.sys.security.mapper.ResourceAuthorityMapper;
-import com.elf.sys.security.mapper.RoleMapper;
 import com.elf.sys.security.service.ResourceAuthorityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -35,9 +33,6 @@ public class ResourceAuthorityServiceImpl extends BaseServiceImpl<ResourceAuthor
 
     @Autowired
     private ResourceAuthorityMapper resourceAuthorityMapper;
-
-    @Autowired
-    private RoleMapper roleMapper;
 
     /**
      * @Description: 保存指定角色可使用的Permission授权信息
@@ -155,12 +150,12 @@ public class ResourceAuthorityServiceImpl extends BaseServiceImpl<ResourceAuthor
     /**
      * @Description: 查询当前用户可使用的应用授权信息
      * @Param: []
-     * @return: java.util.List<com.elf.sys.security.entity.ResourceAuthority>
+     * @return: java.util.List<java.lang.String>
      * @Author: Liyiming
      * @Date: 2018/5/22
      */
     @Override
-    public List<ResourceAuthority> getAppAuthority() {
+    public List<String> getAppAuthority() {
         String authorityType = AuthorityTypeEnum.available.toString();
         return this.getAppAuthority(authorityType);
     }
@@ -168,12 +163,12 @@ public class ResourceAuthorityServiceImpl extends BaseServiceImpl<ResourceAuthor
     /**
      * @Description: 查询当前用户被禁用的应用授权信息
      * @Param: []
-     * @return: java.util.List<com.elf.sys.security.entity.ResourceAuthority>
+     * @return: java.util.List<java.lang.String>
      * @Author: Liyiming
      * @Date: 2018/5/22
      */
     @Override
-    public List<ResourceAuthority> getAppAuthorityForbidden() {
+    public List<String> getAppAuthorityForbidden() {
         String authorityType = AuthorityTypeEnum.forbidden.toString();
         return this.getAppAuthority(authorityType);
     }
@@ -181,19 +176,14 @@ public class ResourceAuthorityServiceImpl extends BaseServiceImpl<ResourceAuthor
     /**
      * @Description: 查询当前用户的应用授权信息，参数标识可使用/被禁用
      * @Param: [authorityType]
-     * @return: java.util.List<com.elf.sys.security.entity.ResourceAuthority>
+     * @return: java.util.List<java.lang.String>
      * @Author: Liyiming
      * @Date: 2018/5/22
      */
-    private List<ResourceAuthority> getAppAuthority(String authorityType) {
+    private List<String> getAppAuthority(String authorityType) {
         User currentUser = ContextHolder.getContext().getCurrentUser();
-        List<Role> roleList = roleMapper.selectRoleListByUserId(currentUser.getUserId());
-        ArrayList<String> roleIdList = new ArrayList<>();
-        for (Role role : roleList) {
-            roleIdList.add(role.getRoleId());
-        }
         String resourceType = ResourceTypeEnum.app.toString();
-        return this.getResourceAuthority(roleIdList, resourceType, authorityType);
+        return resourceAuthorityMapper.selectResourceAuthorityByUserId(currentUser.getUserId(), resourceType, authorityType);
     }
 
     /**
@@ -272,12 +262,12 @@ public class ResourceAuthorityServiceImpl extends BaseServiceImpl<ResourceAuthor
     /**
      * @Description: 查询当前用户可使用的菜单授权信息
      * @Param: []
-     * @return: java.util.List<com.elf.sys.security.entity.ResourceAuthority>
+     * @return: java.util.List<java.lang.String>
      * @Author: Liyiming
      * @Date: 2018/5/22
      */
     @Override
-    public List<ResourceAuthority> getMenuAuthority() {
+    public List<String> getMenuAuthority() {
         String authorityType = AuthorityTypeEnum.available.toString();
         return this.getMenuAuthority(authorityType);
     }
@@ -285,12 +275,12 @@ public class ResourceAuthorityServiceImpl extends BaseServiceImpl<ResourceAuthor
     /**
      * @Description: 查询当前用户被禁用的菜单授权信息
      * @Param: []
-     * @return: java.util.List<com.elf.sys.security.entity.ResourceAuthority>
+     * @return: java.util.List<java.lang.String>
      * @Author: Liyiming
      * @Date: 2018/5/22
      */
     @Override
-    public List<ResourceAuthority> getMenuAuthorityForbidden() {
+    public List<String> getMenuAuthorityForbidden() {
         String authorityType = AuthorityTypeEnum.forbidden.toString();
         return this.getMenuAuthority(authorityType);
     }
@@ -298,19 +288,14 @@ public class ResourceAuthorityServiceImpl extends BaseServiceImpl<ResourceAuthor
     /**
      * @Description: 查询当前用户的菜单授权信息，参数标识可使用/被禁用
      * @Param: [authorityType]
-     * @return: java.util.List<com.elf.sys.security.entity.ResourceAuthority>
+     * @return: java.util.List<java.lang.String>
      * @Author: Liyiming
      * @Date: 2018/5/22
      */
-    private List<ResourceAuthority> getMenuAuthority(String authorityType) {
+    private List<String> getMenuAuthority(String authorityType) {
         User currentUser = ContextHolder.getContext().getCurrentUser();
-        List<Role> roleList = roleMapper.selectRoleListByUserId(currentUser.getUserId());
-        ArrayList<String> roleIdList = new ArrayList<>();
-        for (Role role : roleList) {
-            roleIdList.add(role.getRoleId());
-        }
         String resourceType = ResourceTypeEnum.menu.toString();
-        return this.getResourceAuthority(roleIdList, resourceType, authorityType);
+        return resourceAuthorityMapper.selectResourceAuthorityByUserId(currentUser.getUserId(), resourceType, authorityType);
     }
 
     /**

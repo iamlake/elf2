@@ -27,6 +27,13 @@ public class ResourceAuthorityController extends BaseController {
     @Autowired
     ResourceAuthorityService resourceAuthorityService;
 
+    /**
+     * @Description: 根据角色查询所有授权的菜单信息
+     * @Param: [roleId]
+     * @return: com.elf.core.persistence.result.Result
+     * @Author: Liyiming
+     * @Date: 2018/5/23
+     */
     @GetMapping("/menuAuthority")
     public Result findMenuAuthorityByRoleId(String roleId) {
         List<ResourceAuthority> menuAuthorityList = resourceAuthorityService.getMenuAuthorityByRoleId(roleId);
@@ -37,10 +44,17 @@ public class ResourceAuthorityController extends BaseController {
         return result;
     }
 
+    /**
+     * @Description: 保存角色与菜单的授权信息
+     * @Param: [roleId, menuIds]
+     * @return: com.elf.core.persistence.result.Result
+     * @Author: Liyiming
+     * @Date: 2018/5/23
+     */
     @PostMapping("/menuAuthority")
     public Result saveMenuAuthority(String roleId, String menuIds) {
         List<String> menuIdList = null;
-        if(StringUtils.isNotBlank(menuIds)){
+        if (StringUtils.isNotBlank(menuIds)) {
             menuIdList = new ArrayList<>();
             for (String menuId : menuIds.split(",")) {
                 menuIdList.add(menuId);
@@ -60,6 +74,13 @@ public class ResourceAuthorityController extends BaseController {
         return result;
     }
 
+    /**
+     * @Description: 根据角色查询所有授权的应用信息
+     * @Param: [roleId]
+     * @return: com.elf.core.persistence.result.Result
+     * @Author: Liyiming
+     * @Date: 2018/5/23
+     */
     @GetMapping("/appAuthority")
     public Result findAppAuthorityByRoleId(String roleId) {
         List<ResourceAuthority> appAuthorityList = resourceAuthorityService.getAppAuthorityByRoleId(roleId);
@@ -70,6 +91,13 @@ public class ResourceAuthorityController extends BaseController {
         return result;
     }
 
+    /**
+     * @Description: 保存角色与应用的授权信息
+     * @Param: [roleId, appIds]
+     * @return: com.elf.core.persistence.result.Result
+     * @Author: Liyiming
+     * @Date: 2018/5/23
+     */
     @PostMapping("/appAuthority")
     public Result saveAppAuthority(String roleId, String appIds) {
         List<String> appIdList = null;
@@ -96,7 +124,7 @@ public class ResourceAuthorityController extends BaseController {
     @PostMapping("/permissionAuthority")
     public Result savePermissionAuthority(String roleId, String permissions) {
         List<String> permissionList = new ArrayList<>();
-        for(String permission : permissions.split(",")) {
+        for (String permission : permissions.split(",")) {
             permissionList.add(permission);
         }
         JSONResult result = new JSONResult();

@@ -491,7 +491,8 @@ public class StringUtils extends org.apache.commons.lang3.StringUtils {
      * @return
      */
     public static String getUUID(boolean b) {
-        String uuid = UUID.randomUUID().toString(); //获取UUID并转化为String对象
+        //获取UUID并转化为String对象
+        String uuid = UUID.randomUUID().toString();
         return b ? uuid.replace("-", "") : uuid;
     }
 

@@ -12,6 +12,7 @@ import java.util.List;
  * @create: 2018-05-20 09:52
  **/
 public interface ResourceAuthorityService extends BaseService<ResourceAuthority> {
+
     List<ResourceAuthority> savePermissionAuthority(String roleId, List<String> permissionList) throws Exception;
 
     List<ResourceAuthority> savePermissionAuthorityForbidden(String roleId, List<String> permissionList) throws Exception;
@@ -20,11 +21,11 @@ public interface ResourceAuthorityService extends BaseService<ResourceAuthority>
 
     List<ResourceAuthority> saveAppAuthorityForbidden(String roleId, List<String> appIdList) throws Exception;
 
+    List<String> getAppAuthority();
+
+    List<String> getAppAuthorityForbidden();
+
     List<ResourceAuthority> getAppAuthorityByRoleId(String roleId);
-
-    List<ResourceAuthority> getAppAuthority();
-
-    List<ResourceAuthority> getAppAuthorityForbidden();
 
     List<ResourceAuthority> getAppAuthorityForbiddenByRoleId(String roleId);
 
@@ -32,11 +33,12 @@ public interface ResourceAuthorityService extends BaseService<ResourceAuthority>
 
     List<ResourceAuthority> saveMenuAuthorityForbidden(String roleId, List<String> menuIdList) throws Exception;
 
+    List<String> getMenuAuthority();
+
+    List<String> getMenuAuthorityForbidden();
+
     List<ResourceAuthority> getMenuAuthorityByRoleId(String roleId);
 
     List<ResourceAuthority> getMenuAuthorityForbiddenByRoleId(String roleId);
 
-    List<ResourceAuthority> getMenuAuthority();
-
-    List<ResourceAuthority> getMenuAuthorityForbidden();
 }

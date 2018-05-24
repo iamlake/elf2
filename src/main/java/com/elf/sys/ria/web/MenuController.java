@@ -1,6 +1,5 @@
 package com.elf.sys.ria.web;
 
-import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.elf.core.persistence.constants.ResultStatusEnum;
 import com.elf.core.persistence.result.JSONResult;
 import com.elf.core.persistence.result.QueryResult;
@@ -8,10 +7,11 @@ import com.elf.core.persistence.result.Result;
 import com.elf.core.web.BaseController;
 import com.elf.sys.ria.entity.Menu;
 import com.elf.sys.ria.service.MenuService;
+import com.elf.sys.security.service.ResourceAuthorityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,6 +26,9 @@ public class MenuController extends BaseController {
     @Autowired
     private MenuService menuService;
 
+    @Autowired
+    private ResourceAuthorityService resourceAuthorityService;
+
     /**
      * @Description: 查询所有菜单
      * @Param: [menu]
@@ -35,7 +38,7 @@ public class MenuController extends BaseController {
      */
     @GetMapping("/menu")
     public Result findMenuList(Menu menu) {
-        List<Menu> list = menuService.selectList(new EntityWrapper<>(menu));
+        List<Menu> list = menuService.getMenuList(menu);
         return new QueryResult<>(ResultStatusEnum.SUCCESS.getValue(), "", list, list.size());
     }
 
@@ -62,17 +65,16 @@ public class MenuController extends BaseController {
     @PostMapping("/menu")
     public Result addMenu(Menu menu) {
         JSONResult result = new JSONResult();
-        menu.setCreatedBy(getSessionUser().getAccount());
-        menu.setModifiedBy(getSessionUser().getAccount());
-        menu.setCreationTime(new Date());
-        boolean bRet = menuService.insert(menu);
-        if (bRet) {
+        try {
+            Menu newMenu = menuService.saveMenu(menu);
             result.setCode(ResultStatusEnum.SUCCESS.getValue());
             result.setMsg("添加成功！");
-            result.getParameters().put("", "");
-        } else {
-            result.setCode(ResultStatusEnum.FAILED.getValue());
+            result.getParameters().put("object", newMenu);
+        } catch (Exception e) {
+            e.printStackTrace();
+            result.setCode(ResultStatusEnum.ERROR.getValue());
             result.setMsg("添加失败！");
+            result.getErrors().put("exception", e);
         }
         return result;
     }
@@ -87,15 +89,15 @@ public class MenuController extends BaseController {
     @PutMapping("/menu")
     public Result modifyMenu(Menu menu) {
         JSONResult result = new JSONResult();
-        menu.setModifiedBy(getSessionUser().getAccount());
-        boolean bRet = menuService.updateById(menu);
-        if (bRet) {
+        try {
+            Menu newMenu = menuService.updateMenu(menu);
             result.setCode(ResultStatusEnum.SUCCESS.getValue());
             result.setMsg("修改成功！");
-            result.getParameters().put("", "");
-        } else {
-            result.setCode(ResultStatusEnum.FAILED.getValue());
+            result.getParameters().put("object", newMenu);
+        } catch (Exception e) {
+            result.setCode(ResultStatusEnum.ERROR.getValue());
             result.setMsg("修改失败！");
+            result.getErrors().put("exception", e);
         }
         return result;
     }
@@ -108,7 +110,7 @@ public class MenuController extends BaseController {
      * @Date: 2018/4/19
      */
     @DeleteMapping("/menu/{id}")
-    public Result deleteMenuById(@PathVariable("id") String menuId) {
+    public Result removeMenuById(@PathVariable("id") String menuId) {
         JSONResult result = new JSONResult();
         boolean bRet = menuService.deleteById(menuId);
         if (bRet) {
@@ -120,5 +122,22 @@ public class MenuController extends BaseController {
             result.setMsg("删除失败！");
         }
         return result;
+    }
+
+    /**
+     * @Description: 查询当前用户可使用的菜单
+     * @Param: [menu]
+     * @return: com.elf.core.persistence.result.Result
+     * @Author: Liyiming
+     * @Date: 2018/5/23
+     */
+    @GetMapping("/authorityMenu")
+    public Result findAuthorityMenuList(Menu menu) {
+        List<String> authorityMenuIdList = resourceAuthorityService.getMenuAuthority();
+        List<Menu> menuList = new ArrayList<>();
+        if (authorityMenuIdList.size() > 0) {
+            menuList = menuService.getAuthorityMenuList(authorityMenuIdList, menu);
+        }
+        return new QueryResult<>(ResultStatusEnum.SUCCESS.getValue(), "", menuList, menuList.size());
     }
 }

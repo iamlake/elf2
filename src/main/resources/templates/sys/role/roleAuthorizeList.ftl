@@ -190,7 +190,7 @@
                     curr: 1 //重新从第 1 页开始
                 },
                 where: {
-                    name: $(".search_roleName").val()
+                    roleName: $(".search_roleName").val()
                 }
             })
         });

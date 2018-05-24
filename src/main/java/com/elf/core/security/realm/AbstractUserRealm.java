@@ -32,7 +32,7 @@ public abstract class AbstractUserRealm extends AuthorizingRealm {
 
     /*@Autowired
     private UserMapper userMapper;*/
-    
+
     @Autowired
     private UserService userService;
 
@@ -99,15 +99,15 @@ public abstract class AbstractUserRealm extends AuthorizingRealm {
         );
         return authenticationInfo;
         /**
-        //UsernamePasswordToken对象用来存放提交的登录信息
-        UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
-        //查出是否有此用户
-        User user = userMapper.selectByAccount(token.getUsername());
-        if (user != null) {
-            // 若存在，将此用户存放到登录认证info中，无需自己做密码对比，Shiro会为我们进行密码对比校验
-            return new SimpleAuthenticationInfo(user.getAccount(), user.getPassword(), getName());
-        }
-        return null;
+         //UsernamePasswordToken对象用来存放提交的登录信息
+         UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
+         //查出是否有此用户
+         User user = userMapper.selectByAccount(token.getUsername());
+         if (user != null) {
+         // 若存在，将此用户存放到登录认证info中，无需自己做密码对比，Shiro会为我们进行密码对比校验
+         return new SimpleAuthenticationInfo(user.getAccount(), user.getPassword(), getName());
+         }
+         return null;
          */
     }
 
@@ -118,7 +118,7 @@ public abstract class AbstractUserRealm extends AuthorizingRealm {
         Set<String> userRoles;
         Set<String> userPermissions;
 
-        public UserRolesAndPermissions(Set<String> userRoles, Set<String> userPermissions) {
+        UserRolesAndPermissions(Set<String> userRoles, Set<String> userPermissions) {
             this.userRoles = userRoles;
             this.userPermissions = userPermissions;
         }

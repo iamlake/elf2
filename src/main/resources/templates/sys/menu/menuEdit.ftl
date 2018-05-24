@@ -111,26 +111,28 @@
         var isNew = true, oType = parent.oType, oData = parent.oData;
 
         $(function () {
-            var appData = JSON.parse(window.sessionStorage.getItem("roleapp"));
-            elf.bindSelect($('.appSelect'), appData, 'appId', 'title');
-            if ('root' == oType) {
-                $('.parentMenu').val('0');
-                $('.div_pmenu').attr("style", "display:none");
-            } else {
-                if ('child' == oType) {
-                    $('.appSelect').val(oData.appId);
-                    $('.parentMenu').val(oData.menuId);
-                    $('.div_app').attr("style", "display:none");
-                } else if ('edit' == oType) {
-                    isNew = false;
-                    elf.setData($(".layui-form"), oData);
-                    if ($("#iconValue").val()) {
-                        initIcon($("#realIcon"), $("#iconValue").val(), null);
+            $.get(basePath + "/app", function (result) {
+                // var appData = JSON.parse(window.sessionStorage.getItem("roleapp"));
+                elf.bindSelect($('.appSelect'), result.data, 'appId', 'title');
+                if ('root' == oType) {
+                    $('.parentMenu').val('0');
+                    $('.div_pmenu').attr("style", "display:none");
+                } else {
+                    if ('child' == oType) {
+                        $('.appSelect').val(oData.appId);
+                        $('.parentMenu').val(oData.menuId);
+                        $('.div_app').attr("style", "display:none");
+                    } else if ('edit' == oType) {
+                        isNew = false;
+                        elf.setData($(".layui-form"), oData);
+                        if ($("#iconValue").val()) {
+                            initIcon($("#realIcon"), $("#iconValue").val(), null);
+                        }
+                        $('.appSelect').attr("disabled", "disabled");
                     }
-                    $('.appSelect').attr("disabled", "disabled");
                 }
-            }
-            form.render();
+                form.render();
+            })
         });
 
         //选择图标

@@ -15,9 +15,9 @@
     //外部图标链接
     var iconUrl = "https://at.alicdn.com/t/font_400842_q6tk84n9ywvu0udi.css";
     var loginUser = {
-        account : '${(user_session.account)!'N/A'}',
-        fullname : '${(user_session.fullname)!'N/A'}',
-        userHead : '${(user_session.userHead)!'N/A'}'
+        account : '${(user_session.currentUser.account)!'N/A'}',
+        fullname : '${(user_session.currentUser.fullname)!'N/A'}',
+        userHead : '${(user_session.currentUser.userHead)!'N/A'}'
     }
 </script>
 

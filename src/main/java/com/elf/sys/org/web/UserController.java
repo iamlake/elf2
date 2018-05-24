@@ -59,23 +59,25 @@ public class UserController extends BaseController {
             try {
                 subject.login(token);
                 final User loginUser = userService.getUserByAccount(user.getAccount());
-                session.setAttribute(Global.USER_SESSION, loginUser);
                 logger.info("BasePath:[" + request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath() + "]");
-                Context context = new ContextImpl();
-                context.setCurrentUser(loginUser);
-                session.setAttribute("com.elf.core.context.Context", context);
-                ContextHolder.setContext(context); 
+                Context userContext = new ContextImpl();
+                userContext.setCurrentUser(loginUser);
+                session.setAttribute(Global.USER_SESSION, userContext);
+                ContextHolder.setContext(userContext);
                 result.setCode(ResultStatusEnum.SUCCESS.getValue());
                 result.setMsg("登录成功！");
             } catch (IncorrectCredentialsException e) {
                 result.setCode(ResultStatusEnum.FAILED.getValue());
                 result.setMsg("用户名或密码不正确！");
+                result.getErrors().put("exception", e);
             } catch (LockedAccountException e) {
                 result.setCode(ResultStatusEnum.FAILED.getValue());
                 result.setMsg("账户已被冻结！");
+                result.getErrors().put("exception", e);
             } catch (AuthenticationException e) {
                 result.setCode(ResultStatusEnum.ERROR.getValue());
                 result.setMsg("登录失败！");
+                result.getErrors().put("exception", e);
             }
         }
         return result;

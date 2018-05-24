@@ -7,10 +7,12 @@ import com.elf.core.persistence.result.Result;
 import com.elf.core.web.BaseController;
 import com.elf.sys.ria.entity.App;
 import com.elf.sys.ria.service.AppService;
+import com.elf.sys.security.service.ResourceAuthorityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,7 +26,9 @@ public class AppController extends BaseController {
 
     @Autowired
     private AppService appService;
-    
+
+    @Autowired
+    private ResourceAuthorityService resourceAuthorityService;
 
     /**
      * @Description: 查询应用信息
@@ -39,6 +43,23 @@ public class AppController extends BaseController {
         entityWrapper.orderBy("app_order", true);
         List<App> list = appService.selectList(entityWrapper);
         return new QueryResult<>(ResultStatusEnum.SUCCESS.getValue(), "", list, list.size());
+    }
+
+    /**
+     * @Description: 查询当前用户可使用的应用
+     * @Param: [app]
+     * @return: com.elf.core.persistence.result.Result
+     * @Author: Liyiming
+     * @Date: 2018/5/23
+     */
+    @GetMapping("/authorityApp")
+    public Result findAuthorityAppList(App app) {
+        List<String> authorityAppIdList = resourceAuthorityService.getAppAuthority();
+        List<App> appList = new ArrayList<>();
+        if (authorityAppIdList.size() > 0) {
+            appList = appService.getAuthorityAppList(authorityAppIdList, app);
+        }
+        return new QueryResult<>(ResultStatusEnum.SUCCESS.getValue(), "", appList, appList.size());
     }
 
 }
