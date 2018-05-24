@@ -27,7 +27,7 @@ import java.util.List;
 public class ResourceAuthorityServiceImpl extends BaseServiceImpl<ResourceAuthorityMapper, ResourceAuthority> implements ResourceAuthorityService {
     enum RoleTypeEnum {adminRole, bizRole, unitRole, stationRole}
 
-    enum ResourceTypeEnum {app, menu, permision}
+    enum ResourceTypeEnum {app, menu, permission}
 
     enum AuthorityTypeEnum {available, forbidden}
 
@@ -70,7 +70,7 @@ public class ResourceAuthorityServiceImpl extends BaseServiceImpl<ResourceAuthor
      * @Date: 2018/5/22
      */
     private List<ResourceAuthority> savePermissionAuthority(String roleId, List<String> permissionList, String authorityType) {
-        String resourceType = ResourceTypeEnum.permision.toString();
+        String resourceType = ResourceTypeEnum.permission.toString();
         return this.saveResourceAuthority(roleId, permissionList, resourceType, authorityType);
     }
 
