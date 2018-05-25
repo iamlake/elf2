@@ -37,7 +37,7 @@ public class CodelistServiceImpl extends BaseServiceImpl<CodelistMapper, Codelis
 
     @Override
     public List<Codelist> getCodeTypeList(Codelist codelist) {
-        List<Codelist> list = codelistMapper.selectCodeTypeList(codelist.getCodeType(), "%" + codelist.getCodeTypeName() + "%");
+        List<Codelist> list = codelistMapper.selectCodeTypeList(codelist.getCodeType(), StringUtils.isNotBlank(codelist.getCodeTypeName()) ? "%" + codelist.getCodeTypeName() + "%" : null);
         return list;
     }
 

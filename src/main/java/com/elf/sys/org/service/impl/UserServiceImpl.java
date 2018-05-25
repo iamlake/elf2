@@ -88,13 +88,13 @@ public class UserServiceImpl extends BaseServiceImpl<UserMapper, User> implement
 
     @Override
     public List<User> getUnitUsers(String unitId, User user) {
-        List<User> userList = userMapper.selectUnitUsers(unitId, user.getAccount(), "%" + user.getFullname() + "%");
+        List<User> userList = userMapper.selectUnitUsers(unitId, user.getAccount(), StringUtils.isNotBlank(user.getFullname()) ? "%" + user.getFullname() + "%" : null);
         return userList;
     }
 
     @Override
     public List<User> getUnitUsersByRoleId(String roleId, User user) {
-        List<User> userList = userMapper.selectUnitUsersByRoleId(roleId, user.getAccount(), "%" + user.getFullname() + "%");
+        List<User> userList = userMapper.selectUnitUsersByRoleId(roleId, user.getAccount(), StringUtils.isNotBlank(user.getFullname()) ? "%" + user.getFullname() + "%" : null);
         return userList;
     }
 }

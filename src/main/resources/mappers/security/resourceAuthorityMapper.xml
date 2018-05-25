@@ -13,7 +13,7 @@
             AND ra.RESOURCE_TYPE = #{resourceType,jdbcType=VARCHAR}
         </if>
         <if test="authorityType != null and authorityType != ''">
-            AND ra.AUTHORITY_TYPE like #{authorityType,jdbcType=VARCHAR}
+            AND ra.AUTHORITY_TYPE = #{authorityType,jdbcType=VARCHAR}
         </if>
     </select>
 </mapper>

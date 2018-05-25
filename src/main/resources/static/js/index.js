@@ -62,10 +62,13 @@ layui.use(['bodyTab', 'form', 'element', 'layer', 'jquery', 'linq', 'elf'], func
                     window.sessionStorage.setItem(ROLE_APP, JSON.stringify(result.data));
                     buildTopLevelMenusHtml(result.data);
                 } else {
-                    layer.msg("您没有任何应用菜单权限！", {
-                        time : 1000,
+                    layer.alert("您没有任何应用菜单权限！", {
                         icon : 5,
                         anim : 6
+                    },function(){
+                        window.sessionStorage.clear();
+                        window.localStorage.clear();
+                        window.location.href = basePath + "/logout";
                     });
                 }
             });
