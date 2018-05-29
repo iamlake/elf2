@@ -43,9 +43,9 @@ public class FilterConfig {
 
     @Bean
     public FilterRegistrationBean contextIntegrationFilterRegistration() {
-        FilterRegistrationBean registration = new FilterRegistrationBean();
-        registration.setFilter(new ContextIntegrationFilter());
-        registration.setOrder(4);
-        return registration;
+        FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
+        filterRegistrationBean.setFilter(new ContextIntegrationFilter());
+        filterRegistrationBean.setOrder(4);
+        return filterRegistrationBean;
     }
 }

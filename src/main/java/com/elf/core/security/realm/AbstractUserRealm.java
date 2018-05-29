@@ -30,9 +30,6 @@ public abstract class AbstractUserRealm extends AuthorizingRealm {
 
     private static final Logger logger = LoggerFactory.getLogger(AbstractUserRealm.class);
 
-    /*@Autowired
-    private UserMapper userMapper;*/
-
     @Autowired
     private UserService userService;
 
@@ -43,7 +40,11 @@ public abstract class AbstractUserRealm extends AuthorizingRealm {
     public abstract UserRolesAndPermissions doGetRoleAuthorizationInfo(User userInfo);
 
     /**
-     * 获取授权信息
+     * @Description: 获取授权信息
+     * @Param: [principals]
+     * @return: org.apache.shiro.authz.AuthorizationInfo
+     * @Author: Liyiming
+     * @Date: 2018/5/27
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
@@ -54,10 +55,11 @@ public abstract class AbstractUserRealm extends AuthorizingRealm {
         User userInfo = userService.getUserByAccount(currentLoginName);
         if (null != userInfo) {
             //UserRolesAndPermissions groupContainer = doGetGroupAuthorizationInfo(userInfo);
-            UserRolesAndPermissions roleContainer = doGetRoleAuthorizationInfo(userInfo);
             //userRoles.addAll(groupContainer.getUserRoles());
-            userRoles.addAll(roleContainer.getUserRoles());
             //userPermissions.addAll(groupContainer.getUserPermissions());
+
+            UserRolesAndPermissions roleContainer = doGetRoleAuthorizationInfo(userInfo);
+            userRoles.addAll(roleContainer.getUserRoles());
             userPermissions.addAll(roleContainer.getUserPermissions());
         } else {
             throw new AuthorizationException();
@@ -65,14 +67,17 @@ public abstract class AbstractUserRealm extends AuthorizingRealm {
         //为当前用户设置角色和权限
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
         authorizationInfo.addRoles(userRoles);
-        userPermissions.add("org:unit:getDimensionList");
         authorizationInfo.addStringPermissions(userPermissions);
         logger.info("###【获取角色成功】[SessionId] => {}", SecurityUtils.getSubject().getSession().getId());
         return authorizationInfo;
     }
 
     /**
-     * 登录认证
+     * @Description: 登录认证
+     * @Param: [authenticationToken]
+     * @return: org.apache.shiro.authc.AuthenticationInfo
+     * @Author: Liyiming
+     * @Date: 2018/5/1
      */
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken) throws AuthenticationException {

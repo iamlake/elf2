@@ -13,7 +13,7 @@ import java.io.IOException;
 
 public class ContextIntegrationFilter implements Filter {
 
-    private Logger logger = LoggerFactory.getLogger(getClass());
+    private Logger logger = LoggerFactory.getLogger(ContextIntegrationFilter.class);
 
     @Override
     public void destroy() {
