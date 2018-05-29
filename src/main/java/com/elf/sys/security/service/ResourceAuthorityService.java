@@ -13,32 +13,16 @@ import java.util.List;
  **/
 public interface ResourceAuthorityService extends BaseService<ResourceAuthority> {
 
-    List<ResourceAuthority> savePermissionAuthority(String roleId, List<String> permissionList) throws Exception;
+    List<String> getResourceAuthority();
 
-    List<ResourceAuthority> savePermissionAuthorityForbidden(String roleId, List<String> permissionList) throws Exception;
+    List<String> getResourceAuthorityForbidden();
 
-    List<ResourceAuthority> saveAppAuthority(String roleId, List<String> appIdList) throws Exception;
+    List<ResourceAuthority> getResourceAuthorityByRoleId(String roleId);
 
-    List<ResourceAuthority> saveAppAuthorityForbidden(String roleId, List<String> appIdList) throws Exception;
+    List<ResourceAuthority> getResourceAuthorityForbiddenByRoleId(String roleId);
 
-    List<String> getAppAuthority();
+    List<ResourceAuthority> saveResourceAuthority(String roleId, List<String> resourceIdList) throws Exception;
 
-    List<String> getAppAuthorityForbidden();
-
-    List<ResourceAuthority> getAppAuthorityByRoleId(String roleId);
-
-    List<ResourceAuthority> getAppAuthorityForbiddenByRoleId(String roleId);
-
-    List<ResourceAuthority> saveMenuAuthority(String roleId, List<String> menuIdList) throws Exception;
-
-    List<ResourceAuthority> saveMenuAuthorityForbidden(String roleId, List<String> menuIdList) throws Exception;
-
-    List<String> getMenuAuthority();
-
-    List<String> getMenuAuthorityForbidden();
-
-    List<ResourceAuthority> getMenuAuthorityByRoleId(String roleId);
-
-    List<ResourceAuthority> getMenuAuthorityForbiddenByRoleId(String roleId);
+    List<ResourceAuthority> saveResourceAuthorityForbidden(String roleId, List<String> resourceIdList) throws Exception;
 
 }

@@ -9,6 +9,7 @@ import com.elf.sys.ria.entity.Menu;
 import com.elf.sys.ria.service.MenuService;
 import com.elf.sys.security.service.ResourceAuthorityService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -27,7 +28,8 @@ public class MenuController extends BaseController {
     private MenuService menuService;
 
     @Autowired
-    private ResourceAuthorityService resourceAuthorityService;
+    @Qualifier("menuAuthorityService")
+    private ResourceAuthorityService menuAuthorityService;
 
     /**
      * @Description: 查询所有菜单
@@ -133,7 +135,7 @@ public class MenuController extends BaseController {
      */
     @GetMapping("/authorityMenu")
     public Result findAuthorityMenuList(Menu menu) {
-        List<String> authorityMenuIdList = resourceAuthorityService.getMenuAuthority();
+        List<String> authorityMenuIdList = menuAuthorityService.getResourceAuthority();
         List<Menu> menuList = new ArrayList<>();
         if (authorityMenuIdList.size() > 0) {
             menuList = menuService.getAuthorityMenuList(authorityMenuIdList, menu);

@@ -9,6 +9,7 @@ import com.elf.sys.ria.entity.App;
 import com.elf.sys.ria.service.AppService;
 import com.elf.sys.security.service.ResourceAuthorityService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,7 +29,8 @@ public class AppController extends BaseController {
     private AppService appService;
 
     @Autowired
-    private ResourceAuthorityService resourceAuthorityService;
+    @Qualifier("appAuthorityService")
+    private ResourceAuthorityService appAuthorityService;
 
     /**
      * @Description: 查询应用信息
@@ -54,7 +56,7 @@ public class AppController extends BaseController {
      */
     @GetMapping("/authorityApp")
     public Result findAuthorityAppList(App app) {
-        List<String> authorityAppIdList = resourceAuthorityService.getAppAuthority();
+        List<String> authorityAppIdList = appAuthorityService.getResourceAuthority();
         List<App> appList = new ArrayList<>();
         if (authorityAppIdList.size() > 0) {
             appList = appService.getAuthorityAppList(authorityAppIdList, app);
