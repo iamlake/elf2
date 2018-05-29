@@ -37,11 +37,6 @@ layui.define(["element", "jquery", "elf"], function (exports) {
                 ulHtml += '<a>';
                 if (data[i].iconfont != undefined && data[i].iconfont != '') {
                     ulHtml += elf.parseIconHtml(data[i].iconfont, null);
-                    // if (data[i].iconfont.indexOf("icon-") != -1) {
-                    //     ulHtml += '<i class="seraph ' + data[i].iconfont + '" data-icon="' + data[i].iconfont + '"></i>';
-                    // } else {
-                    //     ulHtml += '<i class="layui-icon" data-icon="' + data[i].iconfont + '">' + data[i].iconfont + '</i>';
-                    // }
                 }
                 ulHtml += '<cite>' + data[i].title + '</cite>';
                 ulHtml += '<span class="layui-nav-more"></span>';
@@ -57,11 +52,6 @@ layui.define(["element", "jquery", "elf"], function (exports) {
                     }
                     if (data[i].children[j].iconfont != undefined && data[i].children[j].iconfont != '') {
                         ulHtml += elf.parseIconHtml(data[i].children[j].iconfont, null);
-                        // if (data[i].children[j].iconfont.indexOf("icon-") != -1) {
-                        //     ulHtml += '<i class="seraph ' + data[i].children[j].iconfont + '" data-icon="' + data[i].children[j].iconfont + '"></i>';
-                        // } else {
-                        //     ulHtml += '<i class="layui-icon" data-icon="' + data[i].children[j].iconfont + '">' + data[i].children[j].iconfont + '</i>';
-                        // }
                     }
                     ulHtml += '<cite>' + data[i].children[j].title + '</cite></a></dd>';
                 }
@@ -75,11 +65,6 @@ layui.define(["element", "jquery", "elf"], function (exports) {
                 }
                 if (data[i].iconfont != undefined && data[i].iconfont != '') {
                     ulHtml += elf.parseIconHtml(data[i].iconfont, null);
-                    // if (data[i].iconfont.indexOf("icon-") != -1) {
-                    //     ulHtml += '<i class="seraph ' + data[i].iconfont + '" data-icon="' + data[i].iconfont + '"></i>';
-                    // } else {
-                    //     ulHtml += '<i class="layui-icon" data-icon="' + data[i].iconfont + '">' + data[i].iconfont + '</i>';
-                    // }
                 }
                 ulHtml += '<cite>' + data[i].title + '</cite></a>';
             }
@@ -91,7 +76,7 @@ layui.define(["element", "jquery", "elf"], function (exports) {
     Tab.prototype.render = function () {
         //显示左侧菜单
         var _this = this;
-        $(".navBar ul").html('<li class="layui-nav-item layui-this"><a data-url="' + basePath + '/page/main_dashbroad"><i class="layui-icon" data-icon=""></i><cite>后台首页</cite></a></li>').append(_this.navBar(dataStr)).height($(window).height() - 210);
+        $(".navBar ul").html('<li class="layui-nav-item layui-this"><a data-url="' + basePath + '/page/main_dashbroad"><i class="layui-icon layui-icon-home"></i><cite>后台首页</cite></a></li>').append(_this.navBar(dataStr)).height($(window).height() - 210);
         element.init();  //初始化页面元素
         $(window).resize(function () {
             $(".navBar").height($(window).height() - 210);
@@ -145,11 +130,11 @@ layui.define(["element", "jquery", "elf"], function (exports) {
             window.open(_this.attr("data-url"));
         } else if (_this.attr("data-url") != undefined) {
             var title = '';
-            if (_this.find("i.seraph,i.layui-icon").attr("data-icon") != undefined) {
+            if (_this.find("i.seraph,i.layui-icon") != undefined && _this.find("i.seraph,i.layui-icon").length > 0) {
                 if (_this.find("i.seraph").attr("data-icon") != undefined) {
                     title += '<i class="seraph ' + _this.find("i.seraph").attr("data-icon") + '"></i>';
                 } else {
-                    title += '<i class="layui-icon">' + _this.find("i.layui-icon").attr("data-icon") + '</i>';
+                    title += '<i class="' + _this.find("i.layui-icon")[0].classList.value + '"></i>';
                 }
             }
             //已打开的窗口中不存在
@@ -168,7 +153,7 @@ layui.define(["element", "jquery", "elf"], function (exports) {
                 });
                 //当前窗口内容
                 var curmenu = {
-                    "iconfont": _this.find("i.seraph").attr("data-icon") != undefined ? _this.find("i.seraph").attr("data-icon") : _this.find("i.layui-icon").attr("data-icon"),
+                    "iconfont": _this.find("i.seraph").attr("data-icon") != undefined ? _this.find("i.seraph").attr("data-icon") : _this.find("i.layui-icon").innerHTML != "" ? _this.find("i.layui-icon").innerHTML : _this.find("i.layui-icon")[0].classList[1],
                     "title": _this.find("cite").text(),
                     "href": _this.attr("data-url"),
                     "layId": new Date().getTime()
@@ -181,7 +166,7 @@ layui.define(["element", "jquery", "elf"], function (exports) {
             } else {
                 //当前窗口内容
                 var curmenu = {
-                    "iconfont": _this.find("i.seraph").attr("data-icon") != undefined ? _this.find("i.seraph").attr("data-icon") : _this.find("i.layui-icon").attr("data-icon"),
+                    "iconfont": _this.find("i.seraph").attr("data-icon") != undefined ? _this.find("i.seraph").attr("data-icon") : _this.find("i.layui-icon").innerHTML != "" ? _this.find("i.layui-icon").innerHTML : _this.find("i.layui-icon")[0].classList[1],
                     "title": _this.find("cite").text(),
                     "href": _this.attr("data-url")
                 };
