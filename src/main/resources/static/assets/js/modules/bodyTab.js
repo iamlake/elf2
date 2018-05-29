@@ -36,11 +36,12 @@ layui.define(["element", "jquery", "elf"], function (exports) {
             if (data[i].children != undefined && data[i].children.length > 0) {
                 ulHtml += '<a>';
                 if (data[i].iconfont != undefined && data[i].iconfont != '') {
-                    if (data[i].iconfont.indexOf("icon-") != -1) {
-                        ulHtml += '<i class="seraph ' + data[i].iconfont + '" data-icon="' + data[i].iconfont + '"></i>';
-                    } else {
-                        ulHtml += '<i class="layui-icon" data-icon="' + data[i].iconfont + '">' + data[i].iconfont + '</i>';
-                    }
+                    ulHtml += elf.parseIconHtml(data[i].iconfont, null);
+                    // if (data[i].iconfont.indexOf("icon-") != -1) {
+                    //     ulHtml += '<i class="seraph ' + data[i].iconfont + '" data-icon="' + data[i].iconfont + '"></i>';
+                    // } else {
+                    //     ulHtml += '<i class="layui-icon" data-icon="' + data[i].iconfont + '">' + data[i].iconfont + '</i>';
+                    // }
                 }
                 ulHtml += '<cite>' + data[i].title + '</cite>';
                 ulHtml += '<span class="layui-nav-more"></span>';
@@ -55,11 +56,12 @@ layui.define(["element", "jquery", "elf"], function (exports) {
                         ulHtml += '<dd><a data-url="' + _href + '">';
                     }
                     if (data[i].children[j].iconfont != undefined && data[i].children[j].iconfont != '') {
-                        if (data[i].children[j].iconfont.indexOf("icon-") != -1) {
-                            ulHtml += '<i class="seraph ' + data[i].children[j].iconfont + '" data-icon="' + data[i].children[j].iconfont + '"></i>';
-                        } else {
-                            ulHtml += '<i class="layui-icon" data-icon="' + data[i].children[j].iconfont + '">' + data[i].children[j].iconfont + '</i>';
-                        }
+                        ulHtml += elf.parseIconHtml(data[i].children[j].iconfont, null);
+                        // if (data[i].children[j].iconfont.indexOf("icon-") != -1) {
+                        //     ulHtml += '<i class="seraph ' + data[i].children[j].iconfont + '" data-icon="' + data[i].children[j].iconfont + '"></i>';
+                        // } else {
+                        //     ulHtml += '<i class="layui-icon" data-icon="' + data[i].children[j].iconfont + '">' + data[i].children[j].iconfont + '</i>';
+                        // }
                     }
                     ulHtml += '<cite>' + data[i].children[j].title + '</cite></a></dd>';
                 }
@@ -72,11 +74,12 @@ layui.define(["element", "jquery", "elf"], function (exports) {
                     ulHtml += '<a data-url="' + _href + '">';
                 }
                 if (data[i].iconfont != undefined && data[i].iconfont != '') {
-                    if (data[i].iconfont.indexOf("icon-") != -1) {
-                        ulHtml += '<i class="seraph ' + data[i].iconfont + '" data-icon="' + data[i].iconfont + '"></i>';
-                    } else {
-                        ulHtml += '<i class="layui-icon" data-icon="' + data[i].iconfont + '">' + data[i].iconfont + '</i>';
-                    }
+                    ulHtml += elf.parseIconHtml(data[i].iconfont, null);
+                    // if (data[i].iconfont.indexOf("icon-") != -1) {
+                    //     ulHtml += '<i class="seraph ' + data[i].iconfont + '" data-icon="' + data[i].iconfont + '"></i>';
+                    // } else {
+                    //     ulHtml += '<i class="layui-icon" data-icon="' + data[i].iconfont + '">' + data[i].iconfont + '</i>';
+                    // }
                 }
                 ulHtml += '<cite>' + data[i].title + '</cite></a>';
             }

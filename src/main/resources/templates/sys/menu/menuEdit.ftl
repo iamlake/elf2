@@ -93,15 +93,7 @@
     <input type="hidden" name="menuId" id="hid_menuId">
 </form>
 <script>
-    var iconShow, $;
-    var initIcon = function (o, v, s) {
-        var style = s ? ('"font-size: ' + s + ' !important;"') : ('"font-size: 35px !important;"');
-        if (v.indexOf("icon-") != -1) {
-            o.html('<i class="seraph ' + v + '" data-icon="' + v + '" style=' + style + '></i>');
-        } else {
-            o.html('<i class="layui-icon" style=' + style + '>' + v + '</i>');
-        }
-    };
+    var $, iconShow, initIcon;
     layui.use(['form', 'layer', 'elf'], function () {
         var form = layui.form,
                 layer = parent.layer === undefined ? layui.layer : top.layer,
@@ -112,7 +104,6 @@
 
         $(function () {
             $.get(basePath + "/app", function (result) {
-                // var appData = JSON.parse(window.sessionStorage.getItem("roleapp"));
                 elf.bindSelect($('.appSelect'), result.data, 'appId', 'title');
                 if ('root' == oType) {
                     $('.parentMenu').val('0');
@@ -141,7 +132,7 @@
                 type: 2,
                 title: '选择图标',
                 shadeClose: true,
-                content: basePath + '/static/page/systemSetting/icons.html'
+                content: basePath + '/page/sys_menu_icons'
             });
             layui.layer.full(iconShow);
             $(window).on("resize", function () {
@@ -150,6 +141,11 @@
                 }, 150)
             })
         });
+
+        initIcon = function (o, v, s) {
+            var style = s ? ('font-size: ' + s + ' !important;') : ('font-size: 35px !important;');
+            o.html(elf.parseIconHtml(v, style));
+        };
 
         form.on("submit(save)", function (data) {
             var ext = 'isNew:' + isNew;

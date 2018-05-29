@@ -12,7 +12,7 @@
     <meta name="format-detection" content="telephone=no">
 </head>
 <body class="childrenBody">
-<fieldset class="layui-elem-field layui-field-title" style="margin-top: 50px;">
+<fieldset class="layui-elem-field layui-field-title">
     <legend>简洁风格的Tab</legend>
 </fieldset>
 
@@ -22,7 +22,7 @@
         <li>用户管理</li>
         <li>权限分配</li>
     </ul>
-    <div class="layui-tab-content" style="height: 100px;">
+    <div class="layui-tab-content">
         <div class="layui-tab-item layui-show">
             <div id="main" style="width: 1350px;height:800px;"></div>
         </div>

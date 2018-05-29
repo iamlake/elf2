@@ -85,28 +85,26 @@ layui.use(['bodyTab', 'form', 'element', 'layer', 'jquery', 'linq', 'elf'], func
             if (index == 0) {
                 curapp = value.appId;
                 innerhtml += '<li class="layui-nav-item layui-this" data-menu="' + value.appId + '">';
-                innerhtml += '<a href="javascript:;"><i class="layui-icon" data-icon="' + value.style + '">' + value.style + '</i><cite>' + value.title + '</cite></a>';
-                innerhtml += '</li>';
             } else {
                 innerhtml += '<li class="layui-nav-item" data-menu="' + value.appId + '" pc>';
-                innerhtml += '<a href="javascript:;"><i class="layui-icon" data-icon="' + value.style + '">' + value.style + '</i><cite>' + value.title + '</cite></a>';
-                innerhtml += '</li>';
             }
+            innerhtml += '<a href="javascript:;">';
+            innerhtml += elf.parseIconHtml(value.style, null);
+            // innerhtml += '<i class="layui-icon" data-icon="' + value.style + '">' + value.style + '</i>';
+            innerhtml += '<cite>' + value.title + '</cite></a>';
+            innerhtml += '</li>';
         });
         //----mobileTopLevelMenus
         innerhtml2 += '<li class="layui-nav-item" data-menu="' + curapp + '">';
         innerhtml2 += '<a href="javascript:;"><i class="seraph icon-caidan"></i><cite>layuiCMS</cite></a>';
         innerhtml2 += '<dl class="layui-nav-child">';
         linq.from(appData).forEach(function (value, index) {
-            if (index == 0) {
-                innerhtml2 += '<dd class="layui-this" data-menu="' + curapp + '">';
-                innerhtml2 += '<a href="javascript:;"><i class="layui-icon" data-icon="' + value.style + '">' + value.style + '</i><cite>' + value.title + '</cite></a>';
-                innerhtml2 += '</dd>';
-            } else {
-                innerhtml2 += '<dd data-menu="' + value.appId + '">';
-                innerhtml2 += '<a href="javascript:;"><i class="layui-icon" data-icon="' + value.style + '">' + value.style + '</i><cite>' + value.title + '</cite></a>';
-                innerhtml2 += '</dd>';
-            }
+            innerhtml2 += index == 0 ? '<dd class="layui-this" data-menu="' + curapp + '">' : '<dd data-menu="' + value.appId + '">';
+            innerhtml2 += '<a href="javascript:;">';
+            innerhtml2 += elf.parseIconHtml(value.style, null);
+            // innerhtml2 += '<i class="layui-icon" data-icon="' + value.style + '">' + value.style + '</i>';
+            innerhtml2 += '<cite>' + value.title + '</cite></a>';
+            innerhtml2 += '</dd>';
         });
         innerhtml2 += '</dl></li>';
         $(".topLevelMenus").html(innerhtml);
@@ -196,11 +194,7 @@ layui.use(['bodyTab', 'form', 'element', 'layer', 'jquery', 'linq', 'elf'], func
             for (var i = 0; i < menu.length; i++) {
                 openTitle = '';
                 if (menu[i].iconfont) {
-                    if (menu[i].iconfont.split("-")[0] == 'icon') {
-                        openTitle += '<i class="seraph ' + menu[i].iconfont + '"></i>';
-                    } else {
-                        openTitle += '<i class="layui-icon">' + menu[i].iconfont + '</i>';
-                    }
+                    openTitle += elf.parseIconHtml(menu[i].iconfont, null);
                 }
                 openTitle += '<cite>' + menu[i].title + '</cite>';
                 openTitle += '<i class="layui-icon layui-unselect layui-tab-close" data-id="' + menu[i].layId + '">&#x1006;</i>';

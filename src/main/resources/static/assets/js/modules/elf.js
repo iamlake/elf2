@@ -188,6 +188,26 @@ layui.define(['jquery', 'linq'], function (exports) {
                 hash[arr[i]] = true;
             }
             return false;
+        },
+        /**
+         * @Description: 根据字体图标拼装HTML
+         * @Param: {v} icon
+         * @Param: {s} style
+         * @return: object
+         * @Author: Liyiming
+         * @Date: 2018/5/27
+         */
+        parseIconHtml: function (v, s) {
+            var html = '';
+            var style = s ? ' style="' + s + '"' : '';
+            if (v.indexOf("layui-icon-") != -1) {
+                html += '<i class="layui-icon ' + v + '"' + style + '></i>';
+            } else if (v.indexOf("icon-") != -1) {
+                html += '<i class="seraph ' + v + '" data-icon="' + v + '"' + style + '></i>';
+            } else {
+                html += '<i class="layui-icon"' + style + '>' + v + '</i>';
+            }
+            return html;
         }
     }
 

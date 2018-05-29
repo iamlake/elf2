@@ -1,7 +1,7 @@
 var oData, oType;
-layui.use(['layer', 'treeGrid'], function () {
+layui.use(['layer', 'treeGrid', 'elf'], function () {
     var layer = parent.layer === undefined ? layui.layer : top.layer,
-        $ = layui.jquery;
+        $ = layui.jquery, elf = layui.elf;
     var treeGrid = layui.treeGrid;
 
     var treeGridIns = treeGrid.render({
@@ -20,11 +20,12 @@ layui.use(['layer', 'treeGrid'], function () {
                 {field: 'href', minWidth: '200', title: '路径'},
                 {field: 'iconfont', minWidth: '50', title: '图标', align: 'center', templet: function (d) {
                         if (d.iconfont != undefined && d.iconfont != '') {
-                            if (d.iconfont.indexOf("icon-") != -1) {
-                                return '<i class="seraph ' + d.iconfont + '" data-icon="' + d.icon + ' " style="font-size: 25px !important;"></i>';
-                            } else {
-                                return '<i class="layui-icon" data-icon="' + d.iconfont + '" style="font-size: 25px !important;">' + d.iconfont + '</i>';
-                            }
+                            return elf.parseIconHtml(d.iconfont, 'font-size: 25px !important;');
+                            // if (d.iconfont.indexOf("icon-") != -1) {
+                            //     return '<i class="seraph ' + d.iconfont + '" data-icon="' + d.icon + ' " style="font-size: 25px !important;"></i>';
+                            // } else {
+                            //     return '<i class="layui-icon" data-icon="' + d.iconfont + '" style="font-size: 25px !important;">' + d.iconfont + '</i>';
+                            // }
                         } else {
                             return "无";
                         }
