@@ -10,7 +10,7 @@ layui.use(['form','jquery',"layer"],function() {
         layer.alert("请先将项目部署到 localhost 下再进行访问【建议通过tomcat、webstorm、hb等方式运行，不建议通过iis方式运行】，否则部分数据将无法显示");
     }else{    //判断是否处于锁屏状态【如果关闭以后则未关闭浏览器之前不再显示】
         if(window.sessionStorage.getItem("lockcms") != "true" && window.sessionStorage.getItem("showNotice") != "true"){
-            showNotice();
+            //showNotice();
         }
     }
 
@@ -123,13 +123,6 @@ layui.use(['form','jquery',"layer"],function() {
         }
     });
 
-    //退出
-    $(".signOut").click(function(){
-        window.sessionStorage.removeItem("menu");
-        menu = [];
-        window.sessionStorage.removeItem("curmenu");
-    })
-
     //功能设定
     $(".functionSetting").click(function(){
         layer.open({
@@ -161,7 +154,7 @@ layui.use(['form','jquery',"layer"],function() {
                                 '</div>'+
                                 '<div class="layui-form-item skinBtn">'+
                                     '<a href="javascript:;" class="layui-btn layui-btn-sm layui-btn-normal" lay-submit="" lay-filter="settingSuccess">设定完成</a>'+
-                                    '<a href="javascript:;" class="layui-btn layui-btn-sm layui-btn-primary" lay-submit="" lay-filter="noSetting">朕再想想</a>'+
+                                    '<a href="javascript:;" class="layui-btn layui-btn-sm layui-btn-primary" lay-submit="" lay-filter="noSetting">我再想想</a>'+
                                 '</div>'+
                             '</form>'+
                         '</div>',
@@ -233,7 +226,7 @@ layui.use(['form','jquery',"layer"],function() {
                                 '</div>'+
                                 '<div class="layui-form-item skinBtn">'+
                                     '<a href="javascript:;" class="layui-btn layui-btn-sm layui-btn-normal" lay-submit="" lay-filter="changeSkin">确定更换</a>'+
-                                    '<a href="javascript:;" class="layui-btn layui-btn-sm layui-btn-primary" lay-submit="" lay-filter="noChangeSkin">朕再想想</a>'+
+                                    '<a href="javascript:;" class="layui-btn layui-btn-sm layui-btn-primary" lay-submit="" lay-filter="noChangeSkin">我再想想</a>'+
                                 '</div>'+
                             '</form>'+
                         '</div>',

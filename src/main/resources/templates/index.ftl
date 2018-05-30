@@ -38,7 +38,7 @@
                         <cite class="adminName">${(user_session.currentUser.fullname)!''}</cite>
                     </a>
                     <dl class="layui-nav-child">
-                        <dd><a href="javascript:;" data-url="page/user/userInfo.html"><i class="seraph icon-ziliao" data-icon="icon-ziliao"></i><cite>个人资料</cite></a></dd>
+                        <dd><a href="javascript:;" data-url="${basePath}/page/sys_user_userInfo"><i class="seraph icon-ziliao" data-icon="icon-ziliao"></i><cite>个人资料</cite></a></dd>
                         <dd><a href="javascript:;" class="changePwd"><i class="seraph icon-xiugai" data-icon="icon-xiugai"></i><cite>修改密码</cite></a></dd>
                         <dd><a href="javascript:;" class="showNotice"><i class="layui-icon">&#xe645;</i><cite>系统公告</cite><span class="layui-badge-dot"></span></a></dd>
                         <dd pc><a href="javascript:;" class="functionSetting"><i class="layui-icon">&#xe620;</i><cite>功能设定</cite><span class="layui-badge-dot"></span></a></dd>
@@ -67,7 +67,7 @@
         <div class="navBar layui-side-scroll" id="navBar">
             <ul class="layui-nav layui-nav-tree">
                 <li class="layui-nav-item layui-this">
-                    <a href="javascript:;" data-url="${basePath}/page/main_dashbroad"><i class="layui-icon" data-icon=""></i><cite>后台首页</cite></a>
+                    <a href="javascript:;" data-url="${basePath}/page/main_dashbroad"><i class="layui-icon layui-icon-home"></i><cite>后台首页</cite></a>
                 </li>
             </ul>
         </div>

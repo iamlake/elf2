@@ -28,7 +28,7 @@ layui.use(['form', 'layer', 'table', 'codelist'], function () {
                 }
             },
             {field: 'activeFlag', title: '用户状态', align: 'center', templet: function (d) {
-                    return d.activeFlag == "1" ? "正常使用" : "限制使用";
+                    return codelist.getValueName("activeFlag", d.activeFlag);
                     // return d.activeFlag == "1" ? '<span class="layui-badge layui-bg-green">正常</span>' : '<span class="layui-badge layui-bg-gray">停用</span>';
                 }
             },

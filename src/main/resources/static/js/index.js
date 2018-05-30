@@ -90,7 +90,6 @@ layui.use(['bodyTab', 'form', 'element', 'layer', 'jquery', 'linq', 'elf'], func
             }
             innerhtml += '<a href="javascript:;">';
             innerhtml += elf.parseIconHtml(value.style, null);
-            // innerhtml += '<i class="layui-icon" data-icon="' + value.style + '">' + value.style + '</i>';
             innerhtml += '<cite>' + value.title + '</cite></a>';
             innerhtml += '</li>';
         });
@@ -102,7 +101,6 @@ layui.use(['bodyTab', 'form', 'element', 'layer', 'jquery', 'linq', 'elf'], func
             innerhtml2 += index == 0 ? '<dd class="layui-this" data-menu="' + curapp + '">' : '<dd data-menu="' + value.appId + '">';
             innerhtml2 += '<a href="javascript:;">';
             innerhtml2 += elf.parseIconHtml(value.style, null);
-            // innerhtml2 += '<i class="layui-icon" data-icon="' + value.style + '">' + value.style + '</i>';
             innerhtml2 += '<cite>' + value.title + '</cite></a>';
             innerhtml2 += '</dd>';
         });
@@ -174,8 +172,13 @@ layui.use(['bodyTab', 'form', 'element', 'layer', 'jquery', 'linq', 'elf'], func
         var index = layer.msg('清除缓存中，请稍候', {icon: 16, time: false, shade: 0.8});
         setTimeout(function () {
             layer.close(index);
-            layer.msg("缓存清除成功！");
-        }, 1000);
+            layer.alert("缓存清除成功！", {
+                icon : 1
+            },function(){
+                location.reload();
+            });
+
+        }, 800);
     })
 
     //用户注销
