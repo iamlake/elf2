@@ -24,11 +24,12 @@ public class ElfApplication {
     @Bean
     public EmbeddedServletContainerCustomizer containerCustomizer() {
         return (container -> {
-            ErrorPage error401Page = new ErrorPage(HttpStatus.UNAUTHORIZED, "/page/common_404");
+            ErrorPage error401Page = new ErrorPage(HttpStatus.UNAUTHORIZED, "/page/common_401");
+            ErrorPage error403Page = new ErrorPage(HttpStatus.FORBIDDEN, "/page/common_403");
             ErrorPage error404Page = new ErrorPage(HttpStatus.NOT_FOUND, "/page/common_404");
-            ErrorPage error500Page = new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, "/page/common_404");
+            ErrorPage error500Page = new ErrorPage(HttpStatus.INTERNAL_SERVER_ERROR, "/page/common_500");
 
-            container.addErrorPages(error401Page, error404Page, error500Page);
+            container.addErrorPages(error401Page, error403Page, error404Page, error500Page);
         });
     }
 }
