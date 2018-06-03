@@ -15,14 +15,14 @@
 <form class="layui-form layui-row">
     <div class="layui-col-md3 layui-col-xs12 user_right">
         <div class="layui-upload-list">
-            <img class="layui-upload-img layui-circle userFaceBtn userAvatar" id="userFace">
+            <img class="layui-upload-img layui-circle userAvatar" id="userFace">
         </div>
         <button type="button" class="layui-btn layui-btn-primary userFaceBtn" style="margin-top: 20px;"><i class="layui-icon">&#xe67c;</i>
             点击更换头像
         </button>
     </div>
     <div class="layui-col-md6 layui-col-xs12">
-        <div class="layui-form-item">
+        <div class="layui-form-item" style="margin-top: 50px;">
             <label class="layui-form-label">账号</label>
             <div class="layui-input-block">
                 <input type="text" name="account" disabled class="layui-input layui-disabled">
@@ -106,11 +106,17 @@
         upload.render({
             elem: '.userFaceBtn',
             url: basePath + '/static/assets/json/userface.json',
-            method: "get",  //此处是为了演示之用，实际使用中请将此删除，默认用post方式提交
+            before: function (obj) { //obj参数包含的信息，跟 choose回调完全一致。
+                layer.load(); //上传loading
+                obj.preview(function (index, file, result) {
+                    $('#userFace').attr('src', result); //图片链接（base64）
+                });
+            },
             done: function (res, index, upload) {
-                var num = parseInt(4 * Math.random());  //生成0-4的随机数，随机显示一个头像信息
-                $('#userFace').attr('src', res.data[num].src);
-                window.sessionStorage.setItem('userFace', res.data[num].src);
+                layer.closeAll('loading'); //关闭loading
+            },
+            error: function (index, upload) {
+                layer.closeAll('loading'); //关闭loading
             }
         });
 
