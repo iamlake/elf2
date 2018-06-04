@@ -39,14 +39,15 @@
 
             $.get(defaultIconUrl, function (data) {
                 var iconHtml = '';
-                for (var i = 1; i < data.split(".layui-icon-").length; i++) {
+                var iconsArray = data.split(".layui-icon-");
+                iconsArray.sort();
+                for (var i = 1; i < iconsArray.length; i++) {
                     iconHtml += "<li class='layui-col-xs4 layui-col-sm3 layui-col-md2 layui-col-lg1'>" +
-                            "<i class='layui-icon layui-icon-" + data.split(".layui-icon-")[i].split(":before")[0] + "'></i>" +
-                            "layui-icon-" + data.split('.layui-icon-')[i].split(':before')[0] +
-                            "</li>";
+                            "<i class='layui-icon layui-icon-" + iconsArray[i].split(":before")[0] + "'></i>" +
+                            "layui-icon-" + iconsArray[i].split(':before')[0] + "</li>";
                 }
                 $(".icons").html(iconHtml);
-                $(".iconsLength").text(data.split(".layui-icon-").length - 1);
+                $(".iconsLength").text(iconsArray.length - 1);
             })
         });
 
