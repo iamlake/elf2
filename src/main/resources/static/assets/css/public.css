@@ -21,7 +21,7 @@
 .layui-block{width:100% !important;}
 .layui-center{text-align:center;}
 .layui-right{text-align:right;}
-.layui-elem-quote .title{padding:10px 15px; margin-bottom:0;}
+.layui-elem-quote.title{padding:10px 15px; margin-bottom:0;}
 .layui-elem-field legend{font-size: 14px; !important;}
 .layui-bg-white{background-color:#fff !important;}
 .border{border:1px solid #e6e6e6 !important; padding:10px; border-top:none;}
